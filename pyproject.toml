@@ -1,0 +1,10 @@
+[project]
+name = "dendron"
+version = "0.0.1"
+authors = [
+  { name = "Richard Kelley" },
+]
+description = "A library for working with LLMs and behavior trees"
+readme = "README.md"
+requires-python = ">=3.7"
+
