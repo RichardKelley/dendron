@@ -14,3 +14,8 @@ class NodeStatus(Enum):
     SUCCESS = 2
     FAILURE = 3
     SKIPPED = 4
+
+class PortDirection(Enum):
+    INPUT = 0,
+    OUTPUT = 1,
+    INOUT = 2

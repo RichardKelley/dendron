@@ -1,1 +1,1 @@
-from .action_node import ActionNode
+from .always_success_node import AlwaysSuccessNode
