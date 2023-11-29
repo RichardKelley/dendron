@@ -33,6 +33,9 @@ class TreeNode:
     def get_status(self) -> NodeStatus:
         return self.status 
 
+    def set_status(self, new_status):
+        self.status = new_status
+
     def name(self) -> str:
         return self.name
 
