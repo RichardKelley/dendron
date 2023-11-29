@@ -1,6 +1,8 @@
 from .basic_types import NodeType, NodeStatus
 from .tree_node import NodeConfig, TreeNode
 
+from typing import List 
+
 class ControlNode(TreeNode):
 
     def __init__(self, name, cfg):
@@ -23,6 +25,13 @@ class ControlNode(TreeNode):
     def node_type(self) -> NodeType:
         return NodeType.CONTROL
 
+    def halt(self):
+        self.reset_children()
+        self.reset_status()
+
     def reset_children(self):
-        pass
+        for child in self.children:
+            if child.get_status() == NodeStatus.RUNNING:
+                child.halt_node()
+            child.reset_status()
     
