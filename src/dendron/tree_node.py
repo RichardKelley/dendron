@@ -22,7 +22,15 @@ class TreeNode:
         self.registration_id = ""
 
     def execute_tick(self) -> NodeStatus:
-        pass # TODO
+        # TODO check preconditions if any 
+        
+        new_status = self.tick()
+
+        # TODO check postconditions if any
+
+        self.set_status(new_status)
+
+        return new_status
 
     def halt_node(self):
         pass # TODO
@@ -40,7 +48,7 @@ class TreeNode:
         return self.name
 
     def node_type(self) -> NodeType:
-        raise NotImplementedError()
+        raise NotImplementedError("Type is specified in subclass.")
 
     def get_uid(self):
         return self.config.uid
@@ -58,7 +66,7 @@ class TreeNode:
         pass # TODO
 
     def tick(self):
-        raise NotImplementedError()
+        raise NotImplementedError("Tick should be implemented in a subclass.")
 
     def reset_status(self):
         self.status = NodeStatus.IDLE
