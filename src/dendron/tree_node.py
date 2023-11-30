@@ -4,13 +4,13 @@ from .basic_types import NodeType, NodeStatus
 from typing import Dict
 from dataclasses import dataclass
 
-PortsRemapping = Dict[str, str]
+PortList = List[str]
 
 @dataclass
 class NodeConfig:
     blackboard : Blackboard
-    input_ports : PortsRemapping
-    output_ports : PortsRemapping
+    input_ports : PortList
+    output_ports : PortList
     uid : int
     path : str
     
@@ -33,7 +33,7 @@ class TreeNode:
         return new_status
 
     def halt_node(self):
-        pass # TODO
+        raise NotImplementedError("Halt behavior is specified in subclass.")
 
     def is_halted(self) -> bool:
         return self.status == NodeStatus.IDLE
@@ -60,10 +60,17 @@ class TreeNode:
         return self.config
     
     def get_input(self, key : str):
-        pass # TODO
+        if self.cfg.blackboard is not None:
+            value = self.cfg.blackboard[key]
+            return value
+        else:
+            raise RuntimeError("Blackboard is not set.")
 
     def set_output(self, key : str, value):
-        pass # TODO
+        if self.cfg.blackboard is not None:
+            self.cfg.blackboard[key] = value
+        else:
+            raise RuntimeError("Blackboard is not set.")
 
     def tick(self):
         raise NotImplementedError("Tick should be implemented in a subclass.")
