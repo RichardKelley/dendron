@@ -3,8 +3,9 @@ from ..tree_node import TreeNode
 from ..decorator_node import DecoratorNode
 
 class InverterNode(DecoratorNode):
-    def __init__(self, name):
+    def __init__(self, name, child : TreeNode = None):
         self.name = name
+        self.child_node = child 
 
     def tick(self):
         self.set_status(NodeStatus.RUNNING)
