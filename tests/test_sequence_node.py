@@ -3,8 +3,8 @@ from dendron.controls import SequenceNode
 from dendron.basic_types import NodeStatus
 
 def test_successful_sequence():
-    n1 = AlwaysSuccessNode()
-    n2 = AlwaysSuccessNode()
+    n1 = AlwaysSuccessNode("Success1")
+    n2 = AlwaysSuccessNode("Success2")
 
     seq = SequenceNode("Sequence")
 
