@@ -9,7 +9,7 @@ class SequenceNode(ControlNode):
 
         self.current_child_idx = 0
 
-    def halt(self):
+    def halt_node(self):
         self.current_child_idx = 0
         ControlNode.halt(self)
 
