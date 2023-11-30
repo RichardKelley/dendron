@@ -5,19 +5,13 @@ from typing import Dict, List
 from dataclasses import dataclass
 
 PortList = List[str]
-
-@dataclass
-class NodeConfig:
-    blackboard : Blackboard
-    input_ports : PortList
-    output_ports : PortList
-    uid : int
-    path : str
     
 class TreeNode:
-    def __init__(self, name : str, cfg : NodeConfig):
+    def __init__(self, name : str):
         self.name = name
-        self.config = cfg
+        self.blackboard = None
+        self.input_ports = []
+        self.output_ports = []
         self.status = NodeStatus.IDLE
         self.registration_id = ""
 
@@ -35,6 +29,15 @@ class TreeNode:
     def halt_node(self):
         raise NotImplementedError("Halt behavior is specified in subclass.")
 
+    def set_blackboard(self, bb : Blackboard):
+        self.blackboard = bb
+
+    def add_input_port(self, input_port):
+        self.input_ports.append(input_port)
+
+    def add_output_port(self, output_port):
+        self.output_ports.append(output_port)
+
     def is_halted(self) -> bool:
         return self.status == NodeStatus.IDLE
 
@@ -50,25 +53,25 @@ class TreeNode:
     def node_type(self) -> NodeType:
         raise NotImplementedError("Type is specified in subclass.")
 
-    def get_uid(self):
-        return self.config.uid
+    #def get_uid(self):
+    #   return self.config.uid
 
-    def full_path(self):
-        return self.config.path
+    #def full_path(self):
+    #    return self.config.path
 
-    def config(self) -> NodeConfig:
-        return self.config
+    #def config(self) -> NodeConfig:
+    #    return self.config
     
     def get_input(self, key : str):
-        if self.cfg.blackboard is not None:
-            value = self.cfg.blackboard[key]
+        if self.blackboard is not None:
+            value = self.blackboard[key]
             return value
         else:
             raise RuntimeError("Blackboard is not set.")
 
     def set_output(self, key : str, value):
-        if self.cfg.blackboard is not None:
-            self.cfg.blackboard[key] = value
+        if self.blackboard is not None:
+            self.blackboard[key] = value
         else:
             raise RuntimeError("Blackboard is not set.")
 

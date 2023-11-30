@@ -1,10 +1,10 @@
 from .basic_types import NodeType, NodeStatus
-from .tree_node import NodeConfig, TreeNode
+from .tree_node import TreeNode
 
 class DecoratorNode(TreeNode):
 
-    def __init__(self, name, cfg):
-        super().__init__(name, cfg)
+    def __init__(self, name):
+        super().__init__(name)
 
         self.child_node : TreeNode = Node 
 

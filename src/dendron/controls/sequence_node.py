@@ -1,11 +1,11 @@
 from ..basic_types import NodeType, NodeStatus
-from ..tree_node import NodeConfig, TreeNode
+from ..tree_node import TreeNode
 from ..control_node import ControlNode
 
 class SequenceNode(ControlNode):
 
     def __init__(self, name):
-        super().__init__(name, {})
+        super().__init__(name)
 
         self.current_child_idx = 0
 

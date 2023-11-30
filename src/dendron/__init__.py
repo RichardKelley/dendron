@@ -8,4 +8,4 @@ from .blackboard import Blackboard
 from .condition_node import ConditionNode 
 from .control_node import ControlNode 
 from .decorator_node import DecoratorNode 
-from .tree_node import (PortList, NodeConfig, TreeNode)
+from .tree_node import (PortList, TreeNode)
