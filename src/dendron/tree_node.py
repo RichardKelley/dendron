@@ -1,7 +1,7 @@
 from .blackboard import Blackboard
 from .basic_types import NodeType, NodeStatus
 
-from typing import Dict
+from typing import Dict, List
 from dataclasses import dataclass
 
 PortList = List[str]
