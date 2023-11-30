@@ -17,7 +17,7 @@ class InverterNode(DecoratorNode):
                 return NodeStatus.FAILURE
             case NodeStatus.FAILURE:
                 self.reset_child()
-                reutrn NodeStatus.SUCCESS
+                return NodeStatus.SUCCESS
             case NodeStatus.IDLE:
                 raise RuntimeError("Child can't return IDLE")
             case _:
