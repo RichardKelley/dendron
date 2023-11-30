@@ -52,15 +52,6 @@ class TreeNode:
 
     def node_type(self) -> NodeType:
         raise NotImplementedError("Type is specified in subclass.")
-
-    #def get_uid(self):
-    #   return self.config.uid
-
-    #def full_path(self):
-    #    return self.config.path
-
-    #def config(self) -> NodeConfig:
-    #    return self.config
     
     def get_input(self, key : str):
         if self.blackboard is not None:
