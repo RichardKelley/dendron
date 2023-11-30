@@ -7,6 +7,3 @@ class ConditionNode(TreeNode):
 
     def node_type(self) -> NodeType:
         return NodeType.CONDITION
-
-    #def  tick(self):
-    #    raise NotImplementedError()

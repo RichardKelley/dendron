@@ -7,8 +7,4 @@ class ActionNode(TreeNode):
 
     def node_type(self) -> NodeType:
         return NodeType.ACTION
-        
-    #def tick(self):
-    #    raise NotImplementedError()
-
     
