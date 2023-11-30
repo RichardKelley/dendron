@@ -4,8 +4,8 @@ from ..blackboard import Blackboard
 
 class AlwaysSuccessNode(ActionNode):
 
-    def __init__(self):
-        super().__init__("AlwaysSuccess")
+    def __init__(self, name):
+        super().__init__(name)
 
     def tick(self):
         return NodeStatus.SUCCESS
