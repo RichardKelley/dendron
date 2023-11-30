@@ -1,18 +1,24 @@
 from .basic_types import NodeType, NodeStatus
-from .tree_node import NodeConfig, TreeNode
+from .tree_node import TreeNode
+from .blackboard import Blackboard 
 
 class BehaviorTree:
-    def __init__(self):
-        pass # TODO
+    def __init__(self, root_node : TreeNode):
+        self.root = root_node
+        self.blackboard = Blackboard()
 
-    def initialize(self):
-        pass # TODO
+        self.root.set_blackboard(self.blackboard)
+
+    def set_root(self, new_root):
+        self.root = new_root
 
     def halt_tree(self):
-        pass # TODO
+        self.root.halt_node()
 
     def tick_once(self):
-        pass # TODO
+        self.root.execute_tick()
 
     def tick_while_running(self):
-        pass # TODO
+        status = self.root.execute_tick()
+        while status == NodeStatus.RUNNING:
+            status = self.root.execute_tick()
