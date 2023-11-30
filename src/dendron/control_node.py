@@ -25,7 +25,7 @@ class ControlNode(TreeNode):
     def node_type(self) -> NodeType:
         return NodeType.CONTROL
 
-    def halt(self):
+    def halt_node(self):
         self.reset_children()
         self.reset_status()
 
