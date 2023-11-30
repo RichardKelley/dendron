@@ -1,5 +1,6 @@
 from .actions import AlwaysSuccessNode
 from .controls import SequenceNode
+from .decorators import InverterNode
 
 from .action_node import ActionNode
 from .basic_types import (NodeType, NodeStatus, PortDirection)
