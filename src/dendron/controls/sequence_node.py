@@ -6,7 +6,7 @@ from typing import List
 
 class SequenceNode(ControlNode):
 
-    def __init__(self, name, children : List[TreeNode] = None):
+    def __init__(self, name, children : List[TreeNode] = []):
         super().__init__(name, children)
 
         self.current_child_idx = 0
