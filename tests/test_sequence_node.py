@@ -1,6 +1,6 @@
-from src.dendron.actions import AlwaysSuccessNode
-from src.dendron.controls import SequenceNode
-from src.dendron.basic_types import NodeStatus
+from dendron.actions import AlwaysSuccessNode
+from dendron.controls import SequenceNode
+from dendron.basic_types import NodeStatus
 
 def test_successful_sequence():
     n1 = AlwaysSuccessNode()
