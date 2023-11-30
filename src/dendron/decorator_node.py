@@ -15,7 +15,7 @@ class DecoratorNode(TreeNode):
         return self.child_node
 
     def halt_child(self):
-        pass # TODO
+        self.child.halt_node()
 
     def reset_child(self):
-        pass # TODO
+        self.child.reset_status()

@@ -7,4 +7,18 @@ class InverterNode(DecoratorNode):
         self.name = name
 
     def tick(self):
-        pass
+        self.set_status(NodeStatus.RUNNING)
+
+        child_status = self.child_node.execute_tick()
+
+        match child_status:
+            case NodeStatus.SUCCESS:
+                self.reset_child()
+                return NodeStatus.FAILURE
+            case NodeStatus.FAILURE:
+                self.reset_child()
+                reutrn NodeStatus.SUCCESS
+            case NodeStatus.IDLE:
+                raise RuntimeError("Child can't return IDLE")
+            case _:
+                return child_status
