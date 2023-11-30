@@ -3,10 +3,10 @@ from .tree_node import TreeNode
 
 class DecoratorNode(TreeNode):
 
-    def __init__(self, name):
+    def __init__(self, name, child : TreeNode = None):
         super().__init__(name)
 
-        self.child_node : TreeNode = Node 
+        self.child_node : TreeNode = child
 
     def set_child(self, child):
         self.child_node = child

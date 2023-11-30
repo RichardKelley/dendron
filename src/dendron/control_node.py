@@ -6,10 +6,10 @@ from typing import List
 
 class ControlNode(TreeNode):
 
-    def __init__(self, name):
+    def __init__(self, name, children : List[TreeNode] = None):
         super().__init__(name)
 
-        self.children : List[TreeNode] = []
+        self.children : List[TreeNode] = children 
 
     def add_child(self, child : TreeNode):
         self.children.append(child)
