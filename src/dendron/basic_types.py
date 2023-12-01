@@ -6,7 +6,6 @@ class NodeType(Enum):
     CONDITION = 2
     CONTROL = 3
     DECORATOR = 4
-    SUBTREE = 5
 
 class NodeStatus(Enum):
     IDLE = 0
@@ -14,8 +13,3 @@ class NodeStatus(Enum):
     SUCCESS = 2
     FAILURE = 3
     SKIPPED = 4
-
-class PortDirection(Enum):
-    INPUT = 0,
-    OUTPUT = 1,
-    INOUT = 2
