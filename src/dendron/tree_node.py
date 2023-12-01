@@ -4,8 +4,6 @@ from .basic_types import NodeType, NodeStatus
 from typing import Dict, List
 from dataclasses import dataclass
 
-PortList = List[str]
-    
 class TreeNode:
     def __init__(self, name : str):
         self.name = name
