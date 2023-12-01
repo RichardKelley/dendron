@@ -6,6 +6,9 @@ class NodeType(Enum):
     CONDITION = 2
     CONTROL = 3
     DECORATOR = 4
+    GOAL = 5
+    CONJUNCTION = 6
+    DISJUNCTION = 7
 
 class NodeStatus(Enum):
     IDLE = 0
