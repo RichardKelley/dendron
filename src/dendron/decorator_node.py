@@ -8,6 +8,9 @@ class DecoratorNode(TreeNode):
 
         self.child_node : TreeNode = child
 
+    def node_type(self):
+        return NodeType.DECORATOR 
+
     def set_child(self, child):
         self.child_node = child
 
