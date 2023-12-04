@@ -3,12 +3,16 @@ from .tree_node import TreeNode
 from .blackboard import Blackboard 
 
 class BehaviorTree:
-    def __init__(self, root_node : TreeNode):
+    def __init__(self, root_node : TreeNode, bb : Blackboard = None):
         self.root = root_node
-        self.blackboard = Blackboard()
 
+        if bb is None:
+            self.blackboard = Blackboard()
+        else:
+            self.blackboard = bb
+        
         self.root.set_blackboard(self.blackboard)
-
+            
     def set_root(self, new_root):
         self.root = new_root
 
