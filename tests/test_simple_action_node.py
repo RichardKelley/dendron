@@ -1,5 +1,6 @@
 from dendron import SimpleActionNode
 from dendron import NodeStatus
+from dendron import Blackboard, BlackboardEntryMetadata
 
 def test_simple_action_function():
 
@@ -27,3 +28,30 @@ def test_simple_action_functor():
     a1 = SimpleActionNode("greeting", world)
     result = a1.execute_tick()
     assert result == NodeStatus.SUCCESS
+
+def test_simple_action_blackboard_update():
+    bb = Blackboard()
+    bb["important_number"] = 41
+
+    class Updater:
+        def __init__(self):
+            self.bb = None
+
+        def set_bb(self, bb):
+            self.bb = bb
+
+        def __call__(self):
+            if self.bb is not None:
+                self.bb["important_number"] = 42
+                return NodeStatus.SUCCESS
+            else:
+                return NodeStatus.FAILURE
+
+    action = Updater()
+    node = SimpleActionNode("update_bb", action)
+    node.callback.set_bb(bb)
+
+    result = node.execute_tick()
+    assert result == NodeStatus.SUCCESS
+    assert bb["important_number"] == 42
+        
