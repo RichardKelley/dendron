@@ -1,5 +1,10 @@
 from .actions import SimpleActionNode
 
+from .action_node import ActionNode
+from .condition_node import ConditionNode
+from .control_node import ControlNode
+from .decorator_node import DecoratorNode
+
 from .blackboard import Blackboard
 from .behavior_tree import BehaviorTree
 
@@ -36,4 +41,15 @@ class BehaviorTreeFactory:
 
         return bt
 
+    def parse_action_node_xml(self, xml_node) -> ActionNode:
+        pass
+
+    def parse_condition_node_xml(self, xml_node) -> ConditionNode:
+        pass
+
+    def parse_control_node_xml(self, xml_node) -> ControlNode:
+        pass
+
+    def parse_decorator_node_xml(self, xml_node) -> DecoratorNode:
+        pass
     
