@@ -1,3 +1,4 @@
 *~
 __pycache__/
 dendron.egg-info/
+.pytest_cache/
