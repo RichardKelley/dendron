@@ -11,19 +11,21 @@ class BehaviorTreeFactory:
         self.registry = {}
 
     def register_action_type(self, name, action):
-        pass
+        self.registry[name] = action 
 
     def register_condition_type(self, name, condition):
-        pass
+        self.registry[name] = condition
 
     def register_decorator_type(self, name, decorator):
-        pass
+        self.registry[name] = decorator
 
     def register_simple_action(self, name, action_function):
-        pass
+        simple_action = SimpleActionNode("name", action_function)
+        self.registry[name] = simple_action
 
     def register_simple_condition(self, name, condition_function):
-        pass
+        # TODO
+        pass 
 
     def create_from_xml(self, xml_filename):
         bt = BehaviorTree()
