@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4"
+      main_tree_to_execute="TestTree1">
+  <BehaviorTree ID="TestTree1">
+    <Fallback>
+      <AtGoal/>
+      <Sequence>
+        <Precond1/>
+        <Action1/>
+      </Sequence>
+      <Sequence>
+        <Precond2/>
+        <Action2/>
+      </Sequence>
+    </Fallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="TestTree2">
+    <Fallback>
+      <AtGoal/>
+      <Sequence>
+        <Precond2/>
+        <Action2/>
+      </Sequence>
+      <Sequence>
+        <Precond1/>
+        <Action1/>
+      </Sequence>
+      <SubTree ID="TestTree3"
+               _autoremap="true"/>
+    </Fallback>
+  </BehaviorTree>
+
+  <BehaviorTree ID="TestTree3">
+    <PortedAction1 input_key="0"
+                   output_key="5"/>
+  </BehaviorTree>
+
+  <BehaviorTree ID="TestTree4">
+    <AlwaysSuccess/>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel>
+    <Action ID="Action1"
+            editable="true"/>
+    <Action ID="Action2"
+            editable="true"/>
+    <Condition ID="AtGoal"
+               editable="true"/>
+    <Action ID="PortedAction1"
+            editable="true">
+      <input_port name="input_key"
+                  default="0">An input port.</input_port>
+      <output_port name="output_key"
+                   default="5">An output port.</output_port>
+    </Action>
+    <Condition ID="Precond1"
+               editable="true"/>
+    <Condition ID="Precond2"
+               editable="true"/>
+  </TreeNodesModel>
+
+</root>
