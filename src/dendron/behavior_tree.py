@@ -20,7 +20,7 @@ class BehaviorTree:
         self.root.halt_node()
 
     def tick_once(self):
-        self.root.execute_tick()
+        return self.root.execute_tick()
 
     def tick_while_running(self):
         status = self.root.execute_tick()
