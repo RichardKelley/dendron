@@ -69,3 +69,6 @@ class TreeNode:
 
     def reset_status(self):
         self.status = NodeStatus.IDLE
+
+    def pretty_repr(self, depth = 0):
+        raise NotImplementedError("Pretty printing should be implemented in a subclass.")

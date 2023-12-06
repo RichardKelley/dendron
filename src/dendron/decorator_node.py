@@ -22,3 +22,8 @@ class DecoratorNode(TreeNode):
 
     def reset_child(self):
         self.child_node.reset_status()
+
+    def pretty_repr(self, depth = 0):
+        tabs = '\t'*depth
+        repr = f"{tabs}Decorator {self.name}\n{self.child_node.pretty_repr(depth+1)}"
+        return repr

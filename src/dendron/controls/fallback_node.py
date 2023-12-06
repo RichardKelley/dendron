@@ -44,3 +44,11 @@ class FallbackNode(ControlNode):
 
         return NodeStatus.FAILURE
 
+    def pretty_repr(self, depth = 0):
+        tabs = '\t'*depth
+        repr = f"{tabs}Fallback {self.name}"
+        for child in self.children:
+            child_repr = child.pretty_repr(depth+1)
+            repr += f"\n{child_repr}"
+        repr += "\n"
+        return repr

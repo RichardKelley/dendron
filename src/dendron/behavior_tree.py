@@ -26,3 +26,6 @@ class BehaviorTree:
         status = self.root.execute_tick()
         while status == NodeStatus.RUNNING:
             status = self.root.execute_tick()
+
+    def pretty_print(self):
+        print(self.root.pretty_repr())

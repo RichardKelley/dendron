@@ -7,3 +7,8 @@ class ConditionNode(TreeNode):
 
     def node_type(self) -> NodeType:
         return NodeType.CONDITION
+
+    def pretty_repr(self, depth = 0):
+        tabs = '\t'*depth
+        repr = f"{tabs}Condition {self.name}"
+        return repr

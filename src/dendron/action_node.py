@@ -7,4 +7,9 @@ class ActionNode(TreeNode):
 
     def node_type(self) -> NodeType:
         return NodeType.ACTION
+
+    def pretty_repr(self, depth = 0) -> str:
+        tabs = '\t'*depth
+        repr = f"{tabs}Action {self.name}"
+        return repr
     
