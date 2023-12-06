@@ -6,6 +6,7 @@ from .decorator_node import DecoratorNode
 from .controls import FallbackNode, SequenceNode
 from .actions import AlwaysFailureNode, AlwaysSuccessNode, SimpleActionNode
 from .decorators import InverterNode
+from .conditions import SimpleConditionNode
 
 from .blackboard import Blackboard
 from .behavior_tree import BehaviorTree
@@ -65,8 +66,10 @@ class BehaviorTreeFactory:
         self.node_types[name] = NodeType.ACTION
 
     def register_simple_condition(self, name, condition_function):
-        # TODO
-        pass 
+        self.registry[name] = SimpleConditionNode
+        self.functors[name] = condition_function
+        self.node_counts[name] = 0
+        self.node_types[name] = NodeType.CONDITION
 
     def create_from_xml(self, xml_filename):
         self.current_blackboard = Blackboard()
@@ -169,7 +172,11 @@ class BehaviorTreeFactory:
         node_id = self.node_counts[tag]
         node_name = tag + "_" + str(node_id)
 
-        new_node = self.registry[tag](node_name)
+        if self.registry[tag] == SimpleConditionNode:
+            f = self.functors[tag]
+            new_node = self.registry[tag](node_name, f)
+        else:
+            new_node = self.registry[tag](node_name)
 
         self.node_counts[tag] += 1
 
@@ -187,8 +194,6 @@ class BehaviorTreeFactory:
         node_id = self.node_counts[tag]
         node_name = tag + "_" + str(node_id)
 
-        new_node = self.registry[tag](node_name)
-
         self.node_counts[tag] += 1
 
         if xml_node.attrib:
@@ -197,7 +202,6 @@ class BehaviorTreeFactory:
 
         # parse children
         child_nodes = []
-
         for child_xml in xml_node:
             if not child_xml.tag in self.registry:
                 raise RuntimeError(f"Unregistered node {child_xml.tag}")
@@ -214,7 +218,8 @@ class BehaviorTreeFactory:
 
             child_nodes.append(child_node)
 
-        new_node.add_children(child_nodes)
+        new_node = self.registry[tag](node_name, child_nodes)
+
         return new_node
 
     def parse_decorator_node_xml(self, xml_node) -> DecoratorNode:
