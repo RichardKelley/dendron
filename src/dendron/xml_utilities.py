@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET 
 import numpy as np 
 
+from typing import List
+
 def contains_subtree(xml_node) -> bool:
     if xml_node.tag != "SubTree" and len(xml_node) == 0:
         return False
@@ -44,6 +46,7 @@ def cycle_free(xml_root):
     g.compute_connectivity()
 
     # for each node that has subtrees, see if can get back
+    has_cycle = False
     for child in xml_root:
         if child.tag != "BehaviorTree":
             continue
@@ -51,10 +54,26 @@ def cycle_free(xml_root):
         for subtree in subtrees:
             if g.get_edge(child.attrib["ID"], subtree) < np.inf:
                 if g.get_edge(subtree, child.attrib["ID"]) < np.inf:
-                    return False
+                    has_cycle = True
     
-    return True
-        
+    return has_cycle
+    
+def get_parse_order(xml_root):
+    trees = []
+    for child in xml_root:
+        if child.tag == "BehaviorTree":
+            trees.append(child.attrib["ID"])
+    
+    g = SubtreeGraph(trees)
+
+    for child in xml_root:
+        if child.tag != "BehaviorTree":
+            continue
+        subtrees = get_subtree_names(child)
+        for subtree in subtrees:
+            g.set_edge(child.attrib["ID"], subtree)
+
+    return g.topological_sort()
         
 class SubtreeGraph:
     '''
@@ -66,30 +85,59 @@ class SubtreeGraph:
     '''
     def __init__(self, nodes):
         self.nodes = {}
+        self.reverse_nodes = {}
         for i, v in enumerate(nodes):
             self.nodes[v] = i
+            self.reverse_nodes[i] = v
 
         self.n = len(nodes)
+        self.adjacency = np.zeros((self.n, self.n))
         self.dist = np.ones((self.n,self.n)) * np.inf
+
+        for i in range(self.n):
+            self.dist[i,i] = 0
+
+    def topological_sort(self):
+        output = [] # sorted list
+        S = [] # nodes with no incoming edge
+
+        # we need to reverse the dependency relation here. 
+        digraph = self.adjacency.copy().T
+
+        for j in range(0, self.n):
+            if not np.any(digraph[:,j]):
+                S.append(j)
+
+        while len(S) > 0:
+            node = S.pop()
+            output.append(node)
+
+            for i in range(0, self.n):
+                if digraph[node, i] == 1:
+                    digraph[node,i] = 0
+                    if not np.any(digraph[:,i]):
+                        S.append(i)
+
+        return [self.reverse_nodes[k] for k in output]
 
     def set_edge(self, v1, v2, val = 1):
         i = self.nodes[v1]
         j = self.nodes[v2]
-        self.dist[i][j] = val
+        self.adjacency[i,j] = val
+        self.dist[i,j] = val
 
     def get_edge(self, v1, v2):
         i = self.nodes[v1]
         j = self.nodes[v2]
-        return self.dist[i][j]
+        return self.adjacency[i][j]
 
     def compute_connectivity(self):
-        for v in self.nodes.keys():
-            self.set_edge(v,v, 0)
         for k in range(0, self.n):
             for i in range(0, self.n):
                 for j in range(0, self.n):
                     if self.dist[i][j] > self.dist[i][k] + self.dist[k][j]:
                         self.dist[i][j] = self.dist[i][k] + self.dist[k][j]
+        
 
 
 
