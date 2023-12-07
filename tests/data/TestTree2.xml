@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root BTCPP_format="4"
+      main_tree_to_execute="CycleTree0">
+  <BehaviorTree ID="CycleTree0">
+    <SubTree ID="CycleTree1"/>
+  </BehaviorTree>
+
+  <BehaviorTree ID="CycleTree1">
+    <SubTree ID="CycleTree0"/>
+  </BehaviorTree>
+
+  <!-- Description of Node Models (used by Groot) -->
+  <TreeNodesModel/>
+
+</root>

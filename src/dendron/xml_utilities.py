@@ -52,11 +52,12 @@ def cycle_free(xml_root):
             continue
         subtrees = get_subtree_names(child)
         for subtree in subtrees:
-            if g.get_edge(child.attrib["ID"], subtree) < np.inf:
-                if g.get_edge(subtree, child.attrib["ID"]) < np.inf:
-                    has_cycle = True
+            i = g.nodes[child.attrib["ID"]]
+            j = g.nodes[subtree]
+            if g.dist[i,j] < np.inf and g.dist[j,i] < np.inf:
+                has_cycle = True
     
-    return has_cycle
+    return not has_cycle # it's called cycle_free
     
 def get_parse_order(xml_root):
     trees = []
