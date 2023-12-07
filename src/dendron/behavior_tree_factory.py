@@ -107,6 +107,10 @@ class BehaviorTreeFactory:
             main_tree = behavior_tree_xml[0]
 
         # load each behavior tree
+        ## convert the other trees
+        # TODO
+
+
         ## convert the main tree
         main_tree_type = self.node_types[main_tree[0].tag]
         root_node = None
@@ -119,9 +123,6 @@ class BehaviorTreeFactory:
                 root_node = self.parse_control_node_xml(main_tree[0])
             case NodeType.DECORATOR:
                 root_node = self.parse_decorator_node_xml(main_tree[0])
-
-        ## convert the other trees
-        # TODO
 
         bt = BehaviorTree(root_node)
         return bt
@@ -224,4 +225,6 @@ class BehaviorTreeFactory:
 
     def parse_decorator_node_xml(self, xml_node) -> DecoratorNode:
         pass
-    
+
+    def parse_subtree_node_groot(self, xml_node):
+        pass
