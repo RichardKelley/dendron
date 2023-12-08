@@ -9,6 +9,7 @@ class NodeType(Enum):
     GOAL = 5
     CONJUNCTION = 6
     DISJUNCTION = 7
+    SUBTREE = 8
 
 class NodeStatus(Enum):
     IDLE = 0
