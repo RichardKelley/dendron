@@ -13,7 +13,13 @@ from .behavior_tree import BehaviorTree
 
 from .basic_types import NodeType
 
+from .tree_node import TreeNode
+
+from .xml_utilities import cycle_free, get_parse_order
+
 import xml.etree.ElementTree as ET 
+
+from copy import deepcopy
 
 class BehaviorTreeFactory:
 
@@ -28,6 +34,10 @@ class BehaviorTreeFactory:
         self.registry["Inverter"] = InverterNode
         self.registry["AlwaysSuccess"] = AlwaysSuccessNode
         self.registry["AlwaysFailure"] = AlwaysFailureNode
+        
+        # We replace SubTree nodes with the subtree root, so 
+        # we use None as a placeholder here. 
+        self.registry["SubTree"] = None 
 
         self.node_counts["Fallback"] = 0
         self.node_counts["Sequence"] = 0
@@ -40,9 +50,11 @@ class BehaviorTreeFactory:
         self.node_types["Inverter"] = NodeType.DECORATOR
         self.node_types["AlwaysSuccess"] = NodeType.ACTION
         self.node_types["AlwaysFailure"] = NodeType.ACTION
+        self.node_types["SubTree"] = NodeType.SUBTREE
 
         self.current_blackboard = None
         self.tree_nodes_model = None
+        self.behavior_trees = {}
 
     def register_action_type(self, name, action):
         self.registry[name] = action 
@@ -86,8 +98,7 @@ class BehaviorTreeFactory:
         main_tree_name = None
         if has_main_tree:
             main_tree_name = xml_root.attrib["main_tree_to_execute"]
-
-        # load TreeNodesModel
+        
         tree_nodes_xml = None
         behavior_tree_xml = []
         main_tree = None
@@ -100,6 +111,18 @@ class BehaviorTreeFactory:
                 else:
                     behavior_tree_xml.append(child)
 
+        # load TreeNodesModel
+        for child in tree_nodes_xml:
+            match child.tag:
+                case "Action":
+                    self.node_types[child.attrib["ID"]] = NodeType.ACTION
+                case "Condition":
+                    self.node_types[child.attrib["ID"]] = NodeType.CONDITION
+                case "Control":
+                    self.node_types[child.attrib["ID"]] = NodeType.CONTROL
+                case "Decorator":
+                    self.node_types[child.attrib["ID"]] = NodeType.DECORATOR
+
         if not has_main_tree and len(behavior_tree_xml) > 1:
             raise RuntimeError("Multiple behavior trees but no main tree.")
 
@@ -108,40 +131,44 @@ class BehaviorTreeFactory:
 
         # load each behavior tree
         ## convert the other trees
-        # TODO
+        parse_order = get_parse_order(xml_root)
+        for tree_name in parse_order:
+            if tree_name == main_tree_name:
+                continue
+            tree = None
+            for child in xml_root:
+                if child.tag != "BehaviorTree":
+                    continue
+                child_name = child.attrib["ID"]
+                if child_name != tree_name:
+                    continue
+                else:
+                    tree = self.parse_behavior_tree_groot(child)
+                    self.behavior_trees[tree_name] = tree
 
+        # parse the main tree last
+        main_tree = self.parse_behavior_tree_groot(main_tree)
+        self.behavior_trees[main_tree_name] = main_tree
 
-        ## convert the main tree
-        main_tree_type = self.node_types[main_tree[0].tag]
+        return main_tree
+        
+    def parse_behavior_tree_groot(self, xml_node) -> BehaviorTree:
+        tree_type = self.node_types[xml_node[0].tag]
         root_node = None
-        match main_tree_type:
+        match tree_type:
             case NodeType.ACTION:
-                root_node = self.parse_action_node_xml(main_tree[0])
+                root_node = self.parse_action_node_xml(xml_node[0])
             case NodeType.CONDITION:
-                root_node = self.parse_condition_node_xml(main_tree[0])
+                root_node = self.parse_condition_node_xml(xml_node[0])
             case NodeType.CONTROL:
-                root_node = self.parse_control_node_xml(main_tree[0])
+                root_node = self.parse_control_node_xml(xml_node[0])
             case NodeType.DECORATOR:
-                root_node = self.parse_decorator_node_xml(main_tree[0])
+                root_node = self.parse_decorator_node_xml(xml_node[0])
+            case NodeType.SUBTREE:
+                root_node = self.parse_subtree_node_groot(xml_node[0])
 
         bt = BehaviorTree(root_node)
         return bt
-
-    def parse_tree_nodes_model_xml(self, xml_node):
-        if len(xml_node) == 0:
-            return
-        for child in xml_node:
-            new_node_type = None
-            match child.tag:
-                case "Action":
-                    print(f"Adding action {child['ID']}")
-                case "Condition":
-                    print(f"Adding condition {child['ID']}")
-                case "Control":
-                    print(f"Adding control {child['ID']}")
-                case "Decorator":
-                    print(f"Adding decorator {child['ID']}")
-        
 
     def parse_action_node_xml(self, xml_node) -> ActionNode:
         tag = xml_node.tag
@@ -216,6 +243,8 @@ class BehaviorTreeFactory:
                     child_node = self.parse_control_node_xml(child_xml)
                 case NodeType.DECORATOR:
                     child_node = self.parse_decorator_node_xml(child_xml)
+                case NodeType.SUBTREE:
+                    child_node = self.parse_subtree_node_groot(child_xml)
 
             child_nodes.append(child_node)
 
@@ -226,5 +255,8 @@ class BehaviorTreeFactory:
     def parse_decorator_node_xml(self, xml_node) -> DecoratorNode:
         pass
 
-    def parse_subtree_node_groot(self, xml_node):
-        pass
+    def parse_subtree_node_groot(self, xml_node) -> TreeNode:
+        subtree_name = xml_node.attrib["ID"]
+
+        # TODO is deepcopy good enough?
+        return deepcopy(self.behavior_trees[subtree_name].root)
