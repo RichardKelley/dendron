@@ -2,23 +2,17 @@ from .action_node import ActionNode
 from .condition_node import ConditionNode
 from .control_node import ControlNode
 from .decorator_node import DecoratorNode
-
 from .controls import FallbackNode, SequenceNode
 from .actions import AlwaysFailureNode, AlwaysSuccessNode, SimpleActionNode
 from .decorators import InverterNode
 from .conditions import SimpleConditionNode
-
 from .blackboard import Blackboard
 from .behavior_tree import BehaviorTree
-
 from .basic_types import NodeType
-
 from .tree_node import TreeNode
-
 from .xml_utilities import cycle_free, get_parse_order
 
 import xml.etree.ElementTree as ET 
-
 from copy import deepcopy
 
 class BehaviorTreeFactory:
