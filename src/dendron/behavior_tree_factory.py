@@ -77,7 +77,7 @@ class BehaviorTreeFactory:
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.CONDITION
 
-    def create_from_xml(self, xml_filename):
+    def create_from_groot(self, xml_filename):
         self.current_blackboard = Blackboard()
 
         xml_tree = ET.parse(xml_filename)
@@ -151,20 +151,20 @@ class BehaviorTreeFactory:
         root_node = None
         match tree_type:
             case NodeType.ACTION:
-                root_node = self.parse_action_node_xml(xml_node[0])
+                root_node = self.parse_action_node_groot(xml_node[0])
             case NodeType.CONDITION:
-                root_node = self.parse_condition_node_xml(xml_node[0])
+                root_node = self.parse_condition_node_groot(xml_node[0])
             case NodeType.CONTROL:
-                root_node = self.parse_control_node_xml(xml_node[0])
+                root_node = self.parse_control_node_groot(xml_node[0])
             case NodeType.DECORATOR:
-                root_node = self.parse_decorator_node_xml(xml_node[0])
+                root_node = self.parse_decorator_node_groot(xml_node[0])
             case NodeType.SUBTREE:
                 root_node = self.parse_subtree_node_groot(xml_node[0])
 
         bt = BehaviorTree(root_node)
         return bt
 
-    def parse_action_node_xml(self, xml_node) -> ActionNode:
+    def parse_action_node_groot(self, xml_node) -> ActionNode:
         tag = xml_node.tag
         if not tag in self.registry:
             raise KeyError(f"Undefined action {tag}.")
@@ -186,7 +186,7 @@ class BehaviorTreeFactory:
                 
         return new_node
 
-    def parse_condition_node_xml(self, xml_node) -> ConditionNode:
+    def parse_condition_node_groot(self, xml_node) -> ConditionNode:
         tag = xml_node.tag
         if not tag in self.registry:
             raise KeyError(f"Undefined condition {tag}.")
@@ -208,7 +208,7 @@ class BehaviorTreeFactory:
 
         return new_node
 
-    def parse_control_node_xml(self, xml_node) -> ControlNode:
+    def parse_control_node_groot(self, xml_node) -> ControlNode:
         tag = xml_node.tag
         if not tag in self.registry:
             raise KeyError(f"Undefined control {tag}.")
@@ -230,13 +230,13 @@ class BehaviorTreeFactory:
 
             match self.node_types[child_xml.tag]:
                 case NodeType.ACTION:
-                    child_node = self.parse_action_node_xml(child_xml)
+                    child_node = self.parse_action_node_groot(child_xml)
                 case NodeType.CONDITION:
-                    child_node = self.parse_condition_node_xml(child_xml)
+                    child_node = self.parse_condition_node_groot(child_xml)
                 case NodeType.CONTROL:
-                    child_node = self.parse_control_node_xml(child_xml)
+                    child_node = self.parse_control_node_groot(child_xml)
                 case NodeType.DECORATOR:
-                    child_node = self.parse_decorator_node_xml(child_xml)
+                    child_node = self.parse_decorator_node_groot(child_xml)
                 case NodeType.SUBTREE:
                     child_node = self.parse_subtree_node_groot(child_xml)
 
@@ -246,7 +246,7 @@ class BehaviorTreeFactory:
 
         return new_node
 
-    def parse_decorator_node_xml(self, xml_node) -> DecoratorNode:
+    def parse_decorator_node_groot(self, xml_node) -> DecoratorNode:
         tag = xml_node.tag
         if not tag in self.registry:
             raise KeyError(f"Undefined decorator {tag}.")
@@ -264,13 +264,13 @@ class BehaviorTreeFactory:
         child_xml = xml_node[0]
         match self.node_types[child_xml.tag]:
             case NodeType.ACTION:
-                child_node = self.parse_action_node_xml(child_xml)
+                child_node = self.parse_action_node_groot(child_xml)
             case NodeType.CONDITION:
-                child_node = self.parse_condition_node_xml(child_xml)
+                child_node = self.parse_condition_node_groot(child_xml)
             case NodeType.CONTROL:
-                child_node = self.parse_control_node_xml(child_xml)
+                child_node = self.parse_control_node_groot(child_xml)
             case NodeType.DECORATOR:
-                child_node = self.parse_decorator_node_xml(child_xml)
+                child_node = self.parse_decorator_node_groot(child_xml)
             case NodeType.SUBTREE:
                 child_node = self.parse_subtree_node_groot(child_xml)
 
