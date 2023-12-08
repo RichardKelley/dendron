@@ -253,7 +253,35 @@ class BehaviorTreeFactory:
         return new_node
 
     def parse_decorator_node_xml(self, xml_node) -> DecoratorNode:
-        pass
+        tag = xml_node.tag
+        if not tag in self.registry:
+            raise KeyError(f"Undefined decorator {tag}.")
+
+        node_id = self.node_counts[tag]
+        node_name = tag + "_" + str(node_id)
+
+        self.node_counts[tag] += 1
+
+        if xml_node.attrib:
+            for key in xml_node.attrib:
+                self.current_blackboard[key] = xml_node.attrib[key]
+
+        child_node = None
+        child_xml = xml_node[0]
+        match self.node_types[child_xml.tag]:
+            case NodeType.ACTION:
+                child_node = self.parse_action_node_xml(child_xml)
+            case NodeType.CONDITION:
+                child_node = self.parse_condition_node_xml(child_xml)
+            case NodeType.CONTROL:
+                child_node = self.parse_control_node_xml(child_xml)
+            case NodeType.DECORATOR:
+                child_node = self.parse_decorator_node_xml(child_xml)
+            case NodeType.SUBTREE:
+                child_node = self.parse_subtree_node_groot(child_xml)
+
+        new_node = self.registry[tag](node_name, child_node)
+        return new_node
 
     def parse_subtree_node_groot(self, xml_node) -> TreeNode:
         subtree_name = xml_node.attrib["ID"]
