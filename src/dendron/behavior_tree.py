@@ -19,6 +19,12 @@ class BehaviorTree:
     def halt_tree(self):
         self.root.halt_node()
 
+    def blackboard_get(self, key):
+        return self.blackboard[key]
+
+    def blackboard_set(self, key, value):
+        self.blackboard[key] = value
+
     def tick_once(self):
         return self.root.execute_tick()
 
