@@ -17,3 +17,9 @@ class NodeStatus(Enum):
     SUCCESS = 2
     FAILURE = 3
     SKIPPED = 4
+
+class Quantization(Enum):
+    NoQuantization = 0, 
+    TwoBit = 2,
+    FourBit = 4,
+    EightBit = 8,
