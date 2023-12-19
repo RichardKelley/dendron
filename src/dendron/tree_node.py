@@ -30,6 +30,14 @@ class TreeNode:
     def set_blackboard(self, bb : Blackboard):
         self.blackboard = bb
 
+    def blackboard_set(self, key, value):
+        full_key = self.name + '/' + key
+        self.blackboard[full_key] = value
+
+    def blackboard_get(self, key):
+        full_key = self.name + '/' + key
+        return self.blackboard[full_key]
+
     def add_input_port(self, input_port):
         self.input_ports.append(input_port)
 
