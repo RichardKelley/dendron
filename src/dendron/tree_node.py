@@ -8,10 +8,7 @@ class TreeNode:
     def __init__(self, name : str):
         self.name = name
         self.blackboard = None
-        self.input_ports = []
-        self.output_ports = []
         self.status = NodeStatus.IDLE
-        self.registration_id = ""
 
     def execute_tick(self) -> NodeStatus:
         # TODO check preconditions if any 
@@ -38,12 +35,6 @@ class TreeNode:
         full_key = self.name + '/' + key
         return self.blackboard[full_key]
 
-    def add_input_port(self, input_port):
-        self.input_ports.append(input_port)
-
-    def add_output_port(self, output_port):
-        self.output_ports.append(output_port)
-
     def is_halted(self) -> bool:
         return self.status == NodeStatus.IDLE
 
@@ -58,19 +49,6 @@ class TreeNode:
 
     def node_type(self) -> NodeType:
         raise NotImplementedError("Type is specified in subclass.")
-    
-    def get_input(self, key : str):
-        if self.blackboard is not None:
-            value = self.blackboard[key]
-            return value
-        else:
-            raise RuntimeError("Blackboard is not set.")
-
-    def set_output(self, key : str, value):
-        if self.blackboard is not None:
-            self.blackboard[key] = value
-        else:
-            raise RuntimeError("Blackboard is not set.")
 
     def tick(self):
         raise NotImplementedError("Tick should be implemented in a subclass.")
