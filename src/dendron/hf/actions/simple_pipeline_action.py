@@ -44,9 +44,9 @@ class SimplePipelineActionNode(ActionNode):
 
     def tick(self):
         try:
-            input_text = self.blackboard_get(self.input_key)
+            input_text = self.blackboard[self.input_key]
             output = self.pipeline(input_text)
-            self.blackboard_set(self.output_key, output)
+            self.blackboard[self.output_key] = output
             return NodeStatus.SUCCESS            
         except:
             return NodeStatus.FAILURE
