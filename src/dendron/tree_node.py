@@ -21,6 +21,13 @@ class TreeNode:
 
         return new_status
 
+    def set_description(self, desc):
+        """
+        A textual description intended to help with automated
+        policy construction.
+        """
+        self.description = desc
+
     def halt_node(self):
         raise NotImplementedError("Halt behavior is specified in subclass.")
 
