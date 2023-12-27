@@ -11,11 +11,7 @@ class TreeNode:
         self.status = NodeStatus.IDLE
 
     def execute_tick(self) -> NodeStatus:
-        # TODO check preconditions if any 
-        
         new_status = self.tick()
-
-        # TODO check postconditions if any
 
         self.set_status(new_status)
 
