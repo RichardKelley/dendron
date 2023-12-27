@@ -11,6 +11,9 @@ from typing import Optional, Callable
 @dataclass
 class CausalLMActionConfig:
     model_name : str
+    auto_load : Optional[bool] = field(
+        default = True
+    )
     input_key : Optional[str] = field(
         default = "in"
     )
@@ -58,37 +61,45 @@ class CausalLMAction(ActionNode):
             case False, False:
                 self.quantization = Quantization.NoQuantization
 
-        match self.quantization:
-            case Quantization.NoQuantization:
-                self.model = AutoModelForCausalLM.from_pretrained(cfg.model_name)
-            case Quantization.FourBit:
-                self.model = AutoModelForCausalLM.from_pretrained(cfg.model_name, load_in_4bit=True, device_map=self.device)
-            case Quantization.EightBit:
-                self.model = AutoModelForCausalLM.from_pretrained(cfg.model_name, load_in_8bit=True, device_map=self.device)
+        if cfg.auto_load:
+            match self.quantization:
+                case Quantization.NoQuantization:
+                    self.model = AutoModelForCausalLM.from_pretrained(cfg.model_name)
+                case Quantization.FourBit:
+                    self.model = AutoModelForCausalLM.from_pretrained(cfg.model_name, load_in_4bit=True, device_map=self.device)
+                case Quantization.EightBit:
+                    self.model = AutoModelForCausalLM.from_pretrained(cfg.model_name, load_in_8bit=True, device_map=self.device)    
+            self.tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
+        else:
+            self.model = None
+            self.tokenizer = None
+        
+        self.input_processor = None
+        self.output_processor = None
 
-        self.tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
-        self.pre_tick_fn = None
-        self.post_tick_fn = None
+    def set_model(self, new_model):
+        self.model = new_model
+        self.tokenizer = AutoTokenizer.from_pretrained(new_model.name_or_path)
 
-    def set_pre_tick(self, f : Callable[str, str]):
-        self.pre_tick_fn = f
+    def set_input_processor(self, f : Callable):
+        self.input_processor = f
 
-    def set_post_tick(self, f : Callable[str, str]):
-        self.post_tick_fn = f
+    def set_output_processor(self, f : Callable):
+        self.output_processor = f
 
     def tick(self):
         try:
             input_text = self.blackboard[self.input_key]
 
-            if self.pre_tick_fn:
-                input_text = self.pre_tick_fn(input_text)
+            if self.input_processor:
+                input_text = self.input_processor(input_text)
 
             input_ids = self.tokenizer(input_text, return_tensors="pt").to(self.model.device)
             generated_ids = self.model.generate(**input_ids, max_new_tokens=self.max_new_tokens, do_sample=self.do_sample, top_p=self.top_p)
             output_text = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
 
-            if self.post_tick_fn is not None:
-                output_text = self.post_tick_fn(self, output_text)
+            if self.output_processor:
+                output_text = self.output_processor(self, output_text)
 
             self.blackboard[self.output_key] = output_text
 
