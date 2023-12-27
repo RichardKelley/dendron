@@ -1,7 +1,9 @@
 from .blackboard import Blackboard
 from .basic_types import NodeType, NodeStatus
 
-from typing import Dict, List
+import types
+
+from typing import Dict, List, Callable
 from dataclasses import dataclass
 
 class TreeNode:
@@ -10,8 +12,17 @@ class TreeNode:
         self.blackboard = None
         self.status = NodeStatus.IDLE
 
+        self.pre_tick_fn = None
+        self.post_tick_fn = None
+
     def execute_tick(self) -> NodeStatus:
+        if self.pre_tick_fn:
+            self.pre_tick_fn()
+
         new_status = self.tick()
+
+        if self.post_tick_fn:
+            self.post_tick_fn()
 
         self.set_status(new_status)
 
@@ -52,6 +63,12 @@ class TreeNode:
 
     def node_type(self) -> NodeType:
         raise NotImplementedError("Type is specified in subclass.")
+
+    def set_pre_tick(self, f : Callable):
+        self.pre_tick_fn = types.MethodType(f, self)
+
+    def set_post_tick(self, f : Callable):
+        self.post_tick_fn = types.MethodType(f, self)
 
     def tick(self):
         raise NotImplementedError("Tick should be implemented in a subclass.")
