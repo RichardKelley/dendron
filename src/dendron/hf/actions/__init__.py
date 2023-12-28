@@ -1,2 +1,3 @@
 from .simple_pipeline_action import SimplePipelineActionConfig, SimplePipelineActionNode
 from .causal_lm_action import CausalLMActionConfig, CausalLMAction
+from .image_lm_action import ImageLMActionConfig, ImageLMAction

@@ -1,2 +1,3 @@
 from .actions import SimplePipelineActionConfig, SimplePipelineActionNode, \
-    CausalLMActionConfig, CausalLMAction
+    CausalLMActionConfig, CausalLMAction, \
+    ImageLMActionConfig, ImageLMAction
