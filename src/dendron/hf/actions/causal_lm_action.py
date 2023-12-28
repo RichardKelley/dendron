@@ -38,6 +38,12 @@ class CausalLMActionConfig:
     top_p : Optional[float] = field(
         default = 1.0
     )
+    torch_dtype : Optional[torch.dtype] = field(
+        default=torch.float16
+    )
+    use_flash_attn_2 : Optional[bool] = field(
+        default = False
+    )
 
 class CausalLMAction(ActionNode):
     def __init__(self, name : str, cfg : CausalLMActionConfig):
@@ -51,6 +57,8 @@ class CausalLMAction(ActionNode):
         self.do_sample = cfg.do_sample
         self.top_p = cfg.top_p
 
+        self.torch_dtype = cfg.torch_dtype
+
         match cfg.load_in_4bit, cfg.load_in_8bit:
             case True, True:
                 self.quantization = Quantization.FourBit
@@ -61,14 +69,36 @@ class CausalLMAction(ActionNode):
             case False, False:
                 self.quantization = Quantization.NoQuantization
 
+        if cfg.use_flash_attn_2:
+            self.attn_implementation = "flash_attention_2"
+        else:
+            self.attn_implementation = "sdpa"
+
         if cfg.auto_load:
             match self.quantization:
                 case Quantization.NoQuantization:
-                    self.model = AutoModelForCausalLM.from_pretrained(cfg.model_name)
+                    self.model = AutoModelForCausalLM.from_pretrained(
+                        cfg.model_name,
+                        torch_dtype=self.torch_dtype,
+                        low_cpu_mem_usage=True,
+                        attn_implementation=self.attn_implementation
+                    )
                 case Quantization.FourBit:
-                    self.model = AutoModelForCausalLM.from_pretrained(cfg.model_name, load_in_4bit=True, device_map=self.device)
+                    self.model = AutoModelForCausalLM.from_pretrained(
+                        cfg.model_name, 
+                        load_in_4bit=True, 
+                        torch_dtype=self.torch_dtype,
+                        low_cpu_mem_usage=True,
+                        attn_implementation=self.attn_implementation
+                    )
                 case Quantization.EightBit:
-                    self.model = AutoModelForCausalLM.from_pretrained(cfg.model_name, load_in_8bit=True, device_map=self.device)    
+                    self.model = AutoModelForCausalLM.from_pretrained(
+                        cfg.model_name, 
+                        load_in_8bit=True, 
+                        torch_dtype=self.torch_dtype,
+                        low_cpu_mem_usage=True,
+                        attn_implementation=self.attn_implementation
+                    )    
             self.tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
         else:
             self.model = None
