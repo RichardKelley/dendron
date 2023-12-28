@@ -5,6 +5,8 @@ from dataclasses import dataclass, field
 
 from transformers import AutoProcessor, LlavaForConditionalGeneration
 
+import torch
+
 from typing import Optional, Callable
 
 @dataclass
@@ -40,12 +42,17 @@ class ImageLMActionConfig:
     top_p : Optional[float] = field(
         default = 1.0
     )
+    torch_dtype : Optional[torch.dtype] = field(
+        default = torch.float16
+    )
+    use_flash_attn_2 : Optional[bool] = field(
+        default = False
+    )
 
 class ImageLMAction(ActionNode):
     def __init__(self, name : str, cfg : ImageLMActionConfig):
         super().__init__(name)
 
-        # TODO
         self.text_input_key = cfg.text_input_key
         self.image_input_key = cfg.image_input_key
         self.output_key = cfg.output_key
@@ -54,6 +61,8 @@ class ImageLMAction(ActionNode):
         self.max_new_tokens = cfg.max_new_tokens
         self.do_sample = cfg.do_sample
         self.top_p = cfg.top_p
+
+        self.torch_dtype = cfg.torch_dtype
 
         match cfg.load_in_4bit, cfg.load_in_8bit:
             case True, True:
@@ -65,14 +74,36 @@ class ImageLMAction(ActionNode):
             case False, False:
                 self.quantization = Quantization.NoQuantization
 
+        if cfg.use_flash_attn_2:
+            self.attn_implementation = "flash_attention_2"
+        else:
+            self.attn_implementation = "sdpa"
+
         if cfg.auto_load:
             match self.quantization:
                 case Quantization.NoQuantization:
-                    self.model = LlavaForConditionalGeneration.from_pretrained(cfg.model_name)
+                    self.model = LlavaForConditionalGeneration.from_pretrained(
+                        cfg.model_name, 
+                        torch_dtype=cfg.torch_dtype,
+                        low_cpu_mem_usage=True,
+                        attn_implementation=self.attn_implementation
+                    ).to(self.device)
                 case Quantization.FourBit:
-                    self.model = LlavaForConditionalGeneration.from_pretrained(cfg.model_name, load_in_4bit=True, device_map=self.device)
+                    self.model = LlavaForConditionalGeneration.from_pretrained(
+                        cfg.model_name, 
+                        load_in_4bit=True, 
+                        torch_dtype=cfg.torch_dtype,
+                        low_cpu_mem_usage=True,
+                        attn_implementation = self.attn_implementation
+                    )
                 case Quantization.EightBit:
-                    self.model = LlavaForConditionalGeneration.from_pretrained(cfg.model_name, load_in_8bit=True, device_map=self.device)    
+                    self.model = LlavaForConditionalGeneration.from_pretrained(
+                        cfg.model_name, 
+                        load_in_8bit=True, 
+                        torch_dtype=cfg.torch_dtype,
+                        low_cpu_mem_usage=True,
+                        attn_implementation = self.attn_implementation
+                    )
             self.processor = AutoProcessor.from_pretrained(cfg.model_name)
         else:
             self.model = None
@@ -99,7 +130,7 @@ class ImageLMAction(ActionNode):
             if self.input_processor:
                 input_text, input_image = self.input_processor(input_text, input_image)
 
-            input_ids = self.processor(text=input_text, images=input_image, return_tensors="pt").to(self.model.device)
+            input_ids = self.processor(text=input_text, images=input_image, return_tensors="pt").to(self.model.device, self.torch_dtype)
             generated_ids = self.model.generate(**input_ids, max_new_tokens=self.max_new_tokens, do_sample=self.do_sample, top_p=self.top_p)
             output_text = self.processor.batch_decode(generated_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
 
