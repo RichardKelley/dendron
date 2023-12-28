@@ -3,7 +3,7 @@ from .basic_types import NodeType, NodeStatus
 
 import types
 
-from typing import Dict, List, Callable
+from typing import Dict, List, Callable, Optional
 from dataclasses import dataclass
 
 class TreeNode:
@@ -63,6 +63,9 @@ class TreeNode:
 
     def node_type(self) -> NodeType:
         raise NotImplementedError("Type is specified in subclass.")
+
+    def get_node_by_name(self, name : str) -> Optional[TreeNode]:
+        raise NotImplementedError("get_node_by_name should be implemented in a subclass.")
 
     def set_pre_tick(self, f : Callable):
         self.pre_tick_fn = types.MethodType(f, self)

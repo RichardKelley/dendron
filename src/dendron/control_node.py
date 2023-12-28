@@ -2,7 +2,7 @@ from .basic_types import NodeType, NodeStatus
 from .tree_node import TreeNode
 from .blackboard import Blackboard
 
-from typing import List 
+from typing import List, Optional
 
 class ControlNode(TreeNode):
 
@@ -21,6 +21,16 @@ class ControlNode(TreeNode):
         self.blackboard = bb
         for child in self.children:
             child.set_blackboard(bb)
+
+    def get_node_by_name(self, name : str) -> Optional[TreeNode]:
+        if self.name == name:
+            return self
+        else:
+            for child in self.children:
+                node = child.get_node_by_name(name)
+                if node != None:
+                    return node
+            return None
 
     def children_count(self) -> int:
         return len(self.children)

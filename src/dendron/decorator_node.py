@@ -1,6 +1,8 @@
 from .basic_types import NodeType, NodeStatus
 from .tree_node import TreeNode
 
+from typing import Optional
+
 class DecoratorNode(TreeNode):
 
     def __init__(self, name, child : TreeNode = None):
@@ -16,6 +18,12 @@ class DecoratorNode(TreeNode):
 
     def get_child(self):
         return self.child_node
+
+    def get_node_by_name(self, name : str) -> Optional[TreeNode]:
+        if self.name == name:
+            return self
+        else:
+            return self.child_node.get_node_by_name(name)
 
     def halt_child(self):
         self.child_node.halt_node()

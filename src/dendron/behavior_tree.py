@@ -2,6 +2,8 @@ from .basic_types import NodeType, NodeStatus
 from .tree_node import TreeNode
 from .blackboard import Blackboard 
 
+from typing import Optional
+
 class BehaviorTree:
     def __init__(self, root_node : TreeNode, bb : Blackboard = None):
         self.root = root_node
@@ -24,6 +26,12 @@ class BehaviorTree:
 
     def blackboard_set(self, key, value):
         self.blackboard[key] = value
+
+    def get_node_by_name(self, name : str) -> Optional[TreeNode]:
+        if self.root:
+            return self.root.get_node_by_name(name)
+        else:
+            return None
 
     def tick_once(self):
         return self.root.execute_tick()
