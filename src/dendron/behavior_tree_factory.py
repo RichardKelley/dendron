@@ -137,16 +137,16 @@ class BehaviorTreeFactory:
                 if child_name != tree_name:
                     continue
                 else:
-                    tree = self.parse_behavior_tree_groot(child)
+                    tree = self.parse_behavior_tree_groot(child_name, child)
                     self.behavior_trees[tree_name] = tree
 
         # parse the main tree last
-        main_tree = self.parse_behavior_tree_groot(main_tree)
+        main_tree = self.parse_behavior_tree_groot(main_tree.attrib["ID"], main_tree)
         self.behavior_trees[main_tree_name] = main_tree
 
         return main_tree
         
-    def parse_behavior_tree_groot(self, xml_node) -> BehaviorTree:
+    def parse_behavior_tree_groot(self, tree_name, xml_node) -> BehaviorTree:
         tree_type = self.node_types[xml_node[0].tag]
         root_node = None
         match tree_type:
@@ -161,7 +161,7 @@ class BehaviorTreeFactory:
             case NodeType.SUBTREE:
                 root_node = self.parse_subtree_node_groot(xml_node[0])
 
-        bt = BehaviorTree(root_node)
+        bt = BehaviorTree(tree_name, root_node)
         return bt
 
     def parse_action_node_groot(self, xml_node) -> ActionNode:
