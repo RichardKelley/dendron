@@ -4,6 +4,7 @@ from ..decorator_node import DecoratorNode
 
 class InverterNode(DecoratorNode):
     def __init__(self, name, child : TreeNode = None):
+        super().__init__(name)
         self.name = name
         self.child_node = child 
 
