@@ -6,6 +6,8 @@ import types
 from typing import Dict, List, Callable, Optional, Self
 from dataclasses import dataclass
 
+import logging
+
 class TreeNode:
     def __init__(self, name : str):
         self.name = name
@@ -15,16 +17,49 @@ class TreeNode:
         self.pre_tick_fn = None
         self.post_tick_fn = None
 
+        self.logger = None
+        self.log_level = None
+
+    def set_logger(self, new_logger):
+        raise NotImplementedError("set_logger should be defined in subclass.")
+
+    def set_log_level(self, new_level):
+        raise NotImplementedError("set_log_level should be defined in subclass.")
+
+    def _get_level_str(self, new_level):
+        if self.logger is not None:
+            level_str = "None"  
+            match self.logger.level:    
+                case logging.DEBUG: 
+                    level_str = "debug" 
+                case logging.INFO:  
+                    level_str = "info"  
+                case logging.WARNING:   
+                    level_str = "warning"
+                case logging.ERROR: 
+                    level_str = "error" 
+                case logging.CRITICAL:  
+                    level_str = "critical"
+            return level_str
+
     def execute_tick(self) -> NodeStatus:
-        if self.pre_tick_fn:
+        if self.logger is not None:
+            log_fn = getattr(self.logger, self._get_level_str(self.log_level))
+            log_fn(f"{self.name} - pre_tick")
+
+        if self.pre_tick_fn is not None:
             self.pre_tick_fn()
 
         new_status = self.tick()
 
-        if self.post_tick_fn:
+        if self.post_tick_fn is not None:
             self.post_tick_fn()
 
         self.set_status(new_status)
+
+        if self.logger is not None:
+            log_fn = getattr(self.logger, self._get_level_str(self.log_level))
+            log_fn(f"{self.name} - post_tick {self.status}")
 
         return new_status
 

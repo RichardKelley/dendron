@@ -3,12 +3,21 @@ from .tree_node import TreeNode
 
 from typing import Optional
 
+import logging
+
 class DecoratorNode(TreeNode):
 
     def __init__(self, name, child : TreeNode = None):
         super().__init__(name)
-
         self.child_node : TreeNode = child
+
+    def set_logger(self, new_logger):
+        self.logger = new_logger
+        self.child_node.set_logger(new_logger)
+
+    def set_log_level(self, new_level):
+        self.log_level = new_level
+        self.child_node.set_log_level(new_level)
 
     def node_type(self):
         return NodeType.DECORATOR 

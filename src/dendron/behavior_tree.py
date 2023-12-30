@@ -22,11 +22,10 @@ class BehaviorTree:
         self.log_file_name = None
 
     def __del__(self):
-        # TODO - clean up logging
-        pass
+        self.disable_logging()
     
     def enable_logging(self):
-        if not self.logger:
+        if self.logger is None:
             self.logger = logging.getLogger(self.tree_name)
             self.logger.setLevel(logging.DEBUG)
             handler = logging.StreamHandler()
@@ -34,9 +33,10 @@ class BehaviorTree:
             formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
+            self.root.set_logger(self.logger)
 
     def disable_logging(self):
-        if self.logger:
+        if self.logger is not None:
             for h in self.logger.handlers:
                 h.close()
                 self.logger.removeHandler(h)
@@ -63,15 +63,31 @@ class BehaviorTree:
         else:
             raise TypeError("log_level must be either int or str")
 
-        if self.logger:
+        if self.logger is not None:
             self.logger.setLevel(level_to_set)
             for h in self.logger.handlers:
                 h.setLevel(level_to_set)
+            self.root.set_log_level(level_to_set)
 
-    def set_log_filename(self, filename):
-        # TODO
-        if self.logger:
-            pass
+    def set_log_filename(self, filename : Optional[str]):
+        if self.logger is not None:
+            for h in self.logger.handlers:
+                h.close()
+                self.logger.removeHandler(h)
+            
+            log_level = self.logger.level
+            f = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")            
+
+            if filename is None:
+                handler = logging.StreamHandler()
+                handler.setLevel(log_level)
+                handler.setFormatter(f)
+                self.logger.addHandler(handler)
+            else:
+                handler = logging.FileHandler(filename)
+                handler.setLevel(log_level)
+                handler.setFormatter(f)
+                self.logger.addHandler(handler)                
 
     def set_root(self, new_root):
         self.root = new_root

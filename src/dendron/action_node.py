@@ -3,9 +3,17 @@ from .tree_node import TreeNode
 
 from typing import Optional
 
+import logging
+
 class ActionNode(TreeNode):
     def __init__(self, name):
         super().__init__(name)
+
+    def set_logger(self, new_logger):
+        self.logger = new_logger
+
+    def set_log_level(self, new_level):
+        self.log_level = new_level
 
     def node_type(self) -> NodeType:
         return NodeType.ACTION

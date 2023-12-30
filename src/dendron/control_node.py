@@ -4,12 +4,23 @@ from .blackboard import Blackboard
 
 from typing import List, Optional
 
+import logging
+
 class ControlNode(TreeNode):
 
     def __init__(self, name, children : List[TreeNode] = None):
         super().__init__(name)
-
         self.children : List[TreeNode] = children 
+
+    def set_logger(self, new_logger):
+        self.logger = new_logger
+        for c in self.children:
+            c.set_logger(new_logger)
+
+    def set_log_level(self, new_level):
+        self.log_level = new_level
+        for c in self.children:
+            c.set_log_level(new_level)
 
     def add_child(self, child : TreeNode):
         self.children.append(child)
