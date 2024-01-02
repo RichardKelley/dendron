@@ -37,8 +37,8 @@ class DecoratorNode(TreeNode):
     def halt_child(self):
         self.child_node.halt_node()
 
-    def reset_child(self):
-        self.child_node.reset_status()
+    def reset(self):
+        self.child_node.reset()
 
     def pretty_repr(self, depth = 0):
         tabs = '\t'*depth

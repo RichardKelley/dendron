@@ -11,6 +11,11 @@ class FallbackNode(ControlNode):
 
         self.current_child_idx = 0
 
+    def reset(self):
+        self.current_child_idx = 0
+        for child in self.children:
+            child.reset()
+
     def halt_node(self):
         self.current_child_idx = 0
         ControlNode.halt(self)

@@ -59,9 +59,7 @@ class ControlNode(TreeNode):
         self.reset_children()
         self.reset_status()
 
-    def reset_children(self):
+    def reset(self):
         for child in self.children:
-            if child.get_status() == NodeStatus.RUNNING:
-                child.halt_node()
-            child.reset_status()
+            child.reset()
     

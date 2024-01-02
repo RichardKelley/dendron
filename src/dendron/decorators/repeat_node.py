@@ -8,6 +8,10 @@ class RepeatNode(DecoratorNode):
         self.n_times = n_times
         self.repeat_ct = 0
 
+    def reset(self):
+        self.repeat_ct = 0
+        self.child_node.reset()
+
     def tick(self):        
         should_repeat = True
 

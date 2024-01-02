@@ -111,7 +111,7 @@ class TreeNode:
     def tick(self):
         raise NotImplementedError("Tick should be implemented in a subclass.")
 
-    def reset_status(self):
+    def reset(self):
         self.status = NodeStatus.IDLE
 
     def pretty_repr(self, depth = 0):

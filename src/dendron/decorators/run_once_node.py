@@ -7,7 +7,7 @@ class RunOnceNode(DecoratorNode):
         super().__init__(name, child)
         self.has_run = False
 
-    def reset_status(self):
+    def reset(self):
         self.has_run = False
         self.status = NodeStatus.IDLE
         self.child_node.reset_status()

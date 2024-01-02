@@ -92,6 +92,9 @@ class BehaviorTree:
     def set_root(self, new_root):
         self.root = new_root
 
+    def reset(self):
+        self.root.reset()
+
     def halt_tree(self):
         self.root.halt_node()
 
