@@ -15,10 +15,10 @@ class InverterNode(DecoratorNode):
 
         match child_status:
             case NodeStatus.SUCCESS:
-                self.reset_child()
+                self.reset()
                 return NodeStatus.FAILURE
             case NodeStatus.FAILURE:
-                self.reset_child()
+                self.reset()
                 return NodeStatus.SUCCESS
             case NodeStatus.IDLE:
                 raise RuntimeError("Child can't return IDLE")

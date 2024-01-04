@@ -44,8 +44,7 @@ class SequenceNode(ControlNode):
                     raise RuntimeError("Child can't return IDLE")
 
         if self.current_child_idx == n_children:
-            self.reset_children()
-            self.current_child_idx = 0
+            self.reset()
 
         return NodeStatus.SUCCESS
 
