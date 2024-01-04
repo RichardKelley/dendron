@@ -1,4 +1,4 @@
-from dendron import SimpleActionNode
+from dendron.actions import SimpleActionNode
 from dendron import NodeStatus
 from dendron import Blackboard, BlackboardEntryMetadata
 
