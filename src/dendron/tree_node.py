@@ -3,10 +3,13 @@ from .basic_types import NodeType, NodeStatus
 
 import types
 
+import typing
 from typing import Dict, List, Callable, Optional, Self
 from dataclasses import dataclass
 
 import logging
+
+BehaviorTree = typing.NewType("BehaviorTree", None)
 
 class TreeNode:
     def __init__(self, name : str):
@@ -19,6 +22,11 @@ class TreeNode:
 
         self.logger = None
         self.log_level = None
+
+        self.tree = None
+
+    def set_tree(self, tree : BehaviorTree):
+        self.tree = tree
 
     def set_logger(self, new_logger):
         raise NotImplementedError("set_logger should be defined in subclass.")

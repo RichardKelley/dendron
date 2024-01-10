@@ -1,9 +1,12 @@
 from .basic_types import NodeType, NodeStatus
 from .tree_node import TreeNode
 
+import typing
 from typing import Optional
 
 import logging
+
+BehaviorTree = typing.NewType("BehaviorTree", None)
 
 class DecoratorNode(TreeNode):
 
@@ -36,6 +39,10 @@ class DecoratorNode(TreeNode):
 
     def halt_child(self):
         self.child_node.halt_node()
+
+    def set_tree(self, tree : BehaviorTree):
+        self.tree = tree
+        self.child_node.set_tree(tree)
 
     def reset(self):
         self.child_node.reset()

@@ -2,15 +2,23 @@ from .basic_types import NodeType, NodeStatus
 from .tree_node import TreeNode
 from .blackboard import Blackboard
 
+import typing
 from typing import List, Optional
 
 import logging
+
+BehaviorTree = typing.NewType("BehaviorTree", None)
 
 class ControlNode(TreeNode):
 
     def __init__(self, name, children : List[TreeNode] = None):
         super().__init__(name)
         self.children : List[TreeNode] = children 
+
+    def set_tree(self, tree : BehaviorTree):
+        self.tree = tree
+        for c in self.children:
+            c.set_tree(tree)
 
     def set_logger(self, new_logger):
         self.logger = new_logger

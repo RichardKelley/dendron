@@ -6,6 +6,8 @@ from typing import Optional
 
 import logging
 
+from concurrent import futures
+
 class BehaviorTree:
     def __init__(self, tree_name : str, root_node : TreeNode, bb : Blackboard = None):
         self.tree_name = tree_name
@@ -17,9 +19,12 @@ class BehaviorTree:
             self.blackboard = bb
         
         self.root.set_blackboard(self.blackboard)
+        self.root.set_tree(self)
 
         self.logger = None
         self.log_file_name = None
+
+        self.executor = futures.ThreadPoolExecutor(max_workers=num_workers)
 
     def __del__(self):
         self.disable_logging()
@@ -91,6 +96,10 @@ class BehaviorTree:
 
     def set_root(self, new_root):
         self.root = new_root
+        new_root.set_tree(self)
+
+    def status(self):
+        return self.root.get_status()
 
     def reset(self):
         self.root.reset()
