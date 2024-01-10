@@ -9,7 +9,7 @@ import logging
 from concurrent import futures
 
 class BehaviorTree:
-    def __init__(self, tree_name : str, root_node : TreeNode, bb : Blackboard = None):
+    def __init__(self, tree_name : str, root_node : TreeNode, bb : Blackboard = None, num_workers=4):
         self.tree_name = tree_name
         self.root = root_node
 
