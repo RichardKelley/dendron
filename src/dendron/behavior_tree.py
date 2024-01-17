@@ -21,10 +21,20 @@ class BehaviorTree:
         self.root.set_blackboard(self.blackboard)
         self.root.set_tree(self)
 
+        self.num_workers = num_workers
         self.logger = None
         self.log_file_name = None
 
         self.executor = futures.ThreadPoolExecutor(max_workers=num_workers)
+
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        del state['executor']
+        return state
+    
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self.executor = futures.ThreadPoolExecutor(max_workers=self.num_workers)
 
     def __del__(self):
         self.disable_logging()
