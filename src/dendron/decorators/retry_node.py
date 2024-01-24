@@ -3,19 +3,19 @@ from ..tree_node import TreeNode
 from ..decorator_node import DecoratorNode
 
 class RetryNode(DecoratorNode):
-    def __init__(self, name: str, child: TreeNode, n_times: int):
+    def __init__(self, name: str, child: TreeNode, n_times: int) -> None:
         super().__init__(self, child)
         self.n_times = n_times
         self.retry_ct = 0
 
-    def reset(self):
+    def reset(self) -> None:
         self.retry_ct = 0
         self.child_node.reset()
 
-    def tick(self):
+    def tick(self) -> NodeStatus:
         should_retry = True
         
-        while should_repeat:
+        while should_retry:
             child_status = self.child_node.execute_tick()
             match child_status:
                 case NodeStatus.SUCCESS:
