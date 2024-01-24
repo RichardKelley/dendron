@@ -6,12 +6,12 @@ from typing import List
 
 class DisjunctionNode(ConditionNode):
 
-    def __init__(self, name, children : List[TreeNode] = []):
+    def __init__(self, name, children : List[TreeNode] = []) -> None:
         super().__init__(name, children)
 
         self.current_child_idx = 0
 
-    def tick(self):
+    def tick(self) -> NodeStatus:
         n_children = self.children_count()
         self.set_status(NodeStatus.RUNNING)
 

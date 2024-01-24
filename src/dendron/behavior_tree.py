@@ -2,14 +2,14 @@ from .basic_types import NodeType, NodeStatus
 from .tree_node import TreeNode
 from .blackboard import Blackboard 
 
-from typing import Optional
+from typing import Optional, Any
 
 import logging
 
 from concurrent import futures
 
 class BehaviorTree:
-    def __init__(self, tree_name : str, root_node : TreeNode, bb : Blackboard = None, num_workers=4):
+    def __init__(self, tree_name : str, root_node : TreeNode, bb : Blackboard = None, num_workers=4) -> None:
         self.tree_name = tree_name
         self.root = root_node
 
@@ -39,7 +39,7 @@ class BehaviorTree:
     def __del__(self):
         self.disable_logging()
     
-    def enable_logging(self):
+    def enable_logging(self) -> None:
         if self.logger is None:
             self.logger = logging.getLogger(self.tree_name)
             self.logger.setLevel(logging.DEBUG)
@@ -50,15 +50,16 @@ class BehaviorTree:
             self.logger.addHandler(handler)
             self.root.set_logger(self.logger)
 
-    def disable_logging(self):
+    def disable_logging(self) -> None:
         if self.logger is not None:
             for h in self.logger.handlers:
                 h.close()
                 self.logger.removeHandler(h)
         self.logger = None
         self.log_file_name = None
+        # TODO set root logger to None? 
 
-    def set_log_level(self, log_level):
+    def set_log_level(self, log_level) -> None:
         level_to_set = None
         if type(log_level) == str:
             lvl = log_level.upper()
@@ -84,7 +85,7 @@ class BehaviorTree:
                 h.setLevel(level_to_set)
             self.root.set_log_level(level_to_set)
 
-    def set_log_filename(self, filename : Optional[str]):
+    def set_log_filename(self, filename : Optional[str]) -> None:
         if self.logger is not None:
             for h in self.logger.handlers:
                 h.close()
@@ -104,23 +105,25 @@ class BehaviorTree:
                 handler.setFormatter(f)
                 self.logger.addHandler(handler)                
 
-    def set_root(self, new_root):
+    def set_root(self, new_root) -> None:
         self.root = new_root
         new_root.set_tree(self)
 
-    def status(self):
+    def status(self) -> NodeStatus:
         return self.root.get_status()
 
-    def reset(self):
+    def reset(self) -> None:
         self.root.reset()
 
-    def halt_tree(self):
+    def halt_tree(self) -> None:
         self.root.halt_node()
 
-    def blackboard_get(self, key):
+    # TODO consider deprecating
+    def blackboard_get(self, key) -> Any:
         return self.blackboard[key]
 
-    def blackboard_set(self, key, value):
+    # TODO consider deprecating
+    def blackboard_set(self, key, value) -> None:
         self.blackboard[key] = value
 
     def get_node_by_name(self, name : str) -> Optional[TreeNode]:
@@ -129,13 +132,14 @@ class BehaviorTree:
         else:
             return None
 
-    def tick_once(self):
+    def tick_once(self) -> NodeStatus:
         return self.root.execute_tick()
 
-    def tick_while_running(self):
+    def tick_while_running(self) -> NodeStatus:
         status = self.root.execute_tick()
         while status == NodeStatus.RUNNING:
             status = self.root.execute_tick()
+        return status
 
-    def pretty_print(self):
+    def pretty_print(self) -> None:
         print(self.root.pretty_repr())

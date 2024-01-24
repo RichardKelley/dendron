@@ -14,7 +14,7 @@ def contains_subtree(xml_node) -> bool:
             child_contains = child_contains or contains_subtree(child_xml)
         return child_contains
 
-def get_subtree_names(xml_node):
+def get_subtree_names(xml_node) -> List[str]:
     if not contains_subtree(xml_node):
         return []
     elif xml_node.tag == "SubTree":
@@ -25,7 +25,7 @@ def get_subtree_names(xml_node):
             name_list.extend(get_subtree_names(child))
         return name_list
 
-def cycle_free(xml_root):
+def cycle_free(xml_root) -> bool:
     # get the node list
     trees = []
     for child in xml_root:
@@ -59,7 +59,7 @@ def cycle_free(xml_root):
     
     return not has_cycle # it's called cycle_free
     
-def get_parse_order(xml_root):
+def get_parse_order(xml_root) -> List:
     trees = []
     for child in xml_root:
         if child.tag == "BehaviorTree":
@@ -84,7 +84,7 @@ class SubtreeGraph:
     A SubTree dependency exists from BehaviorTree i to BehaviorTree
     j if j appears as a SubTree in i.
     '''
-    def __init__(self, nodes):
+    def __init__(self, nodes) -> None:
         self.nodes = {}
         self.reverse_nodes = {}
         for i, v in enumerate(nodes):
@@ -98,7 +98,7 @@ class SubtreeGraph:
         for i in range(self.n):
             self.dist[i,i] = 0
 
-    def topological_sort(self):
+    def topological_sort(self) -> List:
         output = [] # sorted list
         S = [] # nodes with no incoming edge
 
@@ -121,18 +121,18 @@ class SubtreeGraph:
 
         return [self.reverse_nodes[k] for k in output]
 
-    def set_edge(self, v1, v2, val = 1):
+    def set_edge(self, v1, v2, val = 1) -> None:
         i = self.nodes[v1]
         j = self.nodes[v2]
         self.adjacency[i,j] = val
         self.dist[i,j] = val
 
-    def get_edge(self, v1, v2):
+    def get_edge(self, v1, v2) -> float:
         i = self.nodes[v1]
         j = self.nodes[v2]
         return self.adjacency[i][j]
 
-    def compute_connectivity(self):
+    def compute_connectivity(self) -> None:
         for k in range(0, self.n):
             for i in range(0, self.n):
                 for j in range(0, self.n):

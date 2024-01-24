@@ -6,17 +6,17 @@ from typing import Callable
 from concurrent import futures
 
 class AsyncActionNode(ActionNode):
-    def __init__(self, name : str, cb : Callable, num_workers : int = 4):
+    def __init__(self, name : str, cb : Callable, num_workers : int = 4) -> None:
         super().__init__(name)
 
         self.cb = cb
         self.fut = None        
 
-    def reset(self):
+    def reset(self) -> None:
         self.status = NodeStatus.IDLE
         self.fut = None
 
-    def tick(self):
+    def tick(self) -> NodeStatus:
         if self.fut is None:
             self.fut = self.tree.executor.submit(self.cb)
 

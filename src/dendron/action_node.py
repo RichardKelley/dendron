@@ -6,13 +6,13 @@ from typing import Optional
 import logging
 
 class ActionNode(TreeNode):
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         super().__init__(name)
 
-    def set_logger(self, new_logger):
+    def set_logger(self, new_logger) -> None:
         self.logger = new_logger
 
-    def set_log_level(self, new_level):
+    def set_log_level(self, new_level) -> None:
         self.log_level = new_level
 
     def node_type(self) -> NodeType:

@@ -4,7 +4,7 @@ from .basic_types import NodeType, NodeStatus
 import types
 
 import typing
-from typing import Dict, List, Callable, Optional, Self
+from typing import Dict, List, Callable, Optional, Self, Any
 from dataclasses import dataclass
 
 import logging
@@ -12,7 +12,7 @@ import logging
 BehaviorTree = typing.NewType("BehaviorTree", None)
 
 class TreeNode:
-    def __init__(self, name : str):
+    def __init__(self, name : str) -> None:
         self.name = name
         self.blackboard = None
         self.status = NodeStatus.IDLE
@@ -25,16 +25,16 @@ class TreeNode:
 
         self.tree = None
 
-    def set_tree(self, tree : BehaviorTree):
+    def set_tree(self, tree : BehaviorTree) -> None:
         self.tree = tree
 
-    def set_logger(self, new_logger):
+    def set_logger(self, new_logger) -> None:
         raise NotImplementedError("set_logger should be defined in subclass.")
 
-    def set_log_level(self, new_level):
+    def set_log_level(self, new_level) -> None:
         raise NotImplementedError("set_log_level should be defined in subclass.")
 
-    def _get_level_str(self, new_level):
+    def _get_level_str(self, new_level) -> str:
         if self.logger is not None:
             level_str = "None"  
             match self.logger.level:    
@@ -71,24 +71,26 @@ class TreeNode:
 
         return new_status
 
-    def set_description(self, desc):
+    def set_description(self, desc) -> None:
         """
         A textual description intended to help with automated
         policy construction.
         """
         self.description = desc
 
-    def halt_node(self):
+    def halt_node(self) -> None:
         raise NotImplementedError("Halt behavior is specified in subclass.")
 
-    def set_blackboard(self, bb : Blackboard):
+    def set_blackboard(self, bb : Blackboard) -> None:
         self.blackboard = bb
 
-    def blackboard_set(self, key, value):
+    # TODO consider deprecating
+    def blackboard_set(self, key, value) -> None:
         full_key = self.name + '/' + key
         self.blackboard[full_key] = value
 
-    def blackboard_get(self, key):
+    # TODO consider deprecating
+    def blackboard_get(self, key) -> Any:
         full_key = self.name + '/' + key
         return self.blackboard[full_key]
 
@@ -98,7 +100,7 @@ class TreeNode:
     def get_status(self) -> NodeStatus:
         return self.status 
 
-    def set_status(self, new_status):
+    def set_status(self, new_status) -> None:
         self.status = new_status
 
     def name(self) -> str:
@@ -110,17 +112,17 @@ class TreeNode:
     def get_node_by_name(self, name : str) -> Optional[Self]:
         raise NotImplementedError("get_node_by_name should be implemented in a subclass.")
 
-    def set_pre_tick(self, f : Callable):
+    def set_pre_tick(self, f : Callable) -> None:
         self.pre_tick_fn = types.MethodType(f, self)
 
-    def set_post_tick(self, f : Callable):
+    def set_post_tick(self, f : Callable) -> None:
         self.post_tick_fn = types.MethodType(f, self)
 
-    def tick(self):
+    def tick(self) -> NodeStatus:
         raise NotImplementedError("Tick should be implemented in a subclass.")
 
-    def reset(self):
+    def reset(self) -> None:
         self.status = NodeStatus.IDLE
 
-    def pretty_repr(self, depth = 0):
+    def pretty_repr(self, depth = 0) -> str:
         raise NotImplementedError("Pretty printing should be implemented in a subclass.")

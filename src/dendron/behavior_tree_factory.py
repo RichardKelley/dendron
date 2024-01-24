@@ -17,7 +17,7 @@ from copy import deepcopy
 
 class BehaviorTreeFactory:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.registry = {}
         self.node_counts = {}
         self.node_types = {}
@@ -50,34 +50,34 @@ class BehaviorTreeFactory:
         self.tree_nodes_model = None
         self.behavior_trees = {}
 
-    def register_action_type(self, name, action):
+    def register_action_type(self, name, action) -> None:
         self.registry[name] = action 
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.ACTION
 
-    def register_condition_type(self, name, condition):
+    def register_condition_type(self, name, condition) -> None:
         self.registry[name] = condition
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.CONDITION
 
-    def register_decorator_type(self, name, decorator):
+    def register_decorator_type(self, name, decorator) -> None:
         self.registry[name] = decorator
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.DECORATOR
 
-    def register_simple_action(self, name, action_function):
+    def register_simple_action(self, name, action_function) -> None:
         self.registry[name] = SimpleActionNode
         self.functors[name] = action_function
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.ACTION
 
-    def register_simple_condition(self, name, condition_function):
+    def register_simple_condition(self, name, condition_function) -> None:
         self.registry[name] = SimpleConditionNode
         self.functors[name] = condition_function
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.CONDITION
 
-    def create_from_groot(self, xml_filename):
+    def create_from_groot(self, xml_filename) -> BehaviorTree:
         self.current_blackboard = Blackboard()
 
         xml_tree = ET.parse(xml_filename)

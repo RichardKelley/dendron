@@ -26,7 +26,7 @@ class SimplePipelineActionConfig:
 
 
 class SimplePipelineActionNode(ActionNode):
-    def __init__(self, name : str, cfg : SimplePipelineActionConfig):
+    def __init__(self, name : str, cfg : SimplePipelineActionConfig) -> None:
         super().__init__(name)
 
         self.task_name = cfg.task_name
@@ -42,7 +42,7 @@ class SimplePipelineActionNode(ActionNode):
             self.pipeline = pipeline(cfg.task_name, device_map=self.device)
 
 
-    def tick(self):
+    def tick(self) -> NodeStatus:
         try:
             input_text = self.blackboard[self.input_key]
             output = self.pipeline(input_text)

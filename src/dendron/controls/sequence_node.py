@@ -6,21 +6,21 @@ from typing import List
 
 class SequenceNode(ControlNode):
 
-    def __init__(self, name, children : List[TreeNode] = []):
+    def __init__(self, name, children : List[TreeNode] = []) -> None:
         super().__init__(name, children)
 
         self.current_child_idx = 0
 
-    def reset(self):
+    def reset(self) -> None:
         self.current_child_idx = 0
         for child in self.children:
             child.reset()
 
-    def halt_node(self):
+    def halt_node(self) -> None:
         self.current_child_idx = 0
         ControlNode.halt(self)
 
-    def tick(self):
+    def tick(self) -> NodeStatus:
         n_children = self.children_count()
         self.set_status(NodeStatus.RUNNING)
 
@@ -48,7 +48,7 @@ class SequenceNode(ControlNode):
 
         return NodeStatus.SUCCESS
 
-    def pretty_repr(self, depth = 0):
+    def pretty_repr(self, depth = 0) -> str:
         tabs = '\t'*depth
         repr = f"{tabs}Sequence {self.name}"
         for child in self.children:

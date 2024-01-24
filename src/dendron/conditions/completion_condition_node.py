@@ -43,7 +43,7 @@ class CompletionConditionNodeConfig:
     )
 
 class CompletionConditionNode(ConditionNode):
-    def __init__(self, name : str, cfg : CompletionConditionNodeConfig):
+    def __init__(self, name : str, cfg : CompletionConditionNodeConfig) -> None:
         super().__init__(name)
         self.input_key = cfg.input_key
         self.device = cfg.device
@@ -101,11 +101,11 @@ class CompletionConditionNode(ConditionNode):
             self.tokenizer = None
             self.completions = []
 
-    def set_model(self, new_model):
+    def set_model(self, new_model) -> None:
         self.model = new_model
         self.tokenizer = AutoTokenizer.from_pretrained(new_model.name_or_path)
 
-    def tick(self):
+    def tick(self) -> NodeStatus:
         try:
             log_probs = np.zeros(len(self.completions))
             input_prefix = self.blackboard[self.input_key]

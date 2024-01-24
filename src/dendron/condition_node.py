@@ -6,13 +6,13 @@ from typing import Optional
 import logging
 
 class ConditionNode(TreeNode):
-    def __init__(self, name):
+    def __init__(self, name) -> None:
         super().__init__(name)
 
-    def set_logger(self, new_logger):
+    def set_logger(self, new_logger) -> None:
         self.logger = new_logger
 
-    def set_log_level(self, new_level):
+    def set_log_level(self, new_level) -> None:
         self.log_level = new_level
 
     def node_type(self) -> NodeType:
@@ -24,7 +24,7 @@ class ConditionNode(TreeNode):
         else:
             return None
 
-    def pretty_repr(self, depth = 0):
+    def pretty_repr(self, depth = 0) -> str:
         tabs = '\t'*depth
         repr = f"{tabs}Condition {self.name}"
         return repr

@@ -46,7 +46,7 @@ class CausalLMActionConfig:
     )
 
 class CausalLMAction(ActionNode):
-    def __init__(self, name : str, cfg : CausalLMActionConfig):
+    def __init__(self, name : str, cfg : CausalLMActionConfig) -> None:
         super().__init__(name)
 
         self.input_key = cfg.input_key
@@ -107,17 +107,17 @@ class CausalLMAction(ActionNode):
         self.input_processor = None
         self.output_processor = None
 
-    def set_model(self, new_model):
+    def set_model(self, new_model) -> None:
         self.model = new_model
         self.tokenizer = AutoTokenizer.from_pretrained(new_model.name_or_path)
 
-    def set_input_processor(self, f : Callable):
+    def set_input_processor(self, f : Callable) -> None:
         self.input_processor = f
 
-    def set_output_processor(self, f : Callable):
+    def set_output_processor(self, f : Callable) -> None:
         self.output_processor = f
 
-    def tick(self):
+    def tick(self) -> NodeStatus:
         try:
             input_text = self.blackboard[self.input_key]
 

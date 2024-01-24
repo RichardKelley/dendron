@@ -50,7 +50,7 @@ class ImageLMActionConfig:
     )
 
 class ImageLMAction(ActionNode):
-    def __init__(self, name : str, cfg : ImageLMActionConfig):
+    def __init__(self, name : str, cfg : ImageLMActionConfig) -> None:
         super().__init__(name)
 
         self.text_input_key = cfg.text_input_key
@@ -112,17 +112,17 @@ class ImageLMAction(ActionNode):
         self.input_processor = None
         self.output_processor = None
 
-    def set_model(self, new_model):
+    def set_model(self, new_model) -> None:
         self.model = new_model
         self.processor = AutoProcessor.from_pretrained(new_model.name_or_path)
 
-    def set_input_processor(self, f : Callable):
+    def set_input_processor(self, f : Callable) -> None:
         self.input_processor = f
 
-    def set_output_processor(self, f : Callable):
+    def set_output_processor(self, f : Callable) -> None:
         self.output_processor = f
 
-    def tick(self):
+    def tick(self) -> NodeStatus:
         try:
             input_text = self.blackboard[self.text_input_key]
             input_image = self.blackboard[self.image_input_key]

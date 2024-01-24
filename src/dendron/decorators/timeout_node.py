@@ -5,18 +5,18 @@ from ..decorator_node import DecoratorNode
 import time
 
 class TimeoutNode(DecoratorNode):
-    def __init__(self, name: str, child: TreeNode, timelimit: int):
+    def __init__(self, name: str, child: TreeNode, timelimit: int) -> None:
         super().__init__(name, child)
         self.timelimit = timelimit
         self.timer_started = False
         self.start_time = 0 # this is an int in millis.
 
-    def reset(self):
+    def reset(self) -> None:
         self.timer_started = False
         self.start_time = 0
         self.reset_child()
 
-    def tick(self):
+    def tick(self) -> NodeStatus:
         if not self.timer_startd:
             self.timer_started = True
             self.set_status(NodeStatus.RUNNING)
