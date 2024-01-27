@@ -12,6 +12,14 @@ import logging
 BehaviorTree = typing.NewType("BehaviorTree", None)
 
 class TreeNode:
+    """
+    Base class for a node in a behavior tree.
+
+    Args:
+        name (`str`):
+            The name to give to this node. 
+    """
+    
     def __init__(self, name : str) -> None:
         self.name = name
         self.blackboard = None
@@ -26,6 +34,12 @@ class TreeNode:
         self.tree = None
 
     def set_tree(self, tree : BehaviorTree) -> None:
+        """
+        Set the tree that contains this node.
+
+        Args:
+            tree (`dendron.behavior_tree.BehaviorTree`)
+        """
         self.tree = tree
 
     def set_logger(self, new_logger) -> None:
@@ -51,6 +65,15 @@ class TreeNode:
             return level_str
 
     def execute_tick(self) -> NodeStatus:
+        """
+        Performs pre-tick operations, calls the Node's tick() method, and 
+        then performs post-tick operations. If logging is enabled, then this 
+        is where log functions are called.
+
+        Returns:
+            `dendron.basic_types.NodeStatus`: The status returned by the inner 
+            call to tick().
+        """
         if self.logger is not None:
             log_fn = getattr(self.logger, self._get_level_str(self.log_level))
             log_fn(f"{self.name} - pre_tick")
@@ -75,6 +98,10 @@ class TreeNode:
         """
         A textual description intended to help with automated
         policy construction.
+
+        Args:
+            desc (`str`):
+                The textual description of this node's functionality.
         """
         self.description = desc
 
