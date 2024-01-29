@@ -127,6 +127,18 @@ class BehaviorTree:
         self.blackboard[key] = value
 
     def get_node_by_name(self, name : str) -> Optional[TreeNode]:
+        """
+        Search for a node by its name. Forwards the call to the current
+        root node.
+
+        Args:
+            name (`str`):
+                The name of the node we are looking for.
+
+        Returns:
+            `Optional[TreeNode]`: Either a node with the given name,
+            or None.
+        """
         if self.root:
             return self.root.get_node_by_name(name)
         else:

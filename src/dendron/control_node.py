@@ -42,6 +42,17 @@ class ControlNode(TreeNode):
             child.set_blackboard(bb)
 
     def get_node_by_name(self, name : str) -> Optional[TreeNode]:
+        """
+        Search for a node by its name.
+
+        Args:
+            name (`str`):
+                The name of the node we are looking for.
+
+        Returns:
+            `Optional[TreeNode]`: Either a node with the given name,
+            or None.
+        """
         if self.name == name:
             return self
         else:

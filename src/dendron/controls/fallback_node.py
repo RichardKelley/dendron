@@ -49,6 +49,16 @@ class FallbackNode(ControlNode):
         return NodeStatus.FAILURE
 
     def pretty_repr(self, depth = 0) -> str:
+        """
+        Return a string representation of this node at the given depth.
+
+        Args:
+            depth (`int`):
+                The depth of this node in a surrounding tree.
+
+        Returns:
+            `str`: The indented string representation.
+        """
         tabs = '\t'*depth
         repr = f"{tabs}Fallback {self.name}"
         for child in self.children:

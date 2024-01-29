@@ -137,6 +137,17 @@ class TreeNode:
         raise NotImplementedError("Type is specified in subclass.")
 
     def get_node_by_name(self, name : str) -> Optional[Self]:
+        """
+        Search for a node by its name.
+
+        Args:
+            name (`str`):
+                The name of the node we are looking for.
+
+        Returns:
+            `Optional[TreeNode]`: Either a node with the given name,
+            or None.
+        """
         raise NotImplementedError("get_node_by_name should be implemented in a subclass.")
 
     def set_pre_tick(self, f : Callable) -> None:
@@ -152,4 +163,14 @@ class TreeNode:
         self.status = NodeStatus.IDLE
 
     def pretty_repr(self, depth = 0) -> str:
+        """
+        Return a string representation of this node at the given depth.
+
+        Args:
+            depth (`int`):
+                The depth of this node in a surrounding tree.
+
+        Returns:
+            `str`: The indented string representation.
+        """
         raise NotImplementedError("Pretty printing should be implemented in a subclass.")
