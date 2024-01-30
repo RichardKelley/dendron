@@ -109,6 +109,13 @@ class TreeNode:
         raise NotImplementedError("Halt behavior is specified in subclass.")
 
     def set_blackboard(self, bb : Blackboard) -> None:
+        """
+        Set the blackboard to be used by this TreeNode.
+
+        Args:
+            bb (`dendron.blackboard.Blackboard`):
+                The new blackboard.
+        """
         self.blackboard = bb
 
     # TODO consider deprecating
@@ -122,15 +129,40 @@ class TreeNode:
         return self.blackboard[full_key]
 
     def is_halted(self) -> bool:
+        """
+        Query whether this node is in a halted state.
+
+        Returns:
+            `bool`: True iff the status is IDLE.
+        """
         return self.status == NodeStatus.IDLE
 
     def get_status(self) -> NodeStatus:
+        """
+        Get the current status of this node.
+
+        Returns:
+            `dendron.basic_types.NodeStatus`: The node status.
+        """
         return self.status 
 
-    def set_status(self, new_status) -> None:
+    def set_status(self, new_status : NodeStatus) -> None:
+        """
+        Set the node status to a new value.
+
+        Args:
+            new_status (`dendron.basic_types.NodeStatus`):
+                The new NodeStatus.
+        """
         self.status = new_status
 
     def name(self) -> str:
+        """
+        Get this node's human-readable name.
+
+        Returns:
+            `str`: The given name of this node.
+        """
         return self.name
 
     def node_type(self) -> NodeType:
@@ -151,15 +183,34 @@ class TreeNode:
         raise NotImplementedError("get_node_by_name should be implemented in a subclass.")
 
     def set_pre_tick(self, f : Callable) -> None:
+        """
+        Specify a function-like object to be called before the `tick()` 
+        function.
+
+        Args:
+            f (`Callable`): 
+                The function to call before `tick()`.
+        """
         self.pre_tick_fn = types.MethodType(f, self)
 
     def set_post_tick(self, f : Callable) -> None:
+        """
+        Specify a function-like object to be called after the `tick()`
+        function.
+
+        Args:
+            f (`Callable`):
+                The function to call after `tick()`.
+        """
         self.post_tick_fn = types.MethodType(f, self)
 
     def tick(self) -> NodeStatus:
         raise NotImplementedError("Tick should be implemented in a subclass.")
 
     def reset(self) -> None:
+        """
+        Set the status of this node to IDLE.
+        """
         self.status = NodeStatus.IDLE
 
     def pretty_repr(self, depth = 0) -> str:
