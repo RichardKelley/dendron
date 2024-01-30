@@ -3,9 +3,18 @@ from ..basic_types import NodeStatus
 from ..blackboard import Blackboard
 
 class AlwaysSuccessNode(ActionNode):
+    """
+    An action node that always returns `SUCCESS`.
 
-    def __init__(self, name) -> None:
+    Args:
+        name (`str`):
+            The given name of this node.
+    """
+    def __init__(self, name : str) -> None:
         super().__init__(name)
 
     def tick(self) -> NodeStatus:
+        """
+        Always return `SUCCESS`.
+        """
         return NodeStatus.SUCCESS
