@@ -6,16 +6,41 @@ from typing import Optional
 import logging
 
 class ActionNode(TreeNode):
+    """
+    An action node encapsulates the notion of a self-contained action
+    or behavior. The bulk of the observable actions of a behavior tree
+    are due to the action nodes.
+
+    `ActionNode`s are one of the two kinds of leaf nodes in a Behavior
+    Tree - the other being the `ConditionNode`.
+
+    Args:
+        name (`str`):
+            The given name of this node.
+    """
+
     def __init__(self, name) -> None:
         super().__init__(name)
 
     def set_logger(self, new_logger) -> None:
+        """
+        Set the logger for this node.
+        """
         self.logger = new_logger
 
     def set_log_level(self, new_level) -> None:
+        """
+        Set the log level for this node.
+        """
         self.log_level = new_level
 
     def node_type(self) -> NodeType:
+        """
+        Get the type of this node.
+
+        Returns:
+            `NodeType`: The type (`ACTION`).
+        """
         return NodeType.ACTION
 
     def get_node_by_name(self, name : str) -> Optional[TreeNode]:
