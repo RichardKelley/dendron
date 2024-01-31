@@ -101,7 +101,7 @@ class CausalLMActionConfig:
 class CausalLMAction(ActionNode):
     """
     An action node that uses a causal language model to generate
-    some text based on the a prompt contained in the node's 
+    some text based on a prompt contained in the node's 
     blackboard.
 
     This node is based on the Hugging Face transformers library, and will
@@ -112,6 +112,10 @@ class CausalLMAction(ActionNode):
     the options have all been placed in a dataclass config object. See 
     the documentation for that object to learn about the many options
     available to you.
+
+    Args:
+        cfg (`CausalLMActionConfig`):
+            The configuration object for this model.
     """
     def __init__(self, name : str, cfg : CausalLMActionConfig) -> None:
         super().__init__(name)
