@@ -162,7 +162,8 @@ class CausalLMAction(ActionNode):
                         load_in_4bit=True, 
                         torch_dtype=self.torch_dtype,
                         low_cpu_mem_usage=True,
-                        attn_implementation=self.attn_implementation
+                        attn_implementation=self.attn_implementation,
+                        bnb_4bit_compute_dtype=cfg.torch_dtype
                     )
                 case Quantization.EightBit:
                     self.model = AutoModelForCausalLM.from_pretrained(
