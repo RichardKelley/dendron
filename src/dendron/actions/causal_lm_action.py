@@ -114,6 +114,8 @@ class CausalLMAction(ActionNode):
     available to you.
 
     Args:
+        name (`str`):
+            The given name of this node.
         cfg (`CausalLMActionConfig`):
             The configuration object for this model.
     """
