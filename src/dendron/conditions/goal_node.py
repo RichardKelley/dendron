@@ -4,6 +4,8 @@ from ..condition_node import ConditionNode
 
 class GoalNode(ConditionNode):
     """
+    EXPERIMENTAL! DO NOT USE!
+
     A GoalNode is just syntactic sugar for a condition node -
 
     It should return SUCCESS precisely when the goal is achieved.

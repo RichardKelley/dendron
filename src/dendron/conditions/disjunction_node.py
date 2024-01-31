@@ -5,6 +5,13 @@ from ..condition_node import ConditionNode
 from typing import List 
 
 class DisjunctionNode(ConditionNode):
+    """
+    EXPERIMENTAL! DO NOT USE!
+
+    A disjunction is logically equivalent to a fallback node. The 
+    (eventual) idea is that this will be a node whose children
+    can be reordered dynamically as the tree learns.
+    """
 
     def __init__(self, name, children : List[TreeNode] = []) -> None:
         super().__init__(name, children)
