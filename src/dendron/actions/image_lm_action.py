@@ -11,6 +11,62 @@ from typing import Optional, Callable
 
 @dataclass
 class ImageLMActionConfig:
+    """
+    Configuration for an ImageLMAction.
+
+    The options in this object control what Hugging Face model is used,
+    how the node interacts with the blackboard, and what decoding strategy
+    is used. If you want a refresher on decoding strategies, check out 
+    this blog post: https://huggingface.co/blog/how-to-generate.
+
+    Args:
+        model_name (`str`):
+            The name of the model to use. This should be a valid name
+            corresponding to a Hugging Face model name (including the user
+            name).
+        auto_load (`Optional[bool]`):
+            An optional boolean indicating whether or not to automatically 
+            load model either from disk or the Hugging Face hub. If `False`,
+            the user is responsible for ensuring that a model is loaded
+            before the first `tick()` is triggered. Defaults to `True`.
+        text_input_key (`Optional[str]`):
+            The blackboard key to use for writing and reading the text prompt 
+            that this node will consume. Defaults to "text_in".
+        image_input_key (`Optional[str]`):
+            The blackboard key to use for writing and reading the image prompt
+            that this node will consume. Defaults to "image_in".
+        output_key (`Optional[str]`):
+            The blackboard key to use for writing and reading the text generated
+            by this node. Defaults to "out".
+        device (`Optional[str]`):
+            The device that should be used with the model. Examples include
+            "cpu", "cuda", and "auto". Defaults to "auto".
+        load_in_8bit (`Optional[bool]`):
+            Optional boolean indicating whether or not to use eight-bit quantization
+            from bitsandbytes. When available, will typically decrease memory usage
+            and increase inference speed. Defaults to `False`.
+        load_in_4bit (`Optional[bool]`):
+            Optional boolean indicating whether or not to use four-bit quantization
+            from bitsandbytes. When available, will typically decrease memory usage
+            and increase inference speed. If you observe degraded performance, try
+            eight-bit quanitization instead. Defaults to `False`.
+        max_new_tokens (`Optional[int]`):
+            A limit on the number of new tokens to generate. You will usually want
+            to set this yourself based on your application. Defaults to 16.
+        do_sample (`Optional[bool]`):
+            Optional boolean to control decoding strategy. If set to true, allows use
+            of non-default generation strategy. Defaults to `False`.
+        top_p (`Optional[float]`):
+            Optional float to control use of nucleus sampling. If the value is strictly
+            between 0 and 1, nucleus sampling is activated.
+        torch_dtype (`torch.dtype`):
+            The dtype to use for torch tensors. Defaults to `torch.float16`. You may
+            need to change this depending on your quantization choices.
+        use_flash_attn_2 (`Optional[bool]`):
+            Optional bool controlling whether or not to use Flash Attention 2. Defaults
+            to `False` in case you haven't installed flash attention. Substantially
+            speeds up inference. 
+    """
     model_name : str
     auto_load : Optional[bool] = field(
         default = True
