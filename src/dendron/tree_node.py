@@ -4,9 +4,12 @@ from .basic_types import NodeType, NodeStatus
 import types
 
 import typing
-from typing import Dict, List, Callable, Optional, Self, Any
-from dataclasses import dataclass
 
+# see the note below on why we don't want to use Self.
+#from typing import Dict, List, Callable, Optional, Self, Any
+
+from typing import Dict, List, Callable, Optional, Any
+from dataclasses import dataclass
 import logging
 
 BehaviorTree = typing.NewType("BehaviorTree", None)
@@ -168,7 +171,11 @@ class TreeNode:
     def node_type(self) -> NodeType:
         raise NotImplementedError("Type is specified in subclass.")
 
-    def get_node_by_name(self, name : str) -> Optional[Self]:
+    # the problem with this is that Self is only supported in 3.11+, which 
+    # doesn't work with some libraries and packages.
+    #def get_node_by_name(self, name : str) -> Optional[Self]:
+    
+    def get_node_by_name(self, name: str):
         """
         Search for a node by its name.
 
