@@ -1,3 +1,11 @@
+"""
+Dendron is a library for building behavior trees that use
+large language models and vision language models.
+"""
+
+__version__ = "0.1.0"
+__author__ = "Richard Kelley"
+
 from .action_node import ActionNode
 from .basic_types import NodeType, NodeStatus
 from .behavior_tree import BehaviorTree 
