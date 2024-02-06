@@ -1,15 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "dendron"
-version = "0.0.1"
+version = "0.1.0"
 authors = [
   { name = "Richard Kelley" },
 ]
-description = "A library for working with LLMs and behavior trees"
+license = {text = "BSD License"}
+description = "A library for working with LLMs and behavior trees."
 readme = "README.md"
 requires-python = ">=3.7"
+classifiers = [
+  "License :: OSI Approved :: BSD License",
+  "Intended Audience :: Science/Research",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence"
+]
+
+dependencies = [
+  "torch>=2.0.0",
+  "transformers>=4.36.2",
+  "accelerate>=0.26.1",
+  "bitsandbytes>=0.42.0",
+  "sentencepiece>=0.1.99",
+  "protobuf>=4.25.2",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0.0",
+]
 
 [tool.pytest.ini_options]
 pythonpath = "."
 addopts = [
     "--import-mode=importlib",
 ]
+
+[project.urls]
+Homepage = "https://github.com/RichardKelley/dendron"
