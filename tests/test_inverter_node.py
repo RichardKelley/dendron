@@ -1,9 +1,9 @@
 from dendron.decorators import InverterNode
-from dendron.actions import AlwaysSuccessNode, AlwaysFailureNode
+from dendron.actions import AlwaysSuccess, AlwaysFailure
 from dendron.basic_types import NodeStatus
 
 def test_failure_inversion():
-    n1 = AlwaysSuccessNode("SuccessNode")
+    n1 = AlwaysSuccess("SuccessNode")
 
     inverter = InverterNode("Inverter", n1)
 
@@ -13,7 +13,7 @@ def test_failure_inversion():
 
 def test_success_inversion():
 
-    n1 = AlwaysFailureNode("FailureNode")
+    n1 = AlwaysFailure("FailureNode")
 
     inverter = InverterNode("Inverter", n1)
 
