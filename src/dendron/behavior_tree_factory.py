@@ -3,7 +3,7 @@ from .condition_node import ConditionNode
 from .control_node import ControlNode
 from .decorator_node import DecoratorNode
 from .controls import FallbackNode, SequenceNode
-from .actions import AlwaysFailureNode, AlwaysSuccessNode, SimpleActionNode
+from .actions import AlwaysFailure, AlwaysSuccess, SimpleActionNode
 from .decorators import InverterNode
 from .conditions import SimpleConditionNode
 from .blackboard import Blackboard
@@ -33,8 +33,8 @@ class BehaviorTreeFactory:
         self.registry["Fallback"] = FallbackNode
         self.registry["Sequence"] = SequenceNode
         self.registry["Inverter"] = InverterNode
-        self.registry["AlwaysSuccess"] = AlwaysSuccessNode
-        self.registry["AlwaysFailure"] = AlwaysFailureNode
+        self.registry["AlwaysSuccess"] = AlwaysSuccess
+        self.registry["AlwaysFailure"] = AlwaysFailure
         
         # We replace SubTree nodes with the subtree root, so 
         # we use None as a placeholder here. 
