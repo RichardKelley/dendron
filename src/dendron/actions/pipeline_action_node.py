@@ -51,7 +51,7 @@ class PipelineActionConfig:
     )
 
 
-class PipelineActionNode(ActionNode):
+class PipelineAction(ActionNode):
     """
     An action node that uses a Hugging Face transformers pipeline object
     to execute a behavior. This enables easy access to functionality such

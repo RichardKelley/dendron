@@ -3,7 +3,7 @@ from ..basic_types import NodeStatus
 
 from typing import Callable
 
-class SimpleActionNode(ActionNode):
+class SimpleAction(ActionNode):
     """
     A simple action node is initialized with a callback that is 
     called every time this node `tick()`s. The callback should

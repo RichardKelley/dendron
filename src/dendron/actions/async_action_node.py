@@ -5,7 +5,7 @@ from typing import Callable
 
 from concurrent import futures
 
-class AsyncActionNode(ActionNode):
+class AsyncAction(ActionNode):
     """
     An action node that operates asynchronously. 
 
