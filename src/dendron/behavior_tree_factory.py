@@ -3,7 +3,15 @@ from .condition_node import ConditionNode
 from .control_node import ControlNode
 from .decorator_node import DecoratorNode
 from .controls import FallbackNode, SequenceNode
-from .actions import AlwaysFailure, AlwaysSuccess, SimpleActionNode
+from .actions import (
+    AlwaysFailure, 
+    AlwaysSuccess, 
+    SimpleAction, 
+    AsyncAction, 
+    CausalLMAction, 
+    ImageLMAction, 
+    PipelineAction
+)
 from .decorators import InverterNode
 from .conditions import SimpleConditionNode
 from .blackboard import Blackboard
@@ -29,12 +37,17 @@ class BehaviorTreeFactory:
         self.node_counts = {}
         self.node_types = {}
         self.functors = {}
+        self.neural_configs = {}
 
         self.registry["Fallback"] = FallbackNode
         self.registry["Sequence"] = SequenceNode
         self.registry["Inverter"] = InverterNode
         self.registry["AlwaysSuccess"] = AlwaysSuccess
         self.registry["AlwaysFailure"] = AlwaysFailure
+        self.registry["AsyncAction"] = AsyncAction
+        self.registry["CausalLMAction"] = CausalLMAction
+        self.registry["ImageLMAction"] = ImageLMAction
+        self.registry["PipelineAction"] = PipelineAction
         
         # We replace SubTree nodes with the subtree root, so 
         # we use None as a placeholder here. 
@@ -57,6 +70,9 @@ class BehaviorTreeFactory:
         self.tree_nodes_model = None
         self.behavior_trees = {}
 
+    def register_neural_config(self, name, cfg) -> None:
+        self.neural_configs[name] = cfg
+
     def register_action_type(self, name, action) -> None:
         self.registry[name] = action 
         self.node_counts[name] = 0
@@ -73,7 +89,7 @@ class BehaviorTreeFactory:
         self.node_types[name] = NodeType.DECORATOR
 
     def register_simple_action(self, name, action_function) -> None:
-        self.registry[name] = SimpleActionNode
+        self.registry[name] = SimpleAction
         self.functors[name] = action_function
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.ACTION
@@ -191,7 +207,7 @@ class BehaviorTreeFactory:
         node_id = self.node_counts[tag]
         node_name = tag + "_" + str(node_id)
     
-        if self.registry[tag] == SimpleActionNode:
+        if self.registry[tag] == SimpleAction:
             f = self.functors[tag]
             new_node = self.registry[tag](node_name, f)
         else:

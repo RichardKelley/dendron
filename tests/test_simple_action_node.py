@@ -1,4 +1,4 @@
-from dendron.actions import SimpleActionNode
+from dendron.actions import SimpleAction
 from dendron import NodeStatus
 from dendron import Blackboard, BlackboardEntryMetadata
 
@@ -9,7 +9,7 @@ def test_simple_action_function():
         print(f"Hello {person}!")
         return NodeStatus.SUCCESS
 
-    a1 = SimpleActionNode("greeting", simple_action)
+    a1 = SimpleAction("greeting", simple_action)
     result = a1.execute_tick()
     assert result == NodeStatus.SUCCESS
 
@@ -25,7 +25,7 @@ def test_simple_action_functor():
             return NodeStatus.SUCCESS
 
     world = Greeter("World")
-    a1 = SimpleActionNode("greeting", world)
+    a1 = SimpleAction("greeting", world)
     result = a1.execute_tick()
     assert result == NodeStatus.SUCCESS
 
@@ -48,7 +48,7 @@ def test_simple_action_blackboard_update():
                 return NodeStatus.FAILURE
 
     action = Updater()
-    node = SimpleActionNode("update_bb", action)
+    node = SimpleAction("update_bb", action)
     node.callback.set_bb(bb)
 
     result = node.execute_tick()
