@@ -1,7 +1,7 @@
 from ..action_node import ActionNode
 from ..tree_node import NodeStatus
 
-class AlwaysFailureNode(ActionNode):
+class AlwaysFailure(ActionNode):
     """
     An action node that always returns `FAILURE`.
 

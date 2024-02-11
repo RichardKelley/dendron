@@ -2,7 +2,7 @@ from ..action_node import ActionNode
 from ..basic_types import NodeStatus
 from ..blackboard import Blackboard
 
-class AlwaysSuccessNode(ActionNode):
+class AlwaysSuccess(ActionNode):
     """
     An action node that always returns `SUCCESS`.
 

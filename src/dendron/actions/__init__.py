@@ -1,5 +1,5 @@
-from .always_success_node import AlwaysSuccessNode
-from .always_failure_node import AlwaysFailureNode
+from .always_success_node import AlwaysSuccess
+from .always_failure_node import AlwaysFailure
 from .simple_action_node import SimpleActionNode
 from .async_action_node import AsyncActionNode
 
