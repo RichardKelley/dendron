@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Richard Kelley" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>CompletionCondition - Dendron</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "CompletionCondition";
+        var mkdocs_page_input_path = "api/conditions/completion_condition.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+ <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }</style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> Dendron
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">🌳 Dendron</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../install/">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../theory/">Theory</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Tutorial 1. Chatbot</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../tutorial_intro/">Introduction - Building a Local Chatbot with ASR and TTS Support</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../0_tutorial_single_node/">Part 0. A Single Node</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../1_tutorial_seq/">Part 1. Thinking and Talking</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../2_tutorial_implicit_seq/">Part 2. Managing Chat State</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../3_tutorial_llm_conditional/">Part 3. Learning How to Say Goodbye</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../4_tutorial_tts_asr_chat/">Part 4. Chat with TTS and ASR</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="#">Actions</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/always_failure/">AlwaysFailure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/always_success/">AlwaysSuccess</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/async_action/">AsyncAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/causal_lm_action/">CausalLMAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/image_lm_action/">ImageLMAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/pipeline_action/">PipelineAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/simple_action/">SimpleAction</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Conditions</a>
+    <ul class="current">
+                <li class="toctree-l2 current"><a class="reference internal current" href="./">CompletionCondition</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#completionconditionconfig">CompletionConditionConfig</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dendron.conditions.completion_condition.CompletionConditionConfig">CompletionConditionConfig</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#completioncondition_1">CompletionCondition</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dendron.conditions.completion_condition.CompletionCondition">CompletionCondition</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dendron.conditions.completion_condition.CompletionCondition.set_model">set_model</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dendron.conditions.completion_condition.CompletionCondition.tick">tick</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../simple_condition/">SimpleCondition</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Controls</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../controls/fallback/">Fallback</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../controls/sequence/">Sequence</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Decorators</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../decorators/blackboard_history/">BlackboardHistory</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../decorators/force_failure/">ForceFailure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../decorators/force_success/">ForceSuccess</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../decorators/inverter/">Inverter</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../decorators/repeat/">Repeat</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../decorators/retry/">Retry</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../decorators/run_once/">RunOnce</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../decorators/timeout/">Timeout</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../action_node/">ActionNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../basic_types/">Basic Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../behavior_tree_factory/">BehaviorTreeFactory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../behavior_tree/">BehaviorTree</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../blackboard/">Blackboard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../condition_node/">ConditionNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../control_node/">ControlNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../decorator_node/">DecoratorNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tree_node/">TreeNode</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">Dendron</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">API</li>
+          <li class="breadcrumb-item">Conditions</li>
+      <li class="breadcrumb-item active">CompletionCondition</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/RichardKelley/dendron/edit/master/docs/api/conditions/completion_condition.md">Edit on RichardKelley/dendron</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="completioncondition">CompletionCondition</h1>
+<h2 id="completionconditionconfig">CompletionConditionConfig</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="dendron.conditions.completion_condition.CompletionConditionConfig"></a>
+  <div class="doc doc-contents first">
+
+  
+      <p>Configuration for a CompletionConditionNode.</p>
+<p>The options in this object control what Hugging Face model is used
+and how the node interacts with the blackboard.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>model_name</code></b>
+                  (<code>`str`</code>)
+              –
+              <div class="doc-md-description">
+                <p>The name of the model to use. This should be a valid name
+corresponding to a Hugging Face model name (including the user
+name).</p>
+              </div>
+            </li>
+            <li>
+              <b><code>completions_key</code></b>
+                  (<code>`Optional[str]`</code>, default:
+                      <code><span title="dataclasses.field">field</span>(default=&#39;completions_in&#39;)</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>The blackboard key to read and write the completions to evaluate
+upon a <code>tick()</code> call. The value stored here should be a list of
+strings, each string representing one completion. Defaults to
+"completions_in".</p>
+              </div>
+            </li>
+            <li>
+              <b><code>success_fn_key</code></b>
+                  (<code>`Optional[str]`</code>, default:
+                      <code><span title="dataclasses.field">field</span>(default=&#39;success_fn&#39;)</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>The blackboard key to read and write the success predicate that
+determines the status that is ultimately returned upon a <code>tick()</code>
+call. The predicate should accept a completion string as input 
+and return a <code>NodeStatus</code>. Defaults to "success_fn".</p>
+              </div>
+            </li>
+            <li>
+              <b><code>auto_load</code></b>
+                  (<code>`Optional[bool]`</code>, default:
+                      <code><span title="dataclasses.field">field</span>(default=True)</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>An optional boolean indicating whether or not to automatically 
+load model either from disk or the Hugging Face hub. If <code>False</code>,
+the user is responsible for ensuring that a model is loaded
+before the first <code>tick()</code> is triggered. Defaults to <code>True</code>.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>input_key</code></b>
+                  (<code>`Optional[str]`</code>, default:
+                      <code><span title="dataclasses.field">field</span>(default=&#39;in&#39;)</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>The blackboard key to use for writing and reading the prefix that 
+this node will consume. Defaults to "in".</p>
+              </div>
+            </li>
+            <li>
+              <b><code>device</code></b>
+                  (<code>`Optional[str]`</code>, default:
+                      <code><span title="dataclasses.field">field</span>(default=&#39;auto&#39;)</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>The device that should be used with the model. Examples include
+"cpu", "cuda", and "auto". Defaults to "auto".</p>
+              </div>
+            </li>
+            <li>
+              <b><code>load_in_8bit</code></b>
+                  (<code>`Optional[bool]`</code>, default:
+                      <code><span title="dataclasses.field">field</span>(default=False)</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>Optional boolean indicating whether or not to use eight-bit quantization
+from bitsandbytes. When available, will typically decrease memory usage
+and increase inference speed. Defaults to <code>False</code>.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>load_in_4bit</code></b>
+                  (<code>`Optional[bool]`</code>, default:
+                      <code><span title="dataclasses.field">field</span>(default=False)</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>Optional boolean indicating whether or not to use four-bit quantization
+from bitsandbytes. When available, will typically decrease memory usage
+and increase inference speed. If you observe degraded performance, try
+eight-bit quanitization instead. Defaults to <code>False</code>.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>torch_dtype</code></b>
+                  (<code>`torch.dtype`</code>, default:
+                      <code><span title="dataclasses.field">field</span>(default=<span title="torch.float16">float16</span>)</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>The dtype to use for torch tensors. Defaults to <code>torch.float16</code>. You may
+need to change this depending on your quantization choices.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>use_flash_attn_2</code></b>
+                  (<code>`Optional[bool]`</code>, default:
+                      <code><span title="dataclasses.field">field</span>(default=False)</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>Optional bool controlling whether or not to use Flash Attention 2. Defaults
+to <code>False</code> in case you haven't installed flash attention. Substantially
+speeds up inference.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+            <details class="quote">
+              <summary>Source code in <code>src/dendron/conditions/completion_condition.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span>
+<span class="normal">94</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">CompletionConditionConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Configuration for a CompletionConditionNode.</span>
+
+<span class="sd">    The options in this object control what Hugging Face model is used</span>
+<span class="sd">    and how the node interacts with the blackboard.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_name (`str`):</span>
+<span class="sd">            The name of the model to use. This should be a valid name</span>
+<span class="sd">            corresponding to a Hugging Face model name (including the user</span>
+<span class="sd">            name).</span>
+<span class="sd">        completions_key (`Optional[str]`):</span>
+<span class="sd">            The blackboard key to read and write the completions to evaluate</span>
+<span class="sd">            upon a `tick()` call. The value stored here should be a list of</span>
+<span class="sd">            strings, each string representing one completion. Defaults to</span>
+<span class="sd">            &quot;completions_in&quot;.</span>
+<span class="sd">        success_fn_key (`Optional[str]`):</span>
+<span class="sd">            The blackboard key to read and write the success predicate that</span>
+<span class="sd">            determines the status that is ultimately returned upon a `tick()`</span>
+<span class="sd">            call. The predicate should accept a completion string as input </span>
+<span class="sd">            and return a `NodeStatus`. Defaults to &quot;success_fn&quot;.</span>
+<span class="sd">        auto_load (`Optional[bool]`):</span>
+<span class="sd">            An optional boolean indicating whether or not to automatically </span>
+<span class="sd">            load model either from disk or the Hugging Face hub. If `False`,</span>
+<span class="sd">            the user is responsible for ensuring that a model is loaded</span>
+<span class="sd">            before the first `tick()` is triggered. Defaults to `True`.</span>
+<span class="sd">        input_key (`Optional[str]`):</span>
+<span class="sd">            The blackboard key to use for writing and reading the prefix that </span>
+<span class="sd">            this node will consume. Defaults to &quot;in&quot;.</span>
+<span class="sd">        device (`Optional[str]`):</span>
+<span class="sd">            The device that should be used with the model. Examples include</span>
+<span class="sd">            &quot;cpu&quot;, &quot;cuda&quot;, and &quot;auto&quot;. Defaults to &quot;auto&quot;.</span>
+<span class="sd">        load_in_8bit (`Optional[bool]`):</span>
+<span class="sd">            Optional boolean indicating whether or not to use eight-bit quantization</span>
+<span class="sd">            from bitsandbytes. When available, will typically decrease memory usage</span>
+<span class="sd">            and increase inference speed. Defaults to `False`.</span>
+<span class="sd">        load_in_4bit (`Optional[bool]`):</span>
+<span class="sd">            Optional boolean indicating whether or not to use four-bit quantization</span>
+<span class="sd">            from bitsandbytes. When available, will typically decrease memory usage</span>
+<span class="sd">            and increase inference speed. If you observe degraded performance, try</span>
+<span class="sd">            eight-bit quanitization instead. Defaults to `False`.</span>
+<span class="sd">        torch_dtype (`torch.dtype`):</span>
+<span class="sd">            The dtype to use for torch tensors. Defaults to `torch.float16`. You may</span>
+<span class="sd">            need to change this depending on your quantization choices.</span>
+<span class="sd">        use_flash_attn_2 (`Optional[bool]`):</span>
+<span class="sd">            Optional bool controlling whether or not to use Flash Attention 2. Defaults</span>
+<span class="sd">            to `False` in case you haven&#39;t installed flash attention. Substantially</span>
+<span class="sd">            speeds up inference. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model_name</span> <span class="p">:</span> <span class="nb">str</span>
+    <span class="n">completions_key</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;completions_in&quot;</span>
+    <span class="p">)</span>
+    <span class="n">success_fn_key</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;success_fn&quot;</span>
+    <span class="p">)</span>
+    <span class="n">auto_load</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">input_key</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;in&quot;</span>
+    <span class="p">)</span>
+    <span class="n">device</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span>
+    <span class="p">)</span>
+    <span class="n">load_in_8bit</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="n">load_in_4bit</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="n">torch_dtype</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float16</span>
+    <span class="p">)</span>
+    <span class="n">use_flash_attn_2</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span>
+        <span class="n">default</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  </div>
+
+
+</div><h2 id="completioncondition_1">CompletionCondition</h2>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="dendron.conditions.completion_condition.CompletionCondition"></a>
+  <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="dendron.condition_node.ConditionNode" href="../../condition_node/#dendron.condition_node.ConditionNode">ConditionNode</a></code></p>
+
+  
+      <p>A completion condition node uses a causal language model to evaluate
+the relative likelihood of several different completions of a prompt,
+returning <code>SUCCESS</code> or <code>FAILURE</code> using a user-provided function that
+selects a status based on the most likely completion.</p>
+<p>This node tends to run quickly and gives useful answers, but if you
+use this node you should be aware of the perils of "surface form
+competition", documented in the paper by Holtzman et al. (see 
+https://arxiv.org/abs/2104.08315).</p>
+<p>This node is based on the Hugging Face transformers library, and will
+download the model that you specify by name. This can take a long 
+time and/or use a lot of storage, depending on the model you name.</p>
+<p>There are enough configuration options for this type of node that
+the options have all been placed in a dataclass config object. See 
+the documentation for that object to learn about the many options
+available to you.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>name</code></b>
+                  (<code>`str`</code>)
+              –
+              <div class="doc-md-description">
+                <p>The given name of this node.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>cfg</code></b>
+                  (<code>`CompletionConditionNodeConfig`</code>)
+              –
+              <div class="doc-md-description">
+                <p>The configuration object for this model.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+            <details class="quote">
+              <summary>Source code in <code>src/dendron/conditions/completion_condition.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">CompletionCondition</span><span class="p">(</span><span class="n">ConditionNode</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A completion condition node uses a causal language model to evaluate</span>
+<span class="sd">    the relative likelihood of several different completions of a prompt,</span>
+<span class="sd">    returning `SUCCESS` or `FAILURE` using a user-provided function that</span>
+<span class="sd">    selects a status based on the most likely completion.</span>
+
+<span class="sd">    This node tends to run quickly and gives useful answers, but if you</span>
+<span class="sd">    use this node you should be aware of the perils of &quot;surface form</span>
+<span class="sd">    competition&quot;, documented in the paper by Holtzman et al. (see </span>
+<span class="sd">    https://arxiv.org/abs/2104.08315).</span>
+
+<span class="sd">    This node is based on the Hugging Face transformers library, and will</span>
+<span class="sd">    download the model that you specify by name. This can take a long </span>
+<span class="sd">    time and/or use a lot of storage, depending on the model you name.</span>
+
+<span class="sd">    There are enough configuration options for this type of node that</span>
+<span class="sd">    the options have all been placed in a dataclass config object. See </span>
+<span class="sd">    the documentation for that object to learn about the many options</span>
+<span class="sd">    available to you.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name (`str`):</span>
+<span class="sd">            The given name of this node.</span>
+<span class="sd">        cfg (`CompletionConditionNodeConfig`):</span>
+<span class="sd">            The configuration object for this model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span> <span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">cfg</span> <span class="p">:</span> <span class="n">CompletionConditionConfig</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_key</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">input_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">device</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">torch_dtype</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">torch_dtype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">completions_key</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">completions_key</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">success_fn_key</span> <span class="o">=</span> <span class="n">cfg</span><span class="o">.</span><span class="n">success_fn_key</span>
+
+        <span class="k">match</span> <span class="n">cfg</span><span class="o">.</span><span class="n">load_in_4bit</span><span class="p">,</span> <span class="n">cfg</span><span class="o">.</span><span class="n">load_in_8bit</span><span class="p">:</span>
+            <span class="n">case</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">quantization</span> <span class="o">=</span> <span class="n">Quantization</span><span class="o">.</span><span class="n">FourBit</span>
+            <span class="n">case</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">quantization</span> <span class="o">=</span> <span class="n">Quantization</span><span class="o">.</span><span class="n">FourBit</span>
+            <span class="n">case</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">quantization</span> <span class="o">=</span> <span class="n">Quantization</span><span class="o">.</span><span class="n">EightBit</span>
+            <span class="n">case</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">quantization</span> <span class="o">=</span> <span class="n">Quantization</span><span class="o">.</span><span class="n">NoQuantization</span>
+
+        <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">use_flash_attn_2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attn_implementation</span> <span class="o">=</span> <span class="s2">&quot;flash_attention_2&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attn_implementation</span> <span class="o">=</span> <span class="s2">&quot;sdpa&quot;</span>
+
+        <span class="k">if</span> <span class="n">cfg</span><span class="o">.</span><span class="n">auto_load</span><span class="p">:</span>
+            <span class="k">match</span> <span class="bp">self</span><span class="o">.</span><span class="n">quantization</span><span class="p">:</span>
+                <span class="k">case</span> <span class="n">Quantization</span><span class="o">.</span><span class="n">NoQuantization</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+                        <span class="n">cfg</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
+                        <span class="n">torch_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">torch_dtype</span><span class="p">,</span>
+                        <span class="n">low_cpu_mem_usage</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">attn_implementation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">attn_implementation</span>
+                    <span class="p">)</span>
+                <span class="k">case</span> <span class="n">Quantization</span><span class="o">.</span><span class="n">FourBit</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+                        <span class="n">cfg</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
+                        <span class="n">load_in_4bit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">torch_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">torch_dtype</span><span class="p">,</span>
+                        <span class="n">low_cpu_mem_usage</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">attn_implementation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">attn_implementation</span><span class="p">,</span>
+                        <span class="n">bnb_4bit_compute_dtype</span><span class="o">=</span><span class="n">cfg</span><span class="o">.</span><span class="n">torch_dtype</span>
+                    <span class="p">)</span>
+                <span class="k">case</span> <span class="n">Quantization</span><span class="o">.</span><span class="n">EightBit</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">AutoModelForCausalLM</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span>
+                        <span class="n">cfg</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
+                        <span class="n">load_in_8bit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">torch_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">torch_dtype</span><span class="p">,</span>
+                        <span class="n">low_cpu_mem_usage</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                        <span class="n">attn_implementation</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">attn_implementation</span>
+                    <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">cfg</span><span class="o">.</span><span class="n">model_name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">pad_token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">eos_token</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">completions</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">set_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a new model to use for generating text.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">new_model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">new_model</span><span class="o">.</span><span class="n">name_or_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeStatus</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Execute a tick, consisting of the following steps:</span>
+
+<span class="sd">        - Retrieve the input prefix from the blackboard.</span>
+<span class="sd">        - Retrieve the list of completion options from the blackboard.</span>
+<span class="sd">        - Retrieve the success predicate from the blackboard.</span>
+<span class="sd">        - Tokenize all of the possible completions, padding as needed.</span>
+<span class="sd">        - Evaluate the model on the tokenized batch of completions.</span>
+<span class="sd">        - Compute the &quot;log probabilities&quot; of each completion.</span>
+<span class="sd">        - Apply the success predicate to the completion with the highest</span>
+<span class="sd">          log probability.</span>
+<span class="sd">        - Return the status computed by the success predicate.</span>
+
+<span class="sd">        If any of the above fail, the exception text is printed and the node</span>
+<span class="sd">        returns a status of `FAILURE`. Otherwise the node returns `SUCCESS`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">input_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blackboard</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">input_key</span><span class="p">]</span>
+            <span class="n">completions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blackboard</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">completions_key</span><span class="p">]</span>
+            <span class="n">success_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blackboard</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">success_fn_key</span><span class="p">]</span>
+
+            <span class="n">log_probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">completions</span><span class="p">))</span>
+            <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_prefix</span> <span class="o">+</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">completions</span><span class="p">]</span>
+
+            <span class="c1"># Based on discussion/code at: https://discuss.huggingface.co/t/announcement-generation-get-probabilities-for-generated-output/30075/17</span>
+            <span class="n">input_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">input_ids</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="p">)</span>
+            <span class="n">probs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+
+            <span class="n">probs</span> <span class="o">=</span> <span class="n">probs</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">input_ids</span> <span class="o">=</span> <span class="n">input_ids</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span>
+            <span class="n">gen_probs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">input_ids</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">])</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">input_sentence</span><span class="p">,</span> <span class="n">input_probs</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">gen_probs</span><span class="p">)):</span>
+                <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">input_sentence</span><span class="p">,</span> <span class="n">input_probs</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">token</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">all_special_ids</span><span class="p">:</span>
+                        <span class="n">log_probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+            <span class="n">best_completion</span> <span class="o">=</span> <span class="n">completions</span><span class="p">[</span><span class="n">log_probs</span><span class="o">.</span><span class="n">argmax</span><span class="p">()]</span>
+
+            <span class="k">return</span> <span class="n">success_fn</span><span class="p">(</span><span class="n">best_completion</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception in node </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+            <span class="k">return</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">FAILURE</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.conditions.completion_condition.CompletionCondition.set_model" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">set_model</span><span class="p">(</span><span class="n">new_model</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Set a new model to use for generating text.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/conditions/completion_condition.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_model</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set a new model to use for generating text.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">new_model</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">new_model</span><span class="o">.</span><span class="n">name_or_path</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.conditions.completion_condition.CompletionCondition.tick" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">tick</span><span class="p">()</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Execute a tick, consisting of the following steps:</p>
+<ul>
+<li>Retrieve the input prefix from the blackboard.</li>
+<li>Retrieve the list of completion options from the blackboard.</li>
+<li>Retrieve the success predicate from the blackboard.</li>
+<li>Tokenize all of the possible completions, padding as needed.</li>
+<li>Evaluate the model on the tokenized batch of completions.</li>
+<li>Compute the "log probabilities" of each completion.</li>
+<li>Apply the success predicate to the completion with the highest
+  log probability.</li>
+<li>Return the status computed by the success predicate.</li>
+</ul>
+<p>If any of the above fail, the exception text is printed and the node
+returns a status of <code>FAILURE</code>. Otherwise the node returns <code>SUCCESS</code>.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/conditions/completion_condition.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span>
+<span class="normal">226</span>
+<span class="normal">227</span>
+<span class="normal">228</span>
+<span class="normal">229</span>
+<span class="normal">230</span>
+<span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeStatus</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Execute a tick, consisting of the following steps:</span>
+
+<span class="sd">    - Retrieve the input prefix from the blackboard.</span>
+<span class="sd">    - Retrieve the list of completion options from the blackboard.</span>
+<span class="sd">    - Retrieve the success predicate from the blackboard.</span>
+<span class="sd">    - Tokenize all of the possible completions, padding as needed.</span>
+<span class="sd">    - Evaluate the model on the tokenized batch of completions.</span>
+<span class="sd">    - Compute the &quot;log probabilities&quot; of each completion.</span>
+<span class="sd">    - Apply the success predicate to the completion with the highest</span>
+<span class="sd">      log probability.</span>
+<span class="sd">    - Return the status computed by the success predicate.</span>
+
+<span class="sd">    If any of the above fail, the exception text is printed and the node</span>
+<span class="sd">    returns a status of `FAILURE`. Otherwise the node returns `SUCCESS`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">input_prefix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blackboard</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">input_key</span><span class="p">]</span>
+        <span class="n">completions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blackboard</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">completions_key</span><span class="p">]</span>
+        <span class="n">success_fn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blackboard</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">success_fn_key</span><span class="p">]</span>
+
+        <span class="n">log_probs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">completions</span><span class="p">))</span>
+        <span class="n">texts</span> <span class="o">=</span> <span class="p">[</span><span class="n">input_prefix</span> <span class="o">+</span> <span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">completions</span><span class="p">]</span>
+
+        <span class="c1"># Based on discussion/code at: https://discuss.huggingface.co/t/announcement-generation-get-probabilities-for-generated-output/30075/17</span>
+        <span class="n">input_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s2">&quot;pt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">input_ids</span>
+        <span class="n">outputs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">input_ids</span><span class="p">)</span>
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">outputs</span><span class="o">.</span><span class="n">logits</span><span class="p">,</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+
+        <span class="n">probs</span> <span class="o">=</span> <span class="n">probs</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">input_ids</span> <span class="o">=</span> <span class="n">input_ids</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]</span>
+        <span class="n">gen_probs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span><span class="n">probs</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">input_ids</span><span class="p">[:,</span> <span class="p">:,</span> <span class="kc">None</span><span class="p">])</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">input_sentence</span><span class="p">,</span> <span class="n">input_probs</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">input_ids</span><span class="p">,</span> <span class="n">gen_probs</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">token</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">input_sentence</span><span class="p">,</span> <span class="n">input_probs</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">token</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">all_special_ids</span><span class="p">:</span>
+                    <span class="n">log_probs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+=</span> <span class="n">p</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+
+        <span class="n">best_completion</span> <span class="o">=</span> <span class="n">completions</span><span class="p">[</span><span class="n">log_probs</span><span class="o">.</span><span class="n">argmax</span><span class="p">()]</span>
+
+        <span class="k">return</span> <span class="n">success_fn</span><span class="p">(</span><span class="n">best_completion</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Exception in node </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">FAILURE</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../actions/simple_action/" class="btn btn-neutral float-left" title="SimpleAction"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../simple_condition/" class="btn btn-neutral float-right" title="SimpleCondition">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../actions/simple_action/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../simple_condition/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+<script>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});</script></body>
+</html>

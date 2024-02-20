@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Richard Kelley" />
+      <link rel="shortcut icon" href="../../../img/favicon.ico" />
+    <title>Retry - Dendron</title>
+    <link rel="stylesheet" href="../../../css/theme.css" />
+    <link rel="stylesheet" href="../../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Retry";
+        var mkdocs_page_input_path = "api/decorators/retry.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+ <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }</style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../../.." class="icon icon-home"> Dendron
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">🌳 Dendron</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../install/">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../../theory/">Theory</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Tutorial 1. Chatbot</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../../tutorial_intro/">Introduction - Building a Local Chatbot with ASR and TTS Support</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../0_tutorial_single_node/">Part 0. A Single Node</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../1_tutorial_seq/">Part 1. Thinking and Talking</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../2_tutorial_implicit_seq/">Part 2. Managing Chat State</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../3_tutorial_llm_conditional/">Part 3. Learning How to Say Goodbye</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../../4_tutorial_tts_asr_chat/">Part 4. Chat with TTS and ASR</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="#">Actions</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/always_failure/">AlwaysFailure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/always_success/">AlwaysSuccess</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/async_action/">AsyncAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/causal_lm_action/">CausalLMAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/image_lm_action/">ImageLMAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/pipeline_action/">PipelineAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../actions/simple_action/">SimpleAction</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Conditions</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../conditions/completion_condition/">CompletionCondition</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../conditions/simple_condition/">SimpleCondition</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Controls</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../controls/fallback/">Fallback</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../controls/sequence/">Sequence</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Decorators</a>
+    <ul class="current">
+                <li class="toctree-l2"><a class="reference internal" href="../blackboard_history/">BlackboardHistory</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../force_failure/">ForceFailure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../force_success/">ForceSuccess</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../inverter/">Inverter</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../repeat/">Repeat</a>
+                </li>
+                <li class="toctree-l2 current"><a class="reference internal current" href="./">Retry</a>
+    <ul class="current">
+    <li class="toctree-l3"><a class="reference internal" href="#dendron.decorators.retry.Retry">Retry</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dendron.decorators.retry.Retry.reset">reset</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dendron.decorators.retry.Retry.tick">tick</a>
+    </li>
+    </ul>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../run_once/">RunOnce</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../timeout/">Timeout</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../action_node/">ActionNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../basic_types/">Basic Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../behavior_tree_factory/">BehaviorTreeFactory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../behavior_tree/">BehaviorTree</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../blackboard/">Blackboard</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../condition_node/">ConditionNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../control_node/">ControlNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../decorator_node/">DecoratorNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../tree_node/">TreeNode</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../..">Dendron</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">API</li>
+          <li class="breadcrumb-item">Decorators</li>
+      <li class="breadcrumb-item active">Retry</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/RichardKelley/dendron/edit/master/docs/api/decorators/retry.md">Edit on RichardKelley/dendron</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="retry">Retry</h1>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="dendron.decorators.retry.Retry"></a>
+  <div class="doc doc-contents first">
+          <p class="doc doc-class-bases">
+            Bases: <code><a class="autorefs autorefs-internal" title="dendron.decorator_node.DecoratorNode" href="../../decorator_node/#dendron.decorator_node.DecoratorNode">DecoratorNode</a></code></p>
+
+  
+      <p>A Retry node ticks its child node repeatedly as long as the child
+continues to return <code>FAILURE</code>.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>name</code></b>
+                  (<code>`str`</code>)
+              –
+              <div class="doc-md-description">
+                <p>The given name of this node.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>child</code></b>
+                  (<code>`dendron.tree_node.TreeNode`</code>)
+              –
+              <div class="doc-md-description">
+                <p>Optional child node. If <code>None</code>, it is the responsibility of the
+caller to ensure that the <code>child_node</code> member variable is set
+before the first <code>tick()</code> call.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>n_times</code></b>
+                  (<code>`int`</code>)
+              –
+              <div class="doc-md-description">
+                <p>Number of times to <code>tick()</code> the child node if it continues 
+to return <code>FAILURE</code>.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+            <details class="quote">
+              <summary>Source code in <code>src/dendron/decorators/retry.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 5</span>
+<span class="normal"> 6</span>
+<span class="normal"> 7</span>
+<span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span>
+<span class="normal">19</span>
+<span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Retry</span><span class="p">(</span><span class="n">DecoratorNode</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A Retry node ticks its child node repeatedly as long as the child</span>
+<span class="sd">    continues to return `FAILURE`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name (`str`):</span>
+<span class="sd">            The given name of this node.</span>
+<span class="sd">        child (`dendron.tree_node.TreeNode`):</span>
+<span class="sd">            Optional child node. If `None`, it is the responsibility of the</span>
+<span class="sd">            caller to ensure that the `child_node` member variable is set</span>
+<span class="sd">            before the first `tick()` call.</span>
+<span class="sd">        n_times (`int`):</span>
+<span class="sd">            Number of times to `tick()` the child node if it continues </span>
+<span class="sd">            to return `FAILURE`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">child</span><span class="p">:</span> <span class="n">TreeNode</span><span class="p">,</span> <span class="n">n_times</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">child</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_times</span> <span class="o">=</span> <span class="n">n_times</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the retry counter to 0 and instruct the child node to reset.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child_node</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeStatus</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Tick the child node until either it returns `SUCCESS` or the child </span>
+<span class="sd">        is `tick()`ed `n_times`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">should_retry</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">while</span> <span class="n">should_retry</span><span class="p">:</span>
+            <span class="n">child_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">child_node</span><span class="o">.</span><span class="n">execute_tick</span><span class="p">()</span>
+            <span class="k">match</span> <span class="n">child_status</span><span class="p">:</span>
+                <span class="k">case</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reset_child</span><span class="p">()</span>
+                    <span class="k">return</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">SUCCESS</span>
+                <span class="k">case</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">FAILURE</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">should_retry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_times</span>
+                <span class="k">case</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">RUNNING</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">FAILURE</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.decorators.retry.Retry.reset" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">reset</span><span class="p">()</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Set the retry counter to 0 and instruct the child node to reset.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/decorators/retry.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the retry counter to 0 and instruct the child node to reset.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">child_node</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.decorators.retry.Retry.tick" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">tick</span><span class="p">()</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Tick the child node until either it returns <code>SUCCESS</code> or the child 
+is <code>tick()</code>ed <code>n_times</code>.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/decorators/retry.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span>
+<span class="normal">47</span>
+<span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">tick</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NodeStatus</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tick the child node until either it returns `SUCCESS` or the child </span>
+<span class="sd">    is `tick()`ed `n_times`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">should_retry</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">while</span> <span class="n">should_retry</span><span class="p">:</span>
+        <span class="n">child_status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">child_node</span><span class="o">.</span><span class="n">execute_tick</span><span class="p">()</span>
+        <span class="k">match</span> <span class="n">child_status</span><span class="p">:</span>
+            <span class="k">case</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reset_child</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">SUCCESS</span>
+            <span class="k">case</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">FAILURE</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="n">should_retry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">n_times</span>
+            <span class="k">case</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">RUNNING</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">retry_ct</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">NodeStatus</span><span class="o">.</span><span class="n">FAILURE</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../repeat/" class="btn btn-neutral float-left" title="Repeat"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../run_once/" class="btn btn-neutral float-right" title="RunOnce">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../repeat/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../run_once/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../../..";</script>
+    <script src="../../../js/theme_extra.js"></script>
+    <script src="../../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="../../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+<script>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});</script></body>
+</html>

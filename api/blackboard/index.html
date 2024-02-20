@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Richard Kelley" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Blackboard - Dendron</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+        <link href="../../assets/_mkdocstrings.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Blackboard";
+        var mkdocs_page_input_path = "api/blackboard.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+ <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+    html.glightbox-open { overflow: initial; height: 100%; }
+    .gslide-title { margin-top: 0px; user-select: text; }
+    .gslide-desc { color: #666; user-select: text; }
+    .gslide-image img { background: white; }</style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Dendron
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">🌳 Dendron</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../install/">Installation</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../theory/">Theory</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Tutorials</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Tutorial 1. Chatbot</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../../tutorial_intro/">Introduction - Building a Local Chatbot with ASR and TTS Support</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../0_tutorial_single_node/">Part 0. A Single Node</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../1_tutorial_seq/">Part 1. Thinking and Talking</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../2_tutorial_implicit_seq/">Part 2. Managing Chat State</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../3_tutorial_llm_conditional/">Part 3. Learning How to Say Goodbye</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../../4_tutorial_tts_asr_chat/">Part 4. Chat with TTS and ASR</a>
+                </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">API</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="#">Actions</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../actions/always_failure/">AlwaysFailure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../actions/always_success/">AlwaysSuccess</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../actions/async_action/">AsyncAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../actions/causal_lm_action/">CausalLMAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../actions/image_lm_action/">ImageLMAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../actions/pipeline_action/">PipelineAction</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../actions/simple_action/">SimpleAction</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Conditions</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../conditions/completion_condition/">CompletionCondition</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../conditions/simple_condition/">SimpleCondition</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Controls</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../controls/fallback/">Fallback</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../controls/sequence/">Sequence</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="#">Decorators</a>
+    <ul>
+                <li class="toctree-l2"><a class="reference internal" href="../decorators/blackboard_history/">BlackboardHistory</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../decorators/force_failure/">ForceFailure</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../decorators/force_success/">ForceSuccess</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../decorators/inverter/">Inverter</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../decorators/repeat/">Repeat</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../decorators/retry/">Retry</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../decorators/run_once/">RunOnce</a>
+                </li>
+                <li class="toctree-l2"><a class="reference internal" href="../decorators/timeout/">Timeout</a>
+                </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../action_node/">ActionNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../basic_types/">Basic Types</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../behavior_tree_factory/">BehaviorTreeFactory</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../behavior_tree/">BehaviorTree</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="./">Blackboard</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard">Blackboard</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.__delitem__">__delitem__</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.__getitem__">__getitem__</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.__iter__">__iter__</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.__len__">__len__</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.__setitem__">__setitem__</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.__str__">__str__</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.get">get</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.get_entry">get_entry</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.register_entry">register_entry</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.set">set</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.set_entry">set_entry</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dendron.blackboard.Blackboard.set_print_len">set_print_len</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../condition_node/">ConditionNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../control_node/">ControlNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../decorator_node/">DecoratorNode</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../tree_node/">TreeNode</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Dendron</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">API</li>
+      <li class="breadcrumb-item active">Blackboard</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/RichardKelley/dendron/edit/master/docs/api/blackboard.md">Edit on RichardKelley/dendron</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="blackboard">Blackboard</h1>
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<a id="dendron.blackboard.Blackboard"></a>
+  <div class="doc doc-contents first">
+
+  
+      <p>A blackboard for a Behavior Tree. Implements a key-value mapping
+that is accessible by all of the nodes in a behavior tree.</p>
+
+            <details class="quote">
+              <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 23</span>
+<span class="normal"> 24</span>
+<span class="normal"> 25</span>
+<span class="normal"> 26</span>
+<span class="normal"> 27</span>
+<span class="normal"> 28</span>
+<span class="normal"> 29</span>
+<span class="normal"> 30</span>
+<span class="normal"> 31</span>
+<span class="normal"> 32</span>
+<span class="normal"> 33</span>
+<span class="normal"> 34</span>
+<span class="normal"> 35</span>
+<span class="normal"> 36</span>
+<span class="normal"> 37</span>
+<span class="normal"> 38</span>
+<span class="normal"> 39</span>
+<span class="normal"> 40</span>
+<span class="normal"> 41</span>
+<span class="normal"> 42</span>
+<span class="normal"> 43</span>
+<span class="normal"> 44</span>
+<span class="normal"> 45</span>
+<span class="normal"> 46</span>
+<span class="normal"> 47</span>
+<span class="normal"> 48</span>
+<span class="normal"> 49</span>
+<span class="normal"> 50</span>
+<span class="normal"> 51</span>
+<span class="normal"> 52</span>
+<span class="normal"> 53</span>
+<span class="normal"> 54</span>
+<span class="normal"> 55</span>
+<span class="normal"> 56</span>
+<span class="normal"> 57</span>
+<span class="normal"> 58</span>
+<span class="normal"> 59</span>
+<span class="normal"> 60</span>
+<span class="normal"> 61</span>
+<span class="normal"> 62</span>
+<span class="normal"> 63</span>
+<span class="normal"> 64</span>
+<span class="normal"> 65</span>
+<span class="normal"> 66</span>
+<span class="normal"> 67</span>
+<span class="normal"> 68</span>
+<span class="normal"> 69</span>
+<span class="normal"> 70</span>
+<span class="normal"> 71</span>
+<span class="normal"> 72</span>
+<span class="normal"> 73</span>
+<span class="normal"> 74</span>
+<span class="normal"> 75</span>
+<span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span>
+<span class="normal">125</span>
+<span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span>
+<span class="normal">136</span>
+<span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span>
+<span class="normal">152</span>
+<span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span>
+<span class="normal">159</span>
+<span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span>
+<span class="normal">168</span>
+<span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">class</span> <span class="nc">Blackboard</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A blackboard for a Behavior Tree. Implements a key-value mapping</span>
+<span class="sd">    that is accessible by all of the nodes in a behavior tree.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_len</span> <span class="o">=</span> <span class="mi">16</span>
+
+    <span class="k">def</span> <span class="nf">set_print_len</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_len</span> <span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the width of the columns for printing this blackboard.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            new_len (`int`):</span>
+<span class="sd">                The new column width for printing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_len</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;print length must be positive&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">print_len</span> <span class="o">=</span> <span class="n">new_len</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">print_len</span> <span class="o">=</span> <span class="n">new_len</span> 
+
+    <span class="k">def</span> <span class="nf">register_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span> <span class="p">:</span> <span class="n">BlackboardEntryMetadata</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Register a new metadata entry for this blackboard. Primarily</span>
+<span class="sd">        useful for specfying a type constructor to use with values that</span>
+<span class="sd">        go with a certain key.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            entry (`dendron.blackboard.BlackboardEntryMetadata`):</span>
+<span class="sd">                The entry to register.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span>
+
+    <span class="k">def</span> <span class="nf">get_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the value associated with the given key.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (`Any`):</span>
+<span class="sd">                Key to query on. Usually a `str`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">set_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">description</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">type_constructor</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the metadata for a particular key in anticipation of future </span>
+<span class="sd">        values. </span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (`Any`):</span>
+<span class="sd">                Key to query on. Usually a `str`.</span>
+<span class="sd">            description (`Optional[str`]):</span>
+<span class="sd">                An optional human-readable description of the key-value pair.</span>
+<span class="sd">            type_constructor (`Type`):</span>
+<span class="sd">                An optional type constructor to convert data upon reading.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">new_entry</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2"> not in blackboard.&quot;</span><span class="p">)</span>
+        <span class="n">old_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">new_entry</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">old_entry</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_entry</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+        <span class="k">if</span> <span class="n">type_constructor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">new_entry</span><span class="o">.</span><span class="n">type_constructor</span> <span class="o">=</span> <span class="n">type_constructor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_entry</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value associated with the given key.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (`Any`):</span>
+<span class="sd">                The key we want the value for.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            `Any` : The value in the blackboard corresponding to `key`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entry </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> not in blackboard.&quot;</span><span class="p">)</span>
+        <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">type_constructor</span>
+        <span class="n">temp_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">temp_value</span><span class="p">)</span> <span class="o">!=</span> <span class="n">target_type</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">target_type</span><span class="p">(</span><span class="n">temp_value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the value associated with the given key.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (`Any`):</span>
+<span class="sd">                The key we want the value for.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            `Any` : The value in the blackboard corresponding to `key`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete an entry from the blackboard.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (`Any`):</span>
+<span class="sd">                The key we want to remove from the blackboard. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a key-value pair to the blackboard. If `key` is not already</span>
+<span class="sd">        in the </span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (`Any`):</span>
+<span class="sd">                Key to query on. Usually a `str`.</span>
+<span class="sd">            value (`Any`):</span>
+<span class="sd">                The value that `key` maps to.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">new_entry</span> <span class="o">=</span> <span class="n">BlackboardEntryMetadata</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;Autogenerated entry&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">register_entry</span><span class="p">(</span><span class="n">new_entry</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> 
+
+    <span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a key-value pair to the blackboard. Wrapper around </span>
+<span class="sd">        __setitem__.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an iterator over key-value pairs.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            `Iterator`: The iterator over the value dict.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the number of key-value pairs in the blackboard.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            `int`: The number of key-value pairs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a tabular representation of this blackboard in a `str`.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            `str`: A string that prints as a table of keys and values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">key_header_field</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Key&#39;</span><span class="si">:{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}}</span><span class="s2">&quot;</span>
+        <span class="n">desc_header_field</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Description&#39;</span><span class="si">:{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}}</span><span class="s2">&quot;</span>
+        <span class="n">type_header_field</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Type&#39;</span><span class="si">:{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}}</span><span class="s2">&quot;</span>
+        <span class="n">value_header_field</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Value&#39;</span><span class="si">:{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}}</span><span class="s2">&quot;</span>
+        <span class="n">bb_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key_header_field</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">desc_header_field</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">type_header_field</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">value_header_field</span><span class="si">}</span><span class="s2"> |</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">bb_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">11</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="n">value_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">value_field</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value_string</span><span class="si">:{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}}</span><span class="s2">&quot;</span>
+            <span class="n">bb_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">value_field</span><span class="si">}</span><span class="s2"> | </span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">return</span> <span class="n">bb_str</span> 
+</code></pre></div></td></tr></table></div>
+            </details>
+
+  
+
+  <div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.__delitem__" class="doc doc-heading">
+          <code class="highlight language-python"><span class="fm">__delitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Delete an entry from the blackboard.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>key</code></b>
+                  (<code>`Any`</code>)
+              –
+              <div class="doc-md-description">
+                <p>The key we want to remove from the blackboard.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">126</span>
+<span class="normal">127</span>
+<span class="normal">128</span>
+<span class="normal">129</span>
+<span class="normal">130</span>
+<span class="normal">131</span>
+<span class="normal">132</span>
+<span class="normal">133</span>
+<span class="normal">134</span>
+<span class="normal">135</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Delete an entry from the blackboard.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        key (`Any`):</span>
+<span class="sd">            The key we want to remove from the blackboard. </span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.__getitem__" class="doc doc-heading">
+          <code class="highlight language-python"><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the value associated with the given key.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>key</code></b>
+                  (<code>`Any`</code>)
+              –
+              <div class="doc-md-description">
+                <p>The key we want the value for.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+    <th class="field-name">Returns:</th>
+    <td class="field-body">
+      <ul class="first simple">
+          <li>
+                <code><span title="typing.Any">Any</span></code>
+            –
+            <div class="doc-md-description">
+              <p><code>Any</code> : The value in the blackboard corresponding to <code>key</code>.</p>
+            </div>
+          </li>
+      </ul>
+    </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the value associated with the given key.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        key (`Any`):</span>
+<span class="sd">            The key we want the value for.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        `Any` : The value in the blackboard corresponding to `key`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Entry </span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2"> not in blackboard.&quot;</span><span class="p">)</span>
+    <span class="n">target_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">type_constructor</span>
+    <span class="n">temp_value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">temp_value</span><span class="p">)</span> <span class="o">!=</span> <span class="n">target_type</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">target_type</span><span class="p">(</span><span class="n">temp_value</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.__iter__" class="doc doc-heading">
+          <code class="highlight language-python"><span class="fm">__iter__</span><span class="p">()</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get an iterator over key-value pairs.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+    <th class="field-name">Returns:</th>
+    <td class="field-body">
+      <ul class="first simple">
+          <li>
+                <code><span title="typing.Iterator">Iterator</span></code>
+            –
+            <div class="doc-md-description">
+              <p><code>Iterator</code>: The iterator over the value dict.</p>
+            </div>
+          </li>
+      </ul>
+    </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">160</span>
+<span class="normal">161</span>
+<span class="normal">162</span>
+<span class="normal">163</span>
+<span class="normal">164</span>
+<span class="normal">165</span>
+<span class="normal">166</span>
+<span class="normal">167</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get an iterator over key-value pairs.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        `Iterator`: The iterator over the value dict.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.__len__" class="doc doc-heading">
+          <code class="highlight language-python"><span class="fm">__len__</span><span class="p">()</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the number of key-value pairs in the blackboard.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+    <th class="field-name">Returns:</th>
+    <td class="field-body">
+      <ul class="first simple">
+          <li>
+                <code>int</code>
+            –
+            <div class="doc-md-description">
+              <p><code>int</code>: The number of key-value pairs.</p>
+            </div>
+          </li>
+      </ul>
+    </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">169</span>
+<span class="normal">170</span>
+<span class="normal">171</span>
+<span class="normal">172</span>
+<span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the number of key-value pairs in the blackboard.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        `int`: The number of key-value pairs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.__setitem__" class="doc doc-heading">
+          <code class="highlight language-python"><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Add a key-value pair to the blackboard. If <code>key</code> is not already
+in the </p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>key</code></b>
+                  (<code>`Any`</code>)
+              –
+              <div class="doc-md-description">
+                <p>Key to query on. Usually a <code>str</code>.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>value</code></b>
+                  (<code>`Any`</code>)
+              –
+              <div class="doc-md-description">
+                <p>The value that <code>key</code> maps to.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">137</span>
+<span class="normal">138</span>
+<span class="normal">139</span>
+<span class="normal">140</span>
+<span class="normal">141</span>
+<span class="normal">142</span>
+<span class="normal">143</span>
+<span class="normal">144</span>
+<span class="normal">145</span>
+<span class="normal">146</span>
+<span class="normal">147</span>
+<span class="normal">148</span>
+<span class="normal">149</span>
+<span class="normal">150</span>
+<span class="normal">151</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add a key-value pair to the blackboard. If `key` is not already</span>
+<span class="sd">    in the </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        key (`Any`):</span>
+<span class="sd">            Key to query on. Usually a `str`.</span>
+<span class="sd">        value (`Any`):</span>
+<span class="sd">            The value that `key` maps to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">new_entry</span> <span class="o">=</span> <span class="n">BlackboardEntryMetadata</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;Autogenerated entry&quot;</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">register_entry</span><span class="p">(</span><span class="n">new_entry</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span> 
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.__str__" class="doc doc-heading">
+          <code class="highlight language-python"><span class="fm">__str__</span><span class="p">()</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get a tabular representation of this blackboard in a <code>str</code>.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+    <th class="field-name">Returns:</th>
+    <td class="field-body">
+      <ul class="first simple">
+          <li>
+                <code>str</code>
+            –
+            <div class="doc-md-description">
+              <p><code>str</code>: A string that prints as a table of keys and values.</p>
+            </div>
+          </li>
+      </ul>
+    </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span>
+<span class="normal">189</span>
+<span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a tabular representation of this blackboard in a `str`.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        `str`: A string that prints as a table of keys and values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">key_header_field</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Key&#39;</span><span class="si">:{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}}</span><span class="s2">&quot;</span>
+    <span class="n">desc_header_field</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Description&#39;</span><span class="si">:{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}}</span><span class="s2">&quot;</span>
+    <span class="n">type_header_field</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Type&#39;</span><span class="si">:{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}}</span><span class="s2">&quot;</span>
+    <span class="n">value_header_field</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;Value&#39;</span><span class="si">:{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}}</span><span class="s2">&quot;</span>
+    <span class="n">bb_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key_header_field</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">desc_header_field</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">type_header_field</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">value_header_field</span><span class="si">}</span><span class="s2"> |</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="n">bb_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;=&#39;</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">11</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">value_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="n">value_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">value_field</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">value_string</span><span class="si">:{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">print_len</span><span class="si">}}</span><span class="s2">&quot;</span>
+        <span class="n">bb_str</span> <span class="o">+=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span><span class="si">}</span><span class="s2"> | </span><span class="si">{</span><span class="n">value_field</span><span class="si">}</span><span class="s2"> | </span><span class="se">\n</span><span class="s2">&quot;</span>
+
+    <span class="k">return</span> <span class="n">bb_str</span> 
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.get" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Get the value associated with the given key.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>key</code></b>
+                  (<code>`Any`</code>)
+              –
+              <div class="doc-md-description">
+                <p>The key we want the value for.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+    <th class="field-name">Returns:</th>
+    <td class="field-body">
+      <ul class="first simple">
+          <li>
+                <code><span title="typing.Any">Any</span></code>
+            –
+            <div class="doc-md-description">
+              <p><code>Any</code> : The value in the blackboard corresponding to <code>key</code>.</p>
+            </div>
+          </li>
+      </ul>
+    </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span>
+<span class="normal">122</span>
+<span class="normal">123</span>
+<span class="normal">124</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the value associated with the given key.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        key (`Any`):</span>
+<span class="sd">            The key we want the value for.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        `Any` : The value in the blackboard corresponding to `key`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.get_entry" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">get_entry</span><span class="p">(</span><span class="n">key</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Return the value associated with the given key.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>key</code></b>
+                  (<code>`Any`</code>)
+              –
+              <div class="doc-md-description">
+                <p>Key to query on. Usually a <code>str</code>.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">get_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the value associated with the given key.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        key (`Any`):</span>
+<span class="sd">            Key to query on. Usually a `str`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.register_entry" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">register_entry</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Register a new metadata entry for this blackboard. Primarily
+useful for specfying a type constructor to use with values that
+go with a certain key.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>entry</code></b>
+                  (<code>`dendron.blackboard.BlackboardEntryMetadata`</code>)
+              –
+              <div class="doc-md-description">
+                <p>The entry to register.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">48</span>
+<span class="normal">49</span>
+<span class="normal">50</span>
+<span class="normal">51</span>
+<span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">register_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span> <span class="p">:</span> <span class="n">BlackboardEntryMetadata</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Register a new metadata entry for this blackboard. Primarily</span>
+<span class="sd">    useful for specfying a type constructor to use with values that</span>
+<span class="sd">    go with a certain key.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        entry (`dendron.blackboard.BlackboardEntryMetadata`):</span>
+<span class="sd">            The entry to register.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.set" class="doc doc-heading">
+          <code class="highlight language-python"><span class="nb">set</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Add a key-value pair to the blackboard. Wrapper around 
+<strong>setitem</strong>.</p>
+
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">153</span>
+<span class="normal">154</span>
+<span class="normal">155</span>
+<span class="normal">156</span>
+<span class="normal">157</span>
+<span class="normal">158</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">value</span> <span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add a key-value pair to the blackboard. Wrapper around </span>
+<span class="sd">    __setitem__.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.set_entry" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">set_entry</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">type_constructor</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Set the metadata for a particular key in anticipation of future 
+values. </p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>key</code></b>
+                  (<code>`Any`</code>)
+              –
+              <div class="doc-md-description">
+                <p>Key to query on. Usually a <code>str</code>.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>description</code></b>
+                  (<code>`Optional[str`]</code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>An optional human-readable description of the key-value pair.</p>
+              </div>
+            </li>
+            <li>
+              <b><code>type_constructor</code></b>
+                  (<code>`Type`</code>, default:
+                      <code>None</code>
+)
+              –
+              <div class="doc-md-description">
+                <p>An optional type constructor to convert data upon reading.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span> <span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">description</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">type_constructor</span> <span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the metadata for a particular key in anticipation of future </span>
+<span class="sd">    values. </span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        key (`Any`):</span>
+<span class="sd">            Key to query on. Usually a `str`.</span>
+<span class="sd">        description (`Optional[str`]):</span>
+<span class="sd">            An optional human-readable description of the key-value pair.</span>
+<span class="sd">        type_constructor (`Type`):</span>
+<span class="sd">            An optional type constructor to convert data upon reading.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">new_entry</span><span class="o">.</span><span class="n">key</span><span class="si">}</span><span class="s2"> not in blackboard.&quot;</span><span class="p">)</span>
+    <span class="n">old_entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">new_entry</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">old_entry</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">description</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">new_entry</span><span class="o">.</span><span class="n">description</span> <span class="o">=</span> <span class="n">description</span>
+    <span class="k">if</span> <span class="n">type_constructor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">new_entry</span><span class="o">.</span><span class="n">type_constructor</span> <span class="o">=</span> <span class="n">type_constructor</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_entry</span>
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+
+<h2 id="dendron.blackboard.Blackboard.set_print_len" class="doc doc-heading">
+          <code class="highlight language-python"><span class="n">set_print_len</span><span class="p">(</span><span class="n">new_len</span><span class="p">)</span></code>
+
+</h2>
+
+
+  <div class="doc doc-contents ">
+  
+      <p>Set the width of the columns for printing this blackboard.</p>
+
+
+
+<table class="field-list">
+  <colgroup>
+    <col class="field-name" />
+    <col class="field-body" />
+  </colgroup>
+  <tbody valign="top">
+    <tr class="field">
+      <th class="field-name">Parameters:</th>
+      <td class="field-body">
+        <ul class="first simple">
+            <li>
+              <b><code>new_len</code></b>
+                  (<code>`int`</code>)
+              –
+              <div class="doc-md-description">
+                <p>The new column width for printing.</p>
+              </div>
+            </li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+          <details class="quote">
+            <summary>Source code in <code>src/dendron/blackboard.py</code></summary>
+            <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span>
+<span class="normal">39</span>
+<span class="normal">40</span>
+<span class="normal">41</span>
+<span class="normal">42</span>
+<span class="normal">43</span>
+<span class="normal">44</span>
+<span class="normal">45</span>
+<span class="normal">46</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span> <span class="nf">set_print_len</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_len</span> <span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the width of the columns for printing this blackboard.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        new_len (`int`):</span>
+<span class="sd">            The new column width for printing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">new_len</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;print length must be positive&quot;</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">print_len</span> <span class="o">=</span> <span class="n">new_len</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">entry_mapping</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">print_len</span> <span class="o">=</span> <span class="n">new_len</span> 
+</code></pre></div></td></tr></table></div>
+          </details>
+  </div>
+
+</div>
+
+
+
+  </div>
+
+  </div>
+
+
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../behavior_tree/" class="btn btn-neutral float-left" title="BehaviorTree"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../condition_node/" class="btn btn-neutral float-right" title="ConditionNode">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../behavior_tree/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../condition_node/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+<script>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});</script></body>
+</html>
