@@ -64,7 +64,7 @@ class SequenceNode(ControlNode):
                 case NodeStatus.RUNNING:
                     return NodeStatus.RUNNING
                 case NodeStatus.FAILURE:
-                    self.reset_children()
+                    self.reset()
                     self.current_child_idx = 0
                     return child_status
                 case NodeStatus.SUCCESS:

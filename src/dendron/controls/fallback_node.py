@@ -67,7 +67,7 @@ class FallbackNode(ControlNode):
                 case NodeStatus.FAILURE:
                     self.current_child_idx += 1
                 case NodeStatus.SUCCESS:
-                    self.reset_children()
+                    self.reset()
                     self.current_child_idx = 0
                     return child_status
                 case NodeStatus.SKIPPED:
