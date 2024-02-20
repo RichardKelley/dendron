@@ -2,7 +2,7 @@ from ..basic_types import NodeType, NodeStatus
 from ..tree_node import TreeNode
 from ..decorator_node import DecoratorNode
 
-class ForceSuccessNode(DecoratorNode):
+class ForceSuccess(DecoratorNode):
     """
     A Force Success node calls the `tick()` method of its child,
     ignores the result, and always returns a status of `SUCCESS`.

@@ -1,2 +1,2 @@
-from .sequence_node import SequenceNode
-from .fallback_node import FallbackNode
+from .sequence import Sequence
+from .fallback import Fallback

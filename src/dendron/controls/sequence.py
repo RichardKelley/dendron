@@ -4,7 +4,7 @@ from ..control_node import ControlNode
 
 from typing import List
 
-class SequenceNode(ControlNode):
+class Sequence(ControlNode):
     """
     A Sequence node is a control node that ticks its children in
     sequence, until a child returns `FAILURE`, at which point it
@@ -12,7 +12,7 @@ class SequenceNode(ControlNode):
     node returns `SUCCESS`. 
 
     Args:
-        names (`str`):
+        name (`str`):
             The given name of this node.
         children (`List[TreeNode]`):
             A list of `TreeNode`s to initialize the children of this

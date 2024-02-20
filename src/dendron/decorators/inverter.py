@@ -2,7 +2,7 @@ from ..basic_types import NodeType, NodeStatus
 from ..tree_node import TreeNode
 from ..decorator_node import DecoratorNode
 
-class InverterNode(DecoratorNode):
+class Inverter(DecoratorNode):
     """
     An Inverter decorator instructs its child node to `tick()` and
     then returns the negation of the child's status as its own.

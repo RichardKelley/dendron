@@ -3,7 +3,7 @@ from ..basic_types import NodeType, NodeStatus
 from ..tree_node import TreeNode
 from ..decorator_node import DecoratorNode
 
-class BlackboardHistoryNode(DecoratorNode):
+class BlackboardHistory(DecoratorNode):
     """
     The Blackboard history node keeps track of a blackboard entry 
     related to a child node. Every time this node is ticked, it 

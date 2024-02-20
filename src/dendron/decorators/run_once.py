@@ -2,7 +2,7 @@ from ..basic_types import NodeType, NodeStatus
 from ..tree_node import TreeNode
 from ..decorator_node import DecoratorNode
 
-class RunOnceNode(DecoratorNode):
+class RunOnce(DecoratorNode):
     """
     The RunOnce decorator tracks whether or not its child has been
     ticked. If it has, the next time it is ticked the decorator will

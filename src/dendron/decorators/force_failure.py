@@ -2,7 +2,7 @@ from ..basic_types import NodeType, NodeStatus
 from ..tree_node import TreeNode
 from ..decorator_node import DecoratorNode
 
-class ForceFailureNode(DecoratorNode):
+class ForceFailure(DecoratorNode):
     """
     A Force Failure decorator will tick its child, and regardless of the
     result will return failure.

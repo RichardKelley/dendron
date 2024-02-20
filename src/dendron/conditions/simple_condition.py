@@ -3,7 +3,7 @@ from ..tree_node import NodeStatus
 
 from typing import Callable
 
-class SimpleConditionNode(ConditionNode):
+class SimpleCondition(ConditionNode):
     """
     A simple condition node is initialized with a callback that is
     called every time this node `tick()`s. The callback should be

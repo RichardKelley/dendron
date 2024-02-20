@@ -4,7 +4,7 @@ from ..control_node import ControlNode
 
 from typing import List 
 
-class FallbackNode(ControlNode):
+class Fallback(ControlNode):
     """
     A Fallback node is a control node that ticks its children in 
     sequence, until a child returns `SUCCESS`, at which point it

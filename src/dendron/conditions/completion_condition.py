@@ -14,7 +14,7 @@ from typing import Optional, Callable, List
 import traceback
 
 @dataclass
-class CompletionConditionNodeConfig:
+class CompletionConditionConfig:
     """
     Configuration for a CompletionConditionNode.
 
@@ -93,7 +93,7 @@ class CompletionConditionNodeConfig:
         default = False
     )
 
-class CompletionConditionNode(ConditionNode):
+class CompletionCondition(ConditionNode):
     """
     A completion condition node uses a causal language model to evaluate
     the relative likelihood of several different completions of a prompt,
@@ -120,7 +120,7 @@ class CompletionConditionNode(ConditionNode):
         cfg (`CompletionConditionNodeConfig`):
             The configuration object for this model.
     """
-    def __init__(self, name : str, cfg : CompletionConditionNodeConfig) -> None:
+    def __init__(self, name : str, cfg : CompletionConditionConfig) -> None:
         super().__init__(name)
         self.input_key = cfg.input_key
         self.device = cfg.device

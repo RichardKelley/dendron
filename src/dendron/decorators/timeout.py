@@ -4,7 +4,7 @@ from ..decorator_node import DecoratorNode
 
 import time
 
-class TimeoutNode(DecoratorNode):
+class Timeout(DecoratorNode):
     """
     The timeout decorator ticks its child and starts a timer. The next time
     it receives a tick it will check its timer against the time limit. If 
