@@ -1,187 +1,295 @@
 <!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Richard Kelley" />
-      <link rel="shortcut icon" href="../../../img/favicon.ico" />
-    <title>AsyncAction - Dendron</title>
-    <link rel="stylesheet" href="../../../css/theme.css" />
-    <link rel="stylesheet" href="../../../css/theme_extra.css" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
-        <link href="../../../assets/_mkdocstrings.css" rel="stylesheet" />
-    
-      <script>
-        // Current page data
-        var mkdocs_page_name = "AsyncAction";
-        var mkdocs_page_input_path = "api/actions/async_action.md";
-        var mkdocs_page_url = null;
-      </script>
-    
-    <!--[if lt IE 9]>
-      <script src="../../../js/html5shiv.min.js"></script>
-    <![endif]-->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-      <script>hljs.highlightAll();</script> 
- <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Richard Kelley">
+        
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>AsyncAction - Dendron</title>
+        <link href="../../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/color-brewer.min.css">
+        <link href="../../../assets/_mkdocstrings.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+     <link href="../../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
     html.glightbox-open { overflow: initial; height: 100%; }
     .gslide-title { margin-top: 0px; user-select: text; }
     .gslide-desc { color: #666; user-select: text; }
     .gslide-image img { background: white; }</style> <script src="../../../assets/javascripts/glightbox.min.js"></script></head>
 
-<body class="wy-body-for-nav" role="document">
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../../..">Dendron</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
-    <div class="wy-side-scroll">
-      <div class="wy-side-nav-search">
-          <a href="../../.." class="icon icon-home"> Dendron
-        </a><div role="search">
-  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
-      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
-  </form>
-</div>
-      </div>
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">🌳 Dendron <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../../.." class="dropdown-item">Home</a>
+</li>
+                                    
+<li>
+    <a href="../../../install/" class="dropdown-item">Installation</a>
+</li>
+                                    
+<li>
+    <a href="../../../theory/" class="dropdown-item">Theory</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Tutorials <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Tutorial 1. Chatbot</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../../tutorial_intro/" class="dropdown-item">Introduction - Building a Local Chatbot with ASR and TTS Support</a>
+</li>
+            
+<li>
+    <a href="../../../0_tutorial_single_node/" class="dropdown-item">Part 0. A Single Node</a>
+</li>
+            
+<li>
+    <a href="../../../1_tutorial_seq/" class="dropdown-item">Part 1. Thinking and Talking</a>
+</li>
+            
+<li>
+    <a href="../../../2_tutorial_implicit_seq/" class="dropdown-item">Part 2. Managing Chat State</a>
+</li>
+            
+<li>
+    <a href="../../../3_tutorial_llm_conditional/" class="dropdown-item">Part 3. Learning How to Say Goodbye</a>
+</li>
+            
+<li>
+    <a href="../../../4_tutorial_tts_asr_chat/" class="dropdown-item">Part 4. Chat with TTS and ASR</a>
+</li>
+    </ul>
+  </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">API <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Actions</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../always_failure/" class="dropdown-item">AlwaysFailure</a>
+</li>
+            
+<li>
+    <a href="../always_success/" class="dropdown-item">AlwaysSuccess</a>
+</li>
+            
+<li>
+    <a href="./" class="dropdown-item active">AsyncAction</a>
+</li>
+            
+<li>
+    <a href="../causal_lm_action/" class="dropdown-item">CausalLMAction</a>
+</li>
+            
+<li>
+    <a href="../image_lm_action/" class="dropdown-item">ImageLMAction</a>
+</li>
+            
+<li>
+    <a href="../pipeline_action/" class="dropdown-item">PipelineAction</a>
+</li>
+            
+<li>
+    <a href="../simple_action/" class="dropdown-item">SimpleAction</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Conditions</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../conditions/completion_condition/" class="dropdown-item">CompletionCondition</a>
+</li>
+            
+<li>
+    <a href="../../conditions/simple_condition/" class="dropdown-item">SimpleCondition</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Controls</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../controls/fallback/" class="dropdown-item">Fallback</a>
+</li>
+            
+<li>
+    <a href="../../controls/sequence/" class="dropdown-item">Sequence</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#" class="dropdown-item">Decorators</a>
+    <ul class="dropdown-menu">
+            
+<li>
+    <a href="../../decorators/blackboard_history/" class="dropdown-item">BlackboardHistory</a>
+</li>
+            
+<li>
+    <a href="../../decorators/force_failure/" class="dropdown-item">ForceFailure</a>
+</li>
+            
+<li>
+    <a href="../../decorators/force_success/" class="dropdown-item">ForceSuccess</a>
+</li>
+            
+<li>
+    <a href="../../decorators/inverter/" class="dropdown-item">Inverter</a>
+</li>
+            
+<li>
+    <a href="../../decorators/repeat/" class="dropdown-item">Repeat</a>
+</li>
+            
+<li>
+    <a href="../../decorators/retry/" class="dropdown-item">Retry</a>
+</li>
+            
+<li>
+    <a href="../../decorators/run_once/" class="dropdown-item">RunOnce</a>
+</li>
+            
+<li>
+    <a href="../../decorators/timeout/" class="dropdown-item">Timeout</a>
+</li>
+    </ul>
+  </li>
+                                    
+<li>
+    <a href="../../action_node/" class="dropdown-item">ActionNode</a>
+</li>
+                                    
+<li>
+    <a href="../../basic_types/" class="dropdown-item">Basic Types</a>
+</li>
+                                    
+<li>
+    <a href="../../behavior_tree_factory/" class="dropdown-item">BehaviorTreeFactory</a>
+</li>
+                                    
+<li>
+    <a href="../../behavior_tree/" class="dropdown-item">BehaviorTree</a>
+</li>
+                                    
+<li>
+    <a href="../../blackboard/" class="dropdown-item">Blackboard</a>
+</li>
+                                    
+<li>
+    <a href="../../condition_node/" class="dropdown-item">ConditionNode</a>
+</li>
+                                    
+<li>
+    <a href="../../control_node/" class="dropdown-item">ControlNode</a>
+</li>
+                                    
+<li>
+    <a href="../../decorator_node/" class="dropdown-item">DecoratorNode</a>
+</li>
+                                    
+<li>
+    <a href="../../tree_node/" class="dropdown-item">TreeNode</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
 
-      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption"><span class="caption-text">🌳 Dendron</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="reference internal" href="../../..">Home</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../../install/">Installation</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../../theory/">Theory</a>
-                  </li>
-              </ul>
-              <p class="caption"><span class="caption-text">Tutorials</span></p>
-              <ul>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Tutorial 1. Chatbot</a>
-    <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../../tutorial_intro/">Introduction - Building a Local Chatbot with ASR and TTS Support</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../../0_tutorial_single_node/">Part 0. A Single Node</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../../1_tutorial_seq/">Part 1. Thinking and Talking</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../../2_tutorial_implicit_seq/">Part 2. Managing Chat State</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../../3_tutorial_llm_conditional/">Part 3. Learning How to Say Goodbye</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../../4_tutorial_tts_asr_chat/">Part 4. Chat with TTS and ASR</a>
-                </li>
-    </ul>
-                  </li>
-              </ul>
-              <p class="caption"><span class="caption-text">API</span></p>
-              <ul class="current">
-                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Actions</a>
-    <ul class="current">
-                <li class="toctree-l2"><a class="reference internal" href="../always_failure/">AlwaysFailure</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../always_success/">AlwaysSuccess</a>
-                </li>
-                <li class="toctree-l2 current"><a class="reference internal current" href="./">AsyncAction</a>
-    <ul class="current">
-    <li class="toctree-l3"><a class="reference internal" href="#dendron.actions.async_action.AsyncAction">AsyncAction</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#dendron.actions.async_action.AsyncAction.reset">reset</a>
-    </li>
-    <li class="toctree-l3"><a class="reference internal" href="#dendron.actions.async_action.AsyncAction.tick">tick</a>
-    </li>
-    </ul>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../causal_lm_action/">CausalLMAction</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../image_lm_action/">ImageLMAction</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../pipeline_action/">PipelineAction</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../simple_action/">SimpleAction</a>
-                </li>
-    </ul>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Conditions</a>
-    <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../conditions/completion_condition/">CompletionCondition</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../conditions/simple_condition/">SimpleCondition</a>
-                </li>
-    </ul>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Controls</a>
-    <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../controls/fallback/">Fallback</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../controls/sequence/">Sequence</a>
-                </li>
-    </ul>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="#">Decorators</a>
-    <ul>
-                <li class="toctree-l2"><a class="reference internal" href="../../decorators/blackboard_history/">BlackboardHistory</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../decorators/force_failure/">ForceFailure</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../decorators/force_success/">ForceSuccess</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../decorators/inverter/">Inverter</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../decorators/repeat/">Repeat</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../decorators/retry/">Retry</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../decorators/run_once/">RunOnce</a>
-                </li>
-                <li class="toctree-l2"><a class="reference internal" href="../../decorators/timeout/">Timeout</a>
-                </li>
-    </ul>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../action_node/">ActionNode</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../basic_types/">Basic Types</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../behavior_tree_factory/">BehaviorTreeFactory</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../behavior_tree/">BehaviorTree</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../blackboard/">Blackboard</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../condition_node/">ConditionNode</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../control_node/">ControlNode</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../decorator_node/">DecoratorNode</a>
-                  </li>
-                  <li class="toctree-l1"><a class="reference internal" href="../../tree_node/">TreeNode</a>
-                  </li>
-              </ul>
-      </div>
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../always_success/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../causal_lm_action/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/RichardKelley/dendron/edit/master/docs/api/actions/async_action.md" class="nav-link">Edit on RichardKelley/dendron
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
     </div>
-    </nav>
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../../..">Dendron</a>
-        
-      </nav>
-      <div class="wy-nav-content">
-        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-    <li><a href="../../.." class="icon icon-home" aria-label="Docs"></a></li>
-          <li class="breadcrumb-item">API</li>
-          <li class="breadcrumb-item">Actions</li>
-      <li class="breadcrumb-item active">AsyncAction</li>
-    <li class="wy-breadcrumbs-aside">
-          <a href="https://github.com/RichardKelley/dendron/edit/master/docs/api/actions/async_action.md">Edit on RichardKelley/dendron</a>
-    </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-            <div class="section" itemprop="articleBody">
-              
-                <h1 id="asyncaction">AsyncAction</h1>
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#asyncaction" class="nav-link">AsyncAction</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#dendron.actions.async_action.AsyncAction" class="nav-link">AsyncAction</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#dendron.actions.async_action.AsyncAction.reset" class="nav-link">reset</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#dendron.actions.async_action.AsyncAction.tick" class="nav-link">tick</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="asyncaction">AsyncAction</h1>
 
 
 <div class="doc doc-object doc-class">
@@ -206,37 +314,48 @@ which means this node cannot run without an enclosing tree.</p>
 
 
 
-<table class="field-list">
-  <colgroup>
-    <col class="field-name" />
-    <col class="field-body" />
-  </colgroup>
-  <tbody valign="top">
-    <tr class="field">
-      <th class="field-name">Parameters:</th>
-      <td class="field-body">
-        <ul class="first simple">
-            <li>
-              <b><code>name</code></b>
-                  (<code>`str`</code>)
-              –
-              <div class="doc-md-description">
-                <p>The given name of this node.</p>
-              </div>
-            </li>
-            <li>
-              <b><code>cb</code></b>
-                  (<code>`Callable`</code>)
-              –
-              <div class="doc-md-description">
-                <p>The callable object that will be executed asynchronously.</p>
-              </div>
-            </li>
-        </ul>
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <p><strong>Parameters:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+        <th>Default</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td><code>name</code></td>
+          <td>
+                <code>`str`</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The given name of this node.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+        <tr>
+          <td><code>cb</code></td>
+          <td>
+                <code>`Callable`</code>
+          </td>
+          <td>
+            <div class="doc-md-description">
+              <p>The callable object that will be executed asynchronously.</p>
+            </div>
+          </td>
+          <td>
+              <em>required</em>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
             <details class="quote">
               <summary>Source code in <code>src/dendron/actions/async_action.py</code></summary>
               <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
@@ -417,35 +536,38 @@ future.</p>
 
 
 
-<table class="field-list">
-  <colgroup>
-    <col class="field-name" />
-    <col class="field-body" />
-  </colgroup>
-  <tbody valign="top">
-    <tr class="field">
-    <th class="field-name">Returns:</th>
-    <td class="field-body">
-      <ul class="first simple">
-          <li>
+  <p><strong>Returns:</strong></p>
+  <table>
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+        <tr>
+          <td>
                 <code><a class="autorefs autorefs-internal" title="dendron.basic_types.NodeStatus" href="../../basic_types/#dendron.basic_types.NodeStatus">NodeStatus</a></code>
-            –
+          </td>
+          <td>
             <div class="doc-md-description">
               <p><code>NodeStatus</code>: The status contained in the node's future, or</p>
             </div>
-          </li>
-          <li>
+          </td>
+        </tr>
+        <tr>
+          <td>
                 <code><a class="autorefs autorefs-internal" title="dendron.basic_types.NodeStatus" href="../../basic_types/#dendron.basic_types.NodeStatus">NodeStatus</a></code>
-            –
+          </td>
+          <td>
             <div class="doc-md-description">
               <p><code>RUNNING</code> if the node is not yet done.</p>
             </div>
-          </li>
-      </ul>
-    </td>
-    </tr>
-  </tbody>
-</table>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
           <details class="quote">
             <summary>Source code in <code>src/dendron/actions/async_action.py</code></summary>
             <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">44</span>
@@ -498,53 +620,84 @@ future.</p>
   </div>
 
 
-</div>
-              
+</div></div>
             </div>
-          </div><footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
-        <a href="../always_success/" class="btn btn-neutral float-left" title="AlwaysSuccess"><span class="icon icon-circle-arrow-left"></span> Previous</a>
-        <a href="../causal_lm_action/" class="btn btn-neutral float-right" title="CausalLMAction">Next <span class="icon icon-circle-arrow-right"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <!-- Copyright etc -->
-  </div>
-
-  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-</footer>
-          
         </div>
-      </div>
 
-    </section>
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../../js/jquery-3.6.0.min.js"></script>
+        <script src="../../../js/bootstrap.min.js"></script>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script src="../../../search/main.js"></script>
 
-  </div>
-
-  <div class="rst-versions" role="note" aria-label="Versions">
-  <span class="rst-current-version" data-toggle="rst-current-version">
-    
-    
-      <span><a href="../always_success/" style="color: #fcfcfc">&laquo; Previous</a></span>
-    
-    
-      <span><a href="../causal_lm_action/" style="color: #fcfcfc">Next &raquo;</a></span>
-    
-  </span>
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
 </div>
-    <script src="../../../js/jquery-3.6.0.min.js"></script>
-    <script>var base_url = "../../..";</script>
-    <script src="../../../js/theme_extra.js"></script>
-    <script src="../../../js/theme.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      <script src="../../../search/main.js"></script>
-    <script>
-        jQuery(function () {
-            SphinxRtdTheme.Navigation.enable(true);
-        });
-    </script>
 
-<script>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});</script></body>
+    <script>const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});</script></body>
 </html>
