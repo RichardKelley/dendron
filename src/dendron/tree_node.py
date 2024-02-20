@@ -41,7 +41,8 @@ class TreeNode:
         Set the tree that contains this node.
 
         Args:
-            tree (`dendron.behavior_tree.BehaviorTree`)
+            tree (`dendron.behavior_tree.BehaviorTree`):
+                The new tree this node is a part of.
         """
         self.tree = tree
 
