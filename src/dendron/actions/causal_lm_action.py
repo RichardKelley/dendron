@@ -8,6 +8,10 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from typing import Optional, Callable
 
+import types
+
+import traceback
+
 @dataclass
 class CausalLMActionConfig:
     """
@@ -172,8 +176,12 @@ class CausalLMAction(ActionNode):
                         torch_dtype=self.torch_dtype,
                         low_cpu_mem_usage=True,
                         attn_implementation=self.attn_implementation
-                    )    
+                    )
+            self.model.eval()
             self.tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
+            if self.tokenizer.pad_token is None:
+                self.tokenizer.pad_token = self.tokenizer.eos_token
+
         else:
             self.model = None
             self.tokenizer = None
@@ -186,6 +194,7 @@ class CausalLMAction(ActionNode):
         Set a new model to use for generating text.
         """
         self.model = new_model
+        self.model.eval()
         self.tokenizer = AutoTokenizer.from_pretrained(new_model.name_or_path)
 
     def set_input_processor(self, f : Callable) -> None:
@@ -201,9 +210,9 @@ class CausalLMAction(ActionNode):
         Args:
             f (`Callable`):
                 The input processor function to use. Should be a callable
-                object that maps strings to strings.
+                object that maps (self, Any) to str.
         """
-        self.input_processor = f
+        self.input_processor = types.MethodType(f, self)
 
     def set_output_processor(self, f : Callable) -> None:
         """
@@ -220,9 +229,9 @@ class CausalLMAction(ActionNode):
         Args:
             f (`Callable`):
                 The output processor function. Should be a callable object
-                that maps strings to strings.
+                that maps from (self, str) to Any.
         """
-        self.output_processor = f
+        self.output_processor = types.MethodType(f, self)
 
     def tick(self) -> NodeStatus:
         """
@@ -248,15 +257,17 @@ class CausalLMAction(ActionNode):
                 input_text = self.input_processor(input_text)
 
             input_ids = self.tokenizer(input_text, return_tensors="pt").to(self.model.device)
-            generated_ids = self.model.generate(**input_ids, max_new_tokens=self.max_new_tokens, do_sample=self.do_sample, top_p=self.top_p)
+            generated_ids = self.model.generate(**input_ids, max_new_tokens=self.max_new_tokens, pad_token_id=self.tokenizer.pad_token_id, do_sample=self.do_sample, top_p=self.top_p)
             output_text = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
 
             if self.output_processor:
-                output_text = self.output_processor(self, output_text)
+                output_text = self.output_processor(output_text)
 
             self.blackboard[self.output_key] = output_text
 
             return NodeStatus.SUCCESS
         except Exception as ex:
-            print(f"Exception ({self.name}): {ex}")
+            print(f"Exception in node {self.name}:")
+            print(traceback.format_exc())
+
             return NodeStatus.FAILURE

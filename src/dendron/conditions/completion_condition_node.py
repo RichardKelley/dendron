@@ -11,6 +11,8 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from typing import Optional, Callable, List
 
+import traceback
+
 @dataclass
 class CompletionConditionNodeConfig:
     """
@@ -168,6 +170,7 @@ class CompletionConditionNode(ConditionNode):
                         low_cpu_mem_usage=True,
                         attn_implementation=self.attn_implementation
                     )
+            self.model.eval()
             self.tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
 
             if self.tokenizer.pad_token is None:
@@ -182,6 +185,7 @@ class CompletionConditionNode(ConditionNode):
         Set a new model to use for generating text.
         """
         self.model = new_model
+        self.model.eval()
         self.tokenizer = AutoTokenizer.from_pretrained(new_model.name_or_path)
 
     def tick(self) -> NodeStatus:
@@ -228,5 +232,6 @@ class CompletionConditionNode(ConditionNode):
             return success_fn(best_completion)
 
         except Exception as ex:
-            print(f"Exception ({self.name}): {ex}")
+            print(f"Exception in node {self.name}:")
+            print(traceback.format_exc())
             return NodeStatus.FAILURE

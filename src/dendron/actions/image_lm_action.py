@@ -8,6 +8,9 @@ from transformers import BitsAndBytesConfig
 
 import torch
 
+import traceback
+import types
+
 from typing import Optional, Callable
 
 @dataclass
@@ -180,6 +183,7 @@ class ImageLMAction(ActionNode):
                         low_cpu_mem_usage=True,
                         attn_implementation = self.attn_implementation
                     )
+            self.model.eval()
             self.processor = AutoProcessor.from_pretrained(cfg.model_name)
         else:
             self.model = None
@@ -193,6 +197,7 @@ class ImageLMAction(ActionNode):
         Set a new model to use for generating text.
         """
         self.model = new_model
+        self.model.eval()
         self.processor = AutoProcessor.from_pretrained(new_model.name_or_path)
 
     def set_input_processor(self, f : Callable) -> None:
@@ -211,7 +216,7 @@ class ImageLMAction(ActionNode):
                 object that maps (image,string) pairs to (image,string) 
                 pairs.
         """        
-        self.input_processor = f
+        self.input_processor = types.MethodType(f, self)
 
     def set_output_processor(self, f : Callable) -> None:
         """
@@ -230,7 +235,7 @@ class ImageLMAction(ActionNode):
                 The output processor function. Should be a callable object
                 that maps strings to strings.
         """
-        self.output_processor = f
+        self.output_processor = types.MethodType(f, self)
 
     def tick(self) -> NodeStatus:
         """
@@ -259,11 +264,13 @@ class ImageLMAction(ActionNode):
             output_text = self.processor.batch_decode(generated_ids, skip_special_tokens=True, clean_up_tokenization_spaces=False)[0]
 
             if self.output_processor:
-                output_text = self.output_processor(self, output_text)
+                output_text = self.output_processor(output_text)
 
             self.blackboard[self.output_key] = output_text
 
             return NodeStatus.SUCCESS
         except Exception as ex:
-            print(f"Exception ({self.name}): {ex}")
+            print(f"Exception in node {self.name}:")
+            print(traceback.format_exc())
+            
             return NodeStatus.FAILURE
