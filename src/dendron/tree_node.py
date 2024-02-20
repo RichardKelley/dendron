@@ -84,18 +84,16 @@ class TreeNode:
         if self.pre_tick_fn is not None:
             self.pre_tick_fn()
 
-        new_status = self.tick()
+        self.status = self.tick()
 
         if self.post_tick_fn is not None:
             self.post_tick_fn()
-
-        self.set_status(new_status)
 
         if self.logger is not None:
             log_fn = getattr(self.logger, self._get_level_str(self.log_level))
             log_fn(f"{self.name} - post_tick {self.status}")
 
-        return new_status
+        return self.status
 
     def set_description(self, desc) -> None:
         """
