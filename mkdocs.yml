@@ -1,0 +1,76 @@
+site_name: Dendron
+site_author: Richard Kelley
+
+repo_name: RichardKelley/dendron
+repo_url: https://github.com/RichardKelley/dendron
+
+nav:
+  - 🌳 Dendron: 
+    - Home: index.md
+    - Installation: install.md
+    - Theory: theory.md
+  - Tutorial: 
+    - Introduction - Building a Local Chatbot with ASR and TTS Support: tutorial_intro.md
+    - Part 0. A Single Node: 0_tutorial_single_node.md
+    - Part 1. Thinking and Talking: 1_tutorial_seq.md
+    - Part 2. Managing Chat State: 2_tutorial_implicit_seq.md
+    - Part 3. Learning How to Say Goodbye: 3_tutorial_llm_conditional.md
+    - Part 4. Chat with TTS and ASR: 4_tutorial_tts_asr_chat.md
+  - API:
+    - Actions:
+      - api/actions/always_failure.md
+      - api/actions/always_success.md
+      - api/actions/async_action.md
+      - api/actions/causal_lm_action.md
+      - api/actions/image_lm_action.md
+      - api/actions/pipeline_action.md
+      - api/actions/simple_action.md
+    - Conditions:
+      - api/conditions/completion_condition.md
+      - api/conditions/simple_condition.md
+    - Controls:
+      - api/controls/fallback.md
+      - api/controls/sequence.md
+    - Decorators:
+      - api/decorators/blackboard_history.md
+      - api/decorators/force_failure.md
+      - api/decorators/force_success.md
+      - api/decorators/inverter.md
+      - api/decorators/repeat.md
+      - api/decorators/retry.md
+      - api/decorators/run_once.md
+      - api/decorators/timeout.md
+    - api/action_node.md
+    - api/basic_types.md
+    - api/behavior_tree_factory.md
+    - api/behavior_tree.md
+    - api/blackboard.md
+    - api/condition_node.md
+    - api/control_node.md
+    - api/decorator_node.md
+    - api/tree_node.md
+
+theme: 
+  name: readthedocs
+  favicon: assets/favicon.png
+
+extra_javascript:
+  - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML
+markdown_extensions:
+  - mdx_math
+  - admonition
+  - attr_list
+  - toc:
+      permalink: true
+
+
+plugins:
+  - glightbox
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          paths: [src]
+          options:
+            show_submodules: true 
