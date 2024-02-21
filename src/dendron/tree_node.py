@@ -28,8 +28,8 @@ class TreeNode:
         self.blackboard = None
         self.status = NodeStatus.IDLE
 
-        self.pre_tick_fn = None
-        self.post_tick_fn = None
+        self.pre_tick_fns = []
+        self.post_tick_fns = []
 
         self.logger = None
         self.log_level = None
@@ -82,13 +82,13 @@ class TreeNode:
             log_fn = getattr(self.logger, self._get_level_str(self.log_level))
             log_fn(f"{self.name} - pre_tick")
 
-        if self.pre_tick_fn is not None:
-            self.pre_tick_fn()
+        for f in self.pre_tick_fns:
+            f()
 
         self.status = self.tick()
 
-        if self.post_tick_fn is not None:
-            self.post_tick_fn()
+        for f in self.post_tick_fns:
+            f()
 
         if self.logger is not None:
             log_fn = getattr(self.logger, self._get_level_str(self.log_level))
@@ -119,16 +119,6 @@ class TreeNode:
                 The new blackboard.
         """
         self.blackboard = bb
-
-    # TODO consider deprecating
-    def blackboard_set(self, key, value) -> None:
-        full_key = self.name + '/' + key
-        self.blackboard[full_key] = value
-
-    # TODO consider deprecating
-    def blackboard_get(self, key) -> Any:
-        full_key = self.name + '/' + key
-        return self.blackboard[full_key]
 
     def is_halted(self) -> bool:
         """
@@ -188,27 +178,27 @@ class TreeNode:
         """
         raise NotImplementedError("get_node_by_name should be implemented in a subclass.")
 
-    def set_pre_tick(self, f : Callable) -> None:
+    def add_pre_tick(self, f : Callable) -> None:
         """
         Specify a function-like object to be called before the `tick()` 
-        function.
+        function. The argument is added to a list of such functions.        
 
         Args:
             f (`Callable`): 
                 The function to call before `tick()`.
         """
-        self.pre_tick_fn = types.MethodType(f, self)
+        self.pre_tick_fns.append(types.MethodType(f, self))
 
-    def set_post_tick(self, f : Callable) -> None:
+    def add_post_tick(self, f : Callable) -> None:
         """
         Specify a function-like object to be called after the `tick()`
-        function.
+        function. The argument is added to a list of such functions.
 
         Args:
             f (`Callable`):
                 The function to call after `tick()`.
         """
-        self.post_tick_fn = types.MethodType(f, self)
+        self.post_tick_fns.append(types.MethodType(f, self))
 
     def tick(self) -> NodeStatus:
         raise NotImplementedError("Tick should be implemented in a subclass.")
