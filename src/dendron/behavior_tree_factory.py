@@ -2,7 +2,7 @@ from .action_node import ActionNode
 from .condition_node import ConditionNode
 from .control_node import ControlNode
 from .decorator_node import DecoratorNode
-from .controls import FallbackNode, SequenceNode
+from .controls import Fallback, Sequence
 from .actions import (
     AlwaysFailure, 
     AlwaysSuccess, 
@@ -12,8 +12,8 @@ from .actions import (
     ImageLMAction, 
     PipelineAction
 )
-from .decorators import InverterNode
-from .conditions import SimpleConditionNode
+from .decorators import Inverter
+from .conditions import SimpleCondition
 from .blackboard import Blackboard
 from .behavior_tree import BehaviorTree
 from .basic_types import NodeType
@@ -58,12 +58,21 @@ class BehaviorTreeFactory:
         self.node_counts["Inverter"] = 0
         self.node_counts["AlwaysSuccess"] = 0
         self.node_counts["AlwaysFailure"] = 0
+        self.node_counts["AsyncAction"] = 0
+        self.node_counts["CausalLMAction"] = 0
+        self.node_counts["ImageLMAction"] = 0
+        self.node_counts["PipelineAction"] = 0
 
         self.node_types["Fallback"] = NodeType.CONTROL
         self.node_types["Sequence"] = NodeType.CONTROL
         self.node_types["Inverter"] = NodeType.DECORATOR
         self.node_types["AlwaysSuccess"] = NodeType.ACTION
         self.node_types["AlwaysFailure"] = NodeType.ACTION
+        self.node_types["AsyncAction"] = NodeType.ACTION
+        self.node_types["CausalLMAction"] = NodeType.ACTION
+        self.node_types["ImageLMAction"] = NodeType.ACTION
+        self.node_types["PipelineAction"] = NodeType.ACTION
+
         self.node_types["SubTree"] = NodeType.SUBTREE
 
         self.current_blackboard = None
@@ -71,30 +80,89 @@ class BehaviorTreeFactory:
         self.behavior_trees = {}
 
     def register_neural_config(self, name, cfg) -> None:
+        """
+        Register a configuration object for a neural network
+        based node.
+
+        Args:
+            name (str):
+                The name of the configuration object. This should match
+                the name used in Groot.
+            cfg:
+                The configuration object. At present, one of `CausalLMActionConfig`,
+                `ImageLMActionConfig`, `PipelineActionConfig`, or `CompletionConditionConfig`.
+        """
         self.neural_configs[name] = cfg
 
     def register_action_type(self, name, action) -> None:
+        """
+        Register a new type of action node.
+
+        Args:
+            name (str):
+                The name of the new action node type.
+            action:
+                The constructor (class name) of the new node type.
+        """
         self.registry[name] = action 
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.ACTION
 
     def register_condition_type(self, name, condition) -> None:
+        """
+        Register a new type of condition node.
+
+        Args:
+            name (str):
+                The name of the new condition type.
+            condition:
+                The constructor (class name) of the new node type.
+        """
         self.registry[name] = condition
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.CONDITION
 
     def register_decorator_type(self, name, decorator) -> None:
+        """
+        Register a new type of decorator node.
+
+        Args:
+            name (str):
+                The name of the new decorator type.
+            decorator:
+                The constructor (class name) of the new node type.
+        """
         self.registry[name] = decorator
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.DECORATOR
 
     def register_simple_action(self, name, action_function) -> None:
+        """
+        Register a new simple action. Allows the specification of an
+        action and a callback in one step.
+
+        Args:
+            name (str):
+                The name of the new simple action node type.
+            action_function (Callable):
+                A callback to execute each time this node is ticked.
+        """
         self.registry[name] = SimpleAction
         self.functors[name] = action_function
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.ACTION
 
     def register_simple_condition(self, name, condition_function) -> None:
+        """
+        Register a new simple condition. Allows the specification of
+        a condition and a callback in one step.
+
+        Args:
+            name (str):
+                The name of the simple condition node type.
+            condition_function (Callable):
+                A callback to execute each time this node is ticked.
+        """
         self.registry[name] = SimpleConditionNode
         self.functors[name] = condition_function
         self.node_counts[name] = 0
