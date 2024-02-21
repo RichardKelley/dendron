@@ -39,9 +39,9 @@ class BehaviorTreeFactory:
         self.functors = {}
         self.neural_configs = {}
 
-        self.registry["Fallback"] = FallbackNode
-        self.registry["Sequence"] = SequenceNode
-        self.registry["Inverter"] = InverterNode
+        self.registry["Fallback"] = Fallback
+        self.registry["Sequence"] = Sequence
+        self.registry["Inverter"] = Inverter
         self.registry["AlwaysSuccess"] = AlwaysSuccess
         self.registry["AlwaysFailure"] = AlwaysFailure
         self.registry["AsyncAction"] = AsyncAction
@@ -163,7 +163,7 @@ class BehaviorTreeFactory:
             condition_function (Callable):
                 A callback to execute each time this node is ticked.
         """
-        self.registry[name] = SimpleConditionNode
+        self.registry[name] = SimpleCondition
         self.functors[name] = condition_function
         self.node_counts[name] = 0
         self.node_types[name] = NodeType.CONDITION
@@ -297,7 +297,7 @@ class BehaviorTreeFactory:
         node_id = self.node_counts[tag]
         node_name = tag + "_" + str(node_id)
 
-        if self.registry[tag] == SimpleConditionNode:
+        if self.registry[tag] == SimpleCondition:
             f = self.functors[tag]
             new_node = self.registry[tag](node_name, f)
         else:
