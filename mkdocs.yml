@@ -8,17 +8,16 @@ nav:
   - 🌳 Dendron: 
     - Home: index.md
     - Installation: install.md
-    - Theory: theory.md
   - Tutorials:
-    - Tutorial 1. Chatbot:
-      - Introduction - Building a Local Chatbot with ASR and TTS Support: tutorial_intro.md
+    - Tutorial 1. Chat Agent:
+      - Introduction - Building a Local Chat Agent with ASR and TTS Support: tutorial_intro.md
       - Part 0. A Single Node: 0_tutorial_single_node.md
       - Part 1. Thinking and Talking: 1_tutorial_seq.md
       - Part 2. Managing Chat State: 2_tutorial_implicit_seq.md
       - Part 3. Learning How to Say Goodbye: 3_tutorial_llm_conditional.md
       - Part 4. Chat with TTS and ASR: 4_tutorial_tts_asr_chat.md
-  - API:
-    - Actions:
+  - API Reference:
+    - Action Nodes:
       - api/actions/always_failure.md
       - api/actions/always_success.md
       - api/actions/async_action.md
@@ -26,13 +25,13 @@ nav:
       - api/actions/image_lm_action.md
       - api/actions/pipeline_action.md
       - api/actions/simple_action.md
-    - Conditions:
+    - Condition Nodes:
       - api/conditions/completion_condition.md
       - api/conditions/simple_condition.md
-    - Controls:
+    - Control Nodes:
       - api/controls/fallback.md
       - api/controls/sequence.md
-    - Decorators:
+    - Decorator Nodes:
       - api/decorators/blackboard_history.md
       - api/decorators/force_failure.md
       - api/decorators/force_success.md
