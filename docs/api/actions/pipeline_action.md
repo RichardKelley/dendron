@@ -1,13 +1,11 @@
 # PipelineAction
 
-## Configuration
-
 ::: dendron.actions.pipeline_action.PipelineActionConfig
-
-
-## ImageLMAction
+    options:
+        show_root_heading: true
 
 ::: dendron.actions.pipeline_action.PipelineAction
     options:
+        show_root_heading: true
         members:
             - tick

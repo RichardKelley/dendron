@@ -9,13 +9,14 @@ nav:
     - Home: index.md
     - Installation: install.md
     - Theory: theory.md
-  - Tutorial: 
-    - Introduction - Building a Local Chatbot with ASR and TTS Support: tutorial_intro.md
-    - Part 0. A Single Node: 0_tutorial_single_node.md
-    - Part 1. Thinking and Talking: 1_tutorial_seq.md
-    - Part 2. Managing Chat State: 2_tutorial_implicit_seq.md
-    - Part 3. Learning How to Say Goodbye: 3_tutorial_llm_conditional.md
-    - Part 4. Chat with TTS and ASR: 4_tutorial_tts_asr_chat.md
+  - Tutorials:
+    - Tutorial 1. Chatbot:
+      - Introduction - Building a Local Chatbot with ASR and TTS Support: tutorial_intro.md
+      - Part 0. A Single Node: 0_tutorial_single_node.md
+      - Part 1. Thinking and Talking: 1_tutorial_seq.md
+      - Part 2. Managing Chat State: 2_tutorial_implicit_seq.md
+      - Part 3. Learning How to Say Goodbye: 3_tutorial_llm_conditional.md
+      - Part 4. Chat with TTS and ASR: 4_tutorial_tts_asr_chat.md
   - API:
     - Actions:
       - api/actions/always_failure.md
@@ -51,11 +52,11 @@ nav:
     - api/tree_node.md
 
 theme: 
-  name: mkdocs
-  favicon: assets/favicon.png
+  name: material
+  favicon: img/favicon.ico
   features:
-    - navigation.prune
-    - navigation.path
+    - navigation.expand
+    - content.code.copy
 
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML
@@ -63,6 +64,14 @@ markdown_extensions:
   - mdx_math
   - admonition
   - attr_list
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
 
 plugins:
   - glightbox
@@ -73,4 +82,4 @@ plugins:
         python:
           paths: [src]
           options:
-            show_submodules: true 
+            show_submodules: false 

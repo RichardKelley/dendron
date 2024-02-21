@@ -1,9 +1,9 @@
 # CompletionCondition
 
-## CompletionConditionConfig
-
 ::: dendron.conditions.completion_condition.CompletionConditionConfig
-
-## CompletionCondition
+    options:
+        show_root_heading: true
 
 ::: dendron.conditions.completion_condition.CompletionCondition
+    options:
+        show_root_heading: true

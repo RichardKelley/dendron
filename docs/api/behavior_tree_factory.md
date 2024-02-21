@@ -2,6 +2,7 @@
 
 ::: dendron.behavior_tree_factory.BehaviorTreeFactory
     options:
+        show_root_heading: true
         members:
             - register_neural_config
             - register_action_type

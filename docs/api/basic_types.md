@@ -1,13 +1,14 @@
 # Basic Types
 
-### NodeType
-
 ::: dendron.basic_types.NodeType
+    options:
+        show_root_heading: true
 
-### NodeStatus
 
 ::: dendron.basic_types.NodeStatus
-
-### Quantization
+    options:
+        show_root_heading: true
 
 ::: dendron.basic_types.Quantization
+    options:
+        show_root_heading: true
