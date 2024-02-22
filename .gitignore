@@ -5,3 +5,4 @@ dendron.egg-info/
 .ipynb_checkpoints/
 *.log
 site/
+dist/

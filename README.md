@@ -12,7 +12,11 @@ This will automatically install torch, transformers, bitsandbytes, accelerate, a
 
 ### Behavior Trees for Structured Programming of LLMs
 
+Here is an example behavior tree that implements a chat agent:
+
 ![image](docs/img/4_asr_voice_chat.svg)
+
+You can build this agent by following [the tutorial here](https://richardkelley.io/dendron/tutorial_intro).
 
 ## Examples
 
@@ -20,7 +24,7 @@ For examples of basic language model node usage, see the example notebooks in th
 
 ## Documentation
 
-You can find the main documentation for Dendron [here](https://richardkelley.io/dendron/){:target="_blank"}. This includes a full tutorial building a chat agent that has text-to-speech and automatic speech recognition capabilities, and an API reference.
+You can find the main documentation for Dendron [here](https://richardkelley.io/dendron/). This includes a full tutorial building a chat agent that has text-to-speech and automatic speech recognition capabilities, and an API reference.
 
 ## Acknowledgements
 
