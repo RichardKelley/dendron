@@ -8,7 +8,7 @@ In the [Part 1](1_tutorial_seq.md) we saw how to get two `CausalLMAction` nodes 
 
 ## Imports and a Text Input Node
 
-As before, we begin by importing the nodes we need:
+As before, we begin by importing the code we need:
 
 ```python linenums="1"
 import dendron
@@ -25,7 +25,7 @@ import sounddevice as sd
 
 In addition to importing `dendron` and our `CausalLMAction` node, we're going to explicitly import `Sequence` and `Fallback` from `dendron.controls`, and `NodeStatus` from `dendron`. As our trees get larger and we have more custom components, you'll find that these imports make the code a bit more concise.
 
-Our goal is to handle the entirety of the chat loop inside of our behavior tree. We will need some new logic to do that, but before we get there we'll need to move human text input into the tree as well. We can implement this with an `ActionNode` like this:
+Our goal is to handle the entirety of the chat loop inside of our behavior tree. We will need some new logic to do that, but before we get there we'll need to move human text input into the tree as well. We can implement this with an `ActionNode` as follows:
 
 ```python linenums="1"
 class GetTextInput(dendron.ActionNode):
@@ -49,7 +49,7 @@ class GetTextInput(dendron.ActionNode):
         return NodeStatus.SUCCESS
 ```
 
-Here you can see that I have explicitly written out the pre- and post-conditions for the blackboard state as a design aid. When ticked, a `GetTextInput` node gets a string input from the use, and writes it to the blackboard at whatever key is specified in the constructor. The node then updates the chat history that it is maintaining before returning `NodeStatus.SUCCESS`. 
+Here you can see that I have explicitly written out the pre- and post-conditions for the blackboard state as a design aid. When ticked, a `GetTextInput` node gets a string input from the human, and writes it to the blackboard at whatever key is specified in the constructor. The node then updates the chat history that it is maintaining before returning `NodeStatus.SUCCESS`. 
 
 ## Implicit Sequences for Behavior Tree Design
 
@@ -58,7 +58,7 @@ You might think that at this point we could just put a `GetTextInput` node at th
 * One of the children returns `NodeStatus.SUCCESS`, in which case the `Fallback` node succeeds, or
 * All of the children return `NodeStatus.FAILURE`, in which case the `Fallback` node fails.
 
-You can compare this with the description of `Sequence` nodes to see that `Fallback` and `Sequence` are "conjugate" or "dual" to each other in some sense. Intuitively, a `Fallback` node is "trying" its children in order until one of them works. So one way you can think of `Fallback` is that it provides a way to implement contingent behaviors in the presence of failure. But failure should be understood very broadly in the context of behavior trees: often in this context `SUCCESS` and `FAILURE` are taken as synonyms for `True` and `False`, so that failure doesn't necessarily represent an exceptional or even adverse state in a behavior tree. 
+You can compare this with the description of `Sequence` nodes to see that `Fallback` and `Sequence` are "conjugate" or "dual" to each other in some sense. Intuitively, a `Fallback` node is "trying" its children in order from left to right until one of them works. So one way you can think of `Fallback` is that it provides a mechanism to implement contingent behaviors in the presence of failure. But failure should be understood very broadly in the context of behavior trees: often in this context `SUCCESS` and `FAILURE` are taken as synonyms for `True` and `False`, so that failure doesn't necessarily represent an exceptional or even adverse state in a behavior tree. 
 
 In an _implicit sequence_, instead of executing a sequence of tasks "A -> B -> C", we attach a predicate to each task that returns `True` if and only if it is currently appropriate to execute that task. We then query these predicates in **reverse order**, which looks something like:
 
@@ -72,11 +72,11 @@ If the tasks are related to each other, so that doing A makes it so that B becom
 
     For more details on the theory behind implicit sequences, see the wonderful textbook [Behavior Trees in Robotics and AI: An Introduction](https://arxiv.org/abs/1709.00084){:target="_blank"} by Michele Colledanchise and Petter Ogren.
 
-We can use an implicit sequence to manage our chat state. We'll have three tasks. Anthropomorphizing a bit (too much?), we'll call them "speaking," "thinking," and "listening." The listening is implemented by our `GetTextInput` node above, so next we'll show how implement speaking and thinking with sequences will lead to a better agent.
+We can use an implicit sequence to manage our chat state. We'll have three tasks. Anthropomorphizing a bit (too much?), we'll call them "speaking," "thinking," and "listening." The listening is implemented by our `GetTextInput` node above, so next we'll show how combining speaking and thinking in an implicit sequence will lead to a better agent.
 
 ### The Speech Sequence
 
-To see an example of how this can improve our designs, take a moment to think about how you engage in conversation with other humans. You likely don't just start talking at arbitrary points in time. Instead, you probably (explicitly or implicitly) ask yourself "is now a good time to talk?" and then open your mouth precisely when your answer to that question is "yes." We can model this in a behavior tree with a `Sequence` node that first ticks a `ConditionNode` that queries if now is a good time to speak, followed by our old friend `speech_node`:
+To see how we can use the implicit sequence concept in our design, take a moment to think about how you engage in conversation with other humans. You likely don't just start talking at arbitrary points in time. Instead, you probably (explicitly or implicitly) ask yourself "is now a good time to talk?" and then open your mouth precisely when your answer to that question is "yes." We can model this in a behavior tree with a `Sequence` node that first ticks a `ConditionNode` that queries if now is a good time to speak, followed by our old friend `speech_node`:
 
 <center>
 <markdown figure>
@@ -84,7 +84,7 @@ To see an example of how this can improve our designs, take a moment to think ab
 </figure>
 </center>
 
-In this configuration, our `more_to_say?` condition node is effectively acting as a "guard" that only allows `speech_node` to `tick` when the agent actually has something to say. What determines if the agent has something to say? We'll track this with the blackboard (the image in the `more_to_say?` node above is a blackboard with squiggles on it):
+In this configuration, our `more_to_say?` condition node is effectively acting as a "guardrail" that only allows `speech_node` to `tick` when the agent actually has something to say. What determines if the agent has something to say? We'll track this with the blackboard (the image in the `more_to_say?` node above is a blackboard with squiggles on it):
 
 ```python linenums="1"
 class MoreToSay(dendron.ConditionNode):
@@ -99,7 +99,7 @@ class MoreToSay(dendron.ConditionNode):
             return dendron.NodeStatus.FAILURE
 ```
 
-From the code above, you can see that we're going to keep track of a blackboard entry that tells us if there is any text that needs to be spoken. It might seem a little odd that we are comparing the value at that entry to an empty _list_, since you might think that the entry is a string. But it will turn out to be more convenient to work with a list of strings for reasons we'll see in the next part of the tutorial.
+From the code above, you can see that we're going to keep track of a blackboard entry that tells us if there is any text that needs to be spoken. It might seem a little odd that we are comparing the value at that entry to an empty _list_, since you might think that the entry should be a string. But it will turn out to be more convenient to work with a list of strings for reasons we'll see in the next part of the tutorial.
 
 To complete the speech sequence, we'll repeat the `TTSAction` code here:
 
@@ -127,7 +127,7 @@ def play_speech(self):
     sd.play(self.blackboard["speech_out"][0], self.model.generation_config.sample_rate)
 ```
 
-This is almost identical to the `TTSAction` from the previous part of the tutorial, except that on line 11 we are `pop()`ing the input text from the blackboard entry. This relates again to our use of a list, the utility of which will become clear in the next part. For now, we can create an instance of these two classes and create a speech sequence:
+This is almost identical to the `TTSAction` from the previous part of the tutorial, except that on line 11 we are `pop()`ing the input text from the blackboard entry. This relates again to our use of a list, the utility of which will become clear later on. For now, we can create an instance of these two classes and create a speech sequence:
 
 ```python linenums="1"
 speech_node = TTSAction("speech_node")
@@ -141,7 +141,7 @@ speech_seq = Sequence("speech_seq", [
 
 ### The Thought Sequence
 
-Next we want to implement a "thinking" sequence similar to the speech sequence we described in the previous section. The general outline will be similar: first we ask if it's time to think, and then if it is we'll run a `chat_node` to generate some text to speak. First the `TimeToThink` conditional:
+Next we want to implement a "thinking" sequence similar to the speech sequence we described in the previous section. The general outline will be similar: first we ask if it's time to think, and then if it is we'll run a `chat_node` to generate some text to speak. First the `TimeToThink` condition node:
 
 ```python linenums="1"
 class TimeToThink(dendron.ConditionNode):
@@ -220,7 +220,7 @@ All that remains is to compose our sequence nodes into an implicit sequence via 
 ```python linenums="1"
 root_node = Fallback("conversation_turn", [
     speech_seq,
-    thought_seq                
+    thought_seq,                
     GetTextInput()
 ])
 tree = dendron.BehaviorTree("talker_tree", root_node)
@@ -249,4 +249,4 @@ You should again be able to type to your program and have it reply with speech. 
 
 ## Conclusion
 
-We now have moved all of the management of chat state into our behavior tree. This may feel like a lot of work to get back to where we were at the end of Part 1, but in the [next part](3_tutorial_llm_conditional.md) we'll see how managing the chat state inside the tree allows us to add another language model that will analyze the human's input to decide whether or not to end the conversation.
+We now have moved all of the management of chat state into our behavior tree. This may feel like a lot of work to get back to where we were at the end of Part 1, but in the [next part](3_tutorial_llm_conditional.md) we'll see how managing the chat state inside the tree allows us to add another language model that will analyze the human's input to decide whether or not it would be appropriate to end the conversation.

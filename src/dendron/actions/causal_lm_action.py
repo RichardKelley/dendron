@@ -23,46 +23,46 @@ class CausalLMActionConfig:
     this blog post: https://huggingface.co/blog/how-to-generate.
 
     Args:
-        model_name (`str`):
+        model_name (str):
             The name of the model to use. This should be a valid name
             corresponding to a Hugging Face model name (including the user
             name).
-        auto_load (`Optional[bool]`):
+        auto_load (Optional[bool]):
             An optional boolean indicating whether or not to automatically 
             load model either from disk or the Hugging Face hub. If `False`,
             the user is responsible for ensuring that a model is loaded
             before the first `tick()` is triggered. Defaults to `True`.
-        input_key (`Optional[str]`):
+        input_key (Optional[str]):
             The blackboard key to use for writing and reading the prompt that 
             this node will consume. Defaults to "in".
-        output_key (`Optional[str]`):
+        output_key (Optional[str]):
             The blackboard key to use for writing and reading the text generated
             by this node. Defaults to "out".
-        device (`Optional[str]`):
+        device (Optional[str]):
             The device that should be used with the model. Examples include
             "cpu", "cuda", and "auto". Defaults to "auto".
-        load_in_8bit (`Optional[bool]`):
+        load_in_8bit (Optional[bool]):
             Optional boolean indicating whether or not to use eight-bit quantization
             from bitsandbytes. When available, will typically decrease memory usage
             and increase inference speed. Defaults to `False`.
-        load_in_4bit (`Optional[bool]`):
+        load_in_4bit (Optional[bool]):
             Optional boolean indicating whether or not to use four-bit quantization
             from bitsandbytes. When available, will typically decrease memory usage
             and increase inference speed. If you observe degraded performance, try
             eight-bit quanitization instead. Defaults to `False`.
-        max_new_tokens (`Optional[int]`):
+        max_new_tokens (Optional[int]):
             A limit on the number of new tokens to generate. You will usually want
             to set this yourself based on your application. Defaults to 16.
-        do_sample (`Optional[bool]`):
+        do_sample (Optional[bool]):
             Optional boolean to control decoding strategy. If set to true, allows use
             of non-default generation strategy. Defaults to `False`.
-        top_p (`Optional[float]`):
+        top_p (Optional[float]):
             Optional float to control use of nucleus sampling. If the value is strictly
             between 0 and 1, nucleus sampling is activated.
-        torch_dtype (`torch.dtype`):
+        torch_dtype (torch.dtype):
             The dtype to use for torch tensors. Defaults to `torch.float16`. You may
             need to change this depending on your quantization choices.
-        use_flash_attn_2 (`Optional[bool]`):
+        use_flash_attn_2 (Optional[bool]):
             Optional bool controlling whether or not to use Flash Attention 2. Defaults
             to `False` in case you haven't installed flash attention. Substantially
             speeds up inference. 
@@ -118,9 +118,9 @@ class CausalLMAction(ActionNode):
     available to you.
 
     Args:
-        name (`str`):
+        name (str):
             The given name of this node.
-        cfg (`CausalLMActionConfig`):
+        cfg (CausalLMActionConfig):
             The configuration object for this model.
     """
     def __init__(self, name : str, cfg : CausalLMActionConfig) -> None:
@@ -208,7 +208,7 @@ class CausalLMAction(ActionNode):
         and sent to the model for generation.
 
         Args:
-            f (`Callable`):
+            f (Callable):
                 The input processor function to use. Should be a callable
                 object that maps (self, Any) to str.
         """
@@ -227,7 +227,7 @@ class CausalLMAction(ActionNode):
         the newly generated text is written to the blackboard.
 
         Args:
-            f (`Callable`):
+            f (Callable):
                 The output processor function. Should be a callable object
                 that maps from (self, str) to Any.
         """

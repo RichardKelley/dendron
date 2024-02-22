@@ -123,13 +123,13 @@ def play_speech(self):
         sd.wait()
 ```
 
-The class includes a few added bells and whistles, but should be mostly familiar by now. The `play_speech` function is very different, since it appears that we are now processing a series of utterances to speak. To understand why we do this, let's talk about sentence splitting
+The class includes a few added bells and whistles, but should be mostly familiar by now. The `play_speech` function is very different, since it appears that we are now processing a series of utterances to speak. To understand why we do this, let's talk about sentence splitting.
 
 ### Sentence Splitting
 
-In Part 1, we mentioned that current neural TTS models often struggle with longer utterances. This is something that seems to affect all models, but is particlarly pronounced for smaller models (if you have heard any haunting sounds or screeching from `"bark-small"` you might consider trying the bigger `"bark"`). It turns out you can somewhat mitigate the problem by splitting large utterances into shorter ones. You could do this solely based on string length, but then you're likely to break coherent statements into fragments, which will be spoken in weird ways. It would be best if we could split long strings at natural pause points, like sentences.
+In Part 1, we mentioned that current neural TTS models often struggle with longer utterances. This is something that seems to affect all models, but is particlarly pronounced for smaller models (if you have heard any haunting sounds or screeching from `"bark-small"` you might consider trying the bigger `"bark"`). It turns out you can somewhat mitigate the problem by splitting large utterances into shorter ones. You could do this solely based on string length, but then you're likely to break coherent statements into fragments, which will be spoken in weird ways. It would be best if we could split long strings at natural pause points, like sentence boundaries.
 
-Here we show a simple strategy for doing this using a rule-based system. You could certainly do better with a learning-based approach, but what we'll do here is quick, easy, and usually good enough. The capability we're after is provided by spaCy, which we'll wrap in an `ActionNode`:
+Here we show a simple strategy for doing this using rule-based AI. You could certainly do better with a learning-based approach, but what we'll do here is quick, easy, and often good enough. The capability we're after is provided by spaCy, which we'll wrap in an `ActionNode`:
 
 ```python linenums="1"
 class SentenceSplitter(dendron.ActionNode):
@@ -152,7 +152,7 @@ class SentenceSplitter(dendron.ActionNode):
         return NodeStatus.SUCCESS
 ```
 
-In the constructor, we initialize a spaCy pipeline to perform tokenization at the sentence level. In the `tick` function we use that pipeline to split longer strings into sentence, strip the sentences of whitespace, and add them back to the appropriate slot in the blackboard.
+In the constructor, we initialize a spaCy pipeline to perform tokenization at the sentence level. In the `tick` function we use that pipeline to split longer strings into sentences, strip the sentences of whitespace, and add them back to the appropriate slot in the blackboard.
 
 ## Defining a Single Turn in the Conversation
 
@@ -224,11 +224,11 @@ conversation_turn = Fallback("conversation_turn", [
 ])
 ```
 
-This should look familiar as the root node from Part 2 of the tutorial. We still haven't implemented a way to break out of the chat loop, so lets build our "farewell classifier" using a `CompletionCondition` node.
+This should look familiar as the root node from Part 2 of the tutorial. We still haven't implemented a way to break out of the chat loop, so lets build a "farewell classifier" using a `CompletionCondition` node.
 
 ## `CompletionCondition` for Classifying Strings
 
-A `CompletionCondition` node is, as the name suggests, a condition node that returns `SUCCESS` or `FAILURE` based on the output of an autoregressive language model. Although we mostly use these models purely to generate text these days, it's important to remember that language models are _probability models_, so in addition to generating text by sampling we can also evaluate the conditional probability of any string given any other string (as long as the given string fits inside the model's context window). This opens the door to the following strategy for evaluating a logical condition using a language model:
+A `CompletionCondition` node is, as the name suggests, a condition node that returns `SUCCESS` or `FAILURE` based on the output of an autoregressive language model. Although we mostly use language models to generate text these days, it's important to remember that language models are _probability models_, so in addition to generating text by sampling we can also evaluate the conditional probability of any string given any other string (as long as the combination fits inside the model's context window). This opens the door to the following strategy for evaluating a logical condition using a language model:
 
 1. Write down a prompt that includes a statement and a question with a closed set of possible answers. Include a placeholder where possible answers could go.
 2. Write down the possible answers in a list.
@@ -237,7 +237,7 @@ A `CompletionCondition` node is, as the name suggests, a condition node that ret
 5. Select the answer with the highest probability relative to the other answers.
 6. Determine if this answer corresponds to `SUCCESS` or `FAILURE` depending on the nature of the problem.
 
-The `CompletionCondition` implements precisely this strategy (with some nuance due to how Transformers implements probability calculations). Let's look at the code and then we can talk about its parts:
+The `CompletionCondition` implements precisely this strategy (with some nuance due to how the Transformers library implements probability calculations). Let's look at the code and then we can talk about its parts:
 
 ```python linenums="1"
 farewell_classifier_cfg = CompletionConditionConfig(
@@ -272,13 +272,13 @@ def farewell_posttick(self):
 farewell_classification_node.add_post_tick(farewell_posttick)
 ```
 
-This is a big block of code, but if you've followed the tutorial up to this point you have everything you need to understand what's going on. First we create config file that specifies the model to use, the input key for the blackboard, and some optimization flags. Then we create our `farewell_classification_node` using that configuration. Then we define a `farewell_success_fn`, a `farewell_pretick` function, and a `farewell_posttick` function. The pre- and post-tick functions are responsible for handling state management and format conversion. The model we're using requires some formatting similar to `openchat_3.5`, so we put that processing in `farewell_pretick`. The post-tick function is solely responsible for deciding if the blackboard should be updated to set the `"all_done"` flag to `True`.
+This is a big block of code, but if you've followed the tutorial up to this point you have everything you need to understand what's going on. First we create a config object that specifies the model to use, the input key for the blackboard, and some optimization flags. Then we create our `farewell_classification_node` using that configuration. Then we define a `farewell_success_fn`, a `farewell_pretick` function, and a `farewell_posttick` function. The pre- and post-tick functions are responsible for handling state management and format conversion. The model we're using requires some formatting similar to `openchat_3.5`, so we put that processing in `farewell_pretick`. (We could do this in an input processor, but using a pre-tick function works just as well.) The post-tick function is solely responsible for deciding if the blackboard should be updated to set the `"all_done"` flag to `True`.
 
-Even without saying what exactly `farewell_success_fn` does, you can probably read these three functions and make a guess at how they fit together. In the pre-tick we set up a "yes-no" question asking if the user is saying goodbye. The `farewell_success_fn` takes a completion (it will turn out to be the highest scoring completion) and if it is "yes" then it returns `SUCCESS`. This is status returned as the node's status, and the post-tick function checks that status and sets the blackboard if the status is `SUCCESS`. In this way, the `CompletionCondition` node implements a classifier over text strings. 
+Even without saying what exactly `farewell_success_fn` does, you can probably read these three functions and make a guess at how they fit together. In the pre-tick we set up a "yes-no" question asking if the user is saying goodbye. The `farewell_success_fn` takes a completion (it will turn out to be the highest scoring completion) and if it is "yes" then it returns `SUCCESS`. This is status returned as the node's status, and the post-tick function checks that status and updates the blackboard if the status is `SUCCESS`. In this way, the `CompletionCondition` node implements a kind of classifier over text strings. 
 
 You might be wondering how the completions are passed to the node. If you guessed "via the blackboard," then you're right! You can scroll down to see how the blackboard is set up once we create a `BehaviorTree` instance, or you can [look at the documentation for `CompletionCondition`](api/conditions/completion_condition.md){:target="_blank"}.
 
-Lastly, we implement an action node responsible for saying goodbye. We could just end the conversation as we have before, but since we're already in the process of adding intelligence to our system, we may as well have the node say goodbye:
+Lastly, we implement an action node responsible for saying goodbye. We could just end the conversation as we have before, but since we're already in the process of adding intelligence to our system, we may as well have the node speak goodbye:
 
 ```python linenums="1"
 class SayGoodbye(dendron.ActionNode):
@@ -313,7 +313,6 @@ Now that we have defined all of the components we need, we can build our tree:
 root_node = Fallback("converse", [
     goodbye_test,
     conversation_turn,
-    GetTextInput()
 ])
 
 tree = dendron.BehaviorTree("chat_tree", root_node)

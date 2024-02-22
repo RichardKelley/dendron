@@ -53,6 +53,7 @@ nav:
 theme: 
   name: material
   favicon: img/favicon.ico
+  logo: img/favicon.ico
   features:
     - navigation.expand
     - content.code.copy
@@ -82,3 +83,8 @@ plugins:
           paths: [src]
           options:
             show_submodules: false 
+
+extra:
+  analytics:
+    provider: google
+    property: G-DSF85J64V0

@@ -18,7 +18,8 @@ We'll start out by importing the libraries we need to implement TTS, beginning o
 import dendron
 from dendron.actions.causal_lm_action import CausalLMActionConfig, CausalLMAction
 ```
-We are going to create a custom `dendron.ActionNode` to implement our TTS capability, but it turns out we don't need a new node type: `CausalLMAction` works just as well to implement TTS as it does to generate text. Next we import the components we need specifically for speech generation:
+
+We import `CausalLMAction` as in Part 0 to create a chat node. We are going to create a custom `dendron.ActionNode` to implement our TTS capability, so next we import the components we need specifically for speech generation:
 
 ```python linenums="1"
 import torch
@@ -27,7 +28,7 @@ from optimum.bettertransformer import BetterTransformer
 import sounddevice as sd
 ```
 
-We are going to be using the [bark-small model](https://huggingface.co/suno/bark-small){:target = "_blank"} for our text to speech capability. The combination of the `openchat_3.5` model and `bark-small` uses about 4.7GB of VRAM on my GPU.
+We are going to be using the [bark-small model](https://huggingface.co/suno/bark-small){:target = "_blank"} for our text to speech capability. The combination of the quantized `openchat_3.5` model and `bark-small` uses about 4.7GB of VRAM on my GPU.
 
 ## Creating a Custom Dendron Action Node
 
@@ -67,6 +68,7 @@ The call to `generate` on line 13 above will generate the audio data we want to 
 ```python linenums="1"
 def play_speech(self):
     sd.play(self.blackboard["speech_out"][0], self.model.generation_config.sample_rate)
+    sd.wait()
 ```
 
 After the `tick` function has returned, the audio data is stored in the blackboard and the `play_speech` function above could play it correctly. We just need a way to ensure that `play_speech` is called immediately after the `tick` function returns. It often happens that we want to execute code for its side effects immediately surrounding a `tick` call, and Dendron supports this with "pre-tick functions" and "post-tick functions." These are functions that get added as members of our node classes that are guaranteed to be called before and after a `tick`. Each `TreeNode` maintains a list of pre-tick and post-tick functions, and calls them in the order they are added. To see how this works, we first instantiate our node and then add our `play_speech` post-tick function to the node: 
@@ -90,7 +92,7 @@ With this, our `TTSAction` node is ready to go. It just needs something to say, 
 
 ## A Chat Node
 
-To create our chat node, we will follow almost exactly the same steps as in the previous part. We'll start by creating a `CausalLMActionConfig` and using that configuration to instantiate a `CausalLMAction`. Then we'll define our input and output processor functions to translate between strings and the structured format that `openchat_3.5` expects:
+To create our chat node, we will follow almost exactly the same steps as in the previous part. We'll start by creating a `CausalLMActionConfig` and then we'll use that configuration to instantiate a `CausalLMAction`. Then we'll define our input and output processor functions to translate between strings and the structured format that `openchat_3.5` expects:
 
 ```python linenums="1"
 chat_behavior_cfg = CausalLMActionConfig(load_in_4bit=True,
@@ -117,7 +119,7 @@ chat_node.set_input_processor(chat_to_str)
 chat_node.set_output_processor(str_to_chat)
 ```
 
-So far this is identical to our previous chat system. But in this case we need to connect the output of our `chat_node` with the input of our `speech_node`. Having them communicate this information directly would violate the design constraint of behavior trees, so instead we'll have them communicate via their shared blackboard. Setting a blackboard is a side effecting operation, and post-tick functions are generally a good place to perform node operations that are partly or entirely used for their side effects, so we'll define a function `set_next_speech` and add it as a post-tick function for `chat_node`:
+So far this is identical to our previous chat system. But now we need to connect the output of our `chat_node` with the input of our `speech_node`. Having them communicate this information directly would violate the design constraint of behavior trees, so instead we'll have them communicate via their shared blackboard. Setting a blackboard is a side effecting operation, and post-tick functions are generally a good place to perform node operations that are partly or entirely used for their side effects, so we'll define a function `set_next_speech` and add it as a post-tick function for `chat_node`:
 
 ```python linenums="1"
 def set_next_speech(self):
@@ -157,11 +159,11 @@ At this point our tree is ready for use. We can visually represent the tree as f
 </figure>
 </center>
 
-The `Sequence` node is represented by a rightward pointing arrow; this is standard in much of the behavior tree literature. The children of a control node should be read from left to right to understand the sequencing. The dark circle indicates the root. In this case a `tick` call will tick the `think_then_talk` node first. This node will in turn first tick `chat_node`, and if `chat_node` returns `NodeStatus.SUCCESS` then `think_then_talk` will subsequently tick `speech_node`. This is precisely the behavior we wanted, and how we set up the flow of data through `tree.blackboard`.
+The `Sequence` node is represented by a rightward pointing arrow; this is standard in much of the behavior tree literature. The children of a control node should be read from left to right to understand the sequencing. The dark circle indicates the root. In this case calling the `tick` function will send a tick signal to the `think_then_talk` node first. This node will in turn first tick `chat_node`, and if `chat_node` returns `NodeStatus.SUCCESS` then `think_then_talk` will subsequently tick `speech_node`. This is precisely the behavior we wanted, and how we set up the flow of data through `tree.blackboard`.
 
 !!! Tip
 
-    This is the first time we have had to connect two nodes via a blackboard. It can be very helpful to think about blackboard state and `tick` operations in terms of pre-conditions and post-conditions. For each node that needs to communicate, ask what state it requires from the blackboard to run its `tick` operation (pre-conditions) and what state it ensures will hold in the blackboard after its `tick` operation completes (post-conditions). I have found it helpful to "work backwards" from the end of a tree's tick logic to the beginning.
+    This is the first time we have had to connect two nodes via a blackboard. It can be very helpful to think about blackboard state and `tick` operations in terms of pre-conditions and post-conditions. For each `TreeNode` that needs to communicate with other nodes, ask what state it requires from the blackboard to run its `tick` operation (pre-conditions) and what state it ensures will hold in the blackboard after its `tick` operation completes (post-conditions). I have found it helpful to "work backwards" from the end of a tree's tick logic to the beginning.
 
 ## The Chat Loop
 
