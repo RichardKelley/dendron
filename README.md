@@ -2,7 +2,7 @@
 
 ### Installation
 
-For a full installation that includes supports 🤗 Transformers out of the box, run
+To install Dendron, run
 
 ```
 pip install dendron
@@ -12,7 +12,7 @@ This will automatically install torch, transformers, bitsandbytes, accelerate, a
 
 ### Behavior Trees for Structured Programming of LLMs
 
-[TODO]
+![image](docs/img/4_asr_voice_chat.svg)
 
 ## Examples
 
@@ -20,17 +20,7 @@ For examples of basic language model node usage, see the example notebooks in th
 
 ## Documentation
 
-### Tutorials
-
-[TODO]
-
-### How-to Guides
-
-[TODO]
-
-### Explanations
-
-[TODO]
+You can find the main documentation for Dendron [here](https://richardkelley.io/dendron/){:target="_blank"}. This includes a full tutorial building a chat agent that has text-to-speech and automatic speech recognition capabilities, and an API reference.
 
 ## Acknowledgements
 
