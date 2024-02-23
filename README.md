@@ -14,7 +14,7 @@ This will automatically install torch, transformers, bitsandbytes, accelerate, a
 
 Here is an example behavior tree that implements a chat agent:
 
-![image](docs/img/4_asr_voice_chat.svg)
+![image](https://github.com/RichardKelley/dendron/raw/main/docs/img/4_asr_voice_chat.svg)
 
 You can build this agent by following [the tutorial here](https://richardkelley.io/dendron/tutorial_intro).
 
