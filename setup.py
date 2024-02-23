@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setuptools.setup(
     name = "dendron",
-    version = "0.0.1",
+    version = "0.1.1",
     author = "Richard Kelley",
     package_dir = {"" : "src"},
     packages = setuptools.find_packages(where="src"),
