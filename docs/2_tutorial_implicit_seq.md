@@ -6,6 +6,8 @@ title: Managing Chat State
 
 In the [Part 1](1_tutorial_seq.md) we saw how to get two `CausalLMAction` nodes to work together to generate speech in a chat loop. To do that, we `tick`ed the nodes in order using a `Sequence` control node. In this part we'll see how to move our chat state management into our tree, which we'll find ultimately increases the flexibility of our agent.  
 
+If you find this tutorial too verbose and you just want to get the code, you can find the notebook for this part [here](https://github.com/RichardKelley/dendron-examples/blob/main/tutorial_1/part_2.ipynb){:target="_blank"}.
+
 ## Imports and a Text Input Node
 
 As before, we begin by importing the code we need:

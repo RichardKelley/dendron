@@ -7,6 +7,8 @@ title: Chat with TTS and ASR
 
 In [Part 3](3_tutorial_llm_conditional.md) we learned how to add `CompletionCondition` nodes to our behavior tree, enabling our agent to analyze the human's inputs and terminate the conversation when appropriate. In this last part of the tutorial, we will make a small change in the code to use automatic speech recognition (ASR) to allow spoken human inputs to our agent instead of text. 
 
+If you find this tutorial too verbose and you just want to get the code, you can find the notebook for this part [here](https://github.com/RichardKelley/dendron-examples/blob/main/tutorial_1/part_4.ipynb){:target="_blank"}.
+
 ## Simplifying Imports
 
 Unlike the previous parts of this tutorial, we're going to start this part by showing you the tree you're going to build before we write any code:

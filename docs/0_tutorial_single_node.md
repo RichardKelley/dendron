@@ -6,6 +6,8 @@ title: Dendron Tutorial Part 0. A Single Node
 
 The real power of behavior trees comes from their ability to organize collections of behaviors that interact in complex ways, but to get started using a language model as quickly as possible let's build a tree with a single language model `TreeNode` that we can chat with. We'll have to manage the chat state ourselves, but in [part 2](2_tutorial_implicit_seq.md) we'll see how to make a more complex tree handle that state for us.
 
+If you find this tutorial too verbose and you just want to get the code, you can find the notebook for this part [here](https://github.com/RichardKelley/dendron-examples/blob/main/tutorial_1/part_0.ipynb){:target="_blank"}.
+
 ## Causal Language Models in Dendron
 
 We start by importing `dendron`, and then we import two classes that we can use to define a language model node:
@@ -27,6 +29,10 @@ chat_behavior_cfg = CausalLMActionConfig(load_in_4bit=True,
                                          use_flash_attn_2=True,
                                          model_name='openchat/openchat_3.5')
 ```
+
+!!! warning
+
+    If you haven't installed flash attention, you will need to set `use_flash_attn_2 = False` in this and all of the other model configs of the tutorial.
 
 There are few points to note about this configuration. First, we specify that we want to load our model using _4-bit quantization_. This means that we use less precision for each model weight, which leads to lower memory consumption. This is critical for running larger models on smaller GPUs. The `openchat_3.5` model we are using has billions of parameters, so it would be impossible to run without this quantization. Next, we specify that we are using Flash Attention 2. This makes inference substantially faster, but unfortunately isn't supported on older GPUs. The parameters `do_sample` and `top_p` specify a sampling strategy known as "nucleus sampling." You can read more about sampling strategies and approaches to generating text with language models [here](https://huggingface.co/blog/how-to-generate){:target="_blank"}.
 
