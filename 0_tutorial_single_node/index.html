@@ -1518,6 +1518,7 @@
 
 <h1 id="0-building-a-chat-system-with-dendron-a-single-node">0. Building a Chat System with Dendron: A Single Node</h1>
 <p>The real power of behavior trees comes from their ability to organize collections of behaviors that interact in complex ways, but to get started using a language model as quickly as possible let's build a tree with a single language model <code>TreeNode</code> that we can chat with. We'll have to manage the chat state ourselves, but in <a href="../2_tutorial_implicit_seq/">part 2</a> we'll see how to make a more complex tree handle that state for us.</p>
+<p>If you find this tutorial too verbose and you just want to get the code, you can find the notebook for this part <a href="https://github.com/RichardKelley/dendron-examples/blob/main/tutorial_1/part_0.ipynb" target="_blank">here</a>.</p>
 <h2 id="causal-language-models-in-dendron">Causal Language Models in Dendron</h2>
 <p>We start by importing <code>dendron</code>, and then we import two classes that we can use to define a language model node:</p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
@@ -1538,6 +1539,10 @@
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5"></a>                                         <span class="n">use_flash_attn_2</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6"></a>                                         <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;openchat/openchat_3.5&#39;</span><span class="p">)</span>
 </span></code></pre></div></td></tr></table></div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>If you haven't installed flash attention, you will need to set <code>use_flash_attn_2 = False</code> in this and all of the other model configs of the tutorial.</p>
+</div>
 <p>There are few points to note about this configuration. First, we specify that we want to load our model using <em>4-bit quantization</em>. This means that we use less precision for each model weight, which leads to lower memory consumption. This is critical for running larger models on smaller GPUs. The <code>openchat_3.5</code> model we are using has billions of parameters, so it would be impossible to run without this quantization. Next, we specify that we are using Flash Attention 2. This makes inference substantially faster, but unfortunately isn't supported on older GPUs. The parameters <code>do_sample</code> and <code>top_p</code> specify a sampling strategy known as "nucleus sampling." You can read more about sampling strategies and approaches to generating text with language models <a href="https://huggingface.co/blog/how-to-generate" target="_blank">here</a>.</p>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>

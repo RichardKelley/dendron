@@ -1548,6 +1548,7 @@
 
 <h1 id="2-building-a-chat-system-with-dendron-managing-chat-state">2. Building a Chat System with Dendron: Managing Chat State</h1>
 <p>In the <a href="../1_tutorial_seq/">Part 1</a> we saw how to get two <code>CausalLMAction</code> nodes to work together to generate speech in a chat loop. To do that, we <code>tick</code>ed the nodes in order using a <code>Sequence</code> control node. In this part we'll see how to move our chat state management into our tree, which we'll find ultimately increases the flexibility of our agent.  </p>
+<p>If you find this tutorial too verbose and you just want to get the code, you can find the notebook for this part <a href="https://github.com/RichardKelley/dendron-examples/blob/main/tutorial_1/part_2.ipynb" target="_blank">here</a>.</p>
 <h2 id="imports-and-a-text-input-node">Imports and a Text Input Node</h2>
 <p>As before, we begin by importing the code we need:</p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1"> 1</a></span>

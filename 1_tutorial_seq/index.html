@@ -1558,6 +1558,7 @@
 <p class="admonition-title">Tip</p>
 <p>Current SOTA text-to-speech (TTS) models appear to be a bit on the slow side, at least on consumer cards like the single 3090 I'm developing with. If you want an agent that can talk but find the latency of neural TTS unbearable, try replacing the <code>TTSAction</code> we implement below with an action that uses an old-fashioned TTS system like espeak on Linux. I found that the <code>pyttsx3</code> library was useful in this regard.</p>
 </div>
+<p>If you find this tutorial too verbose and you just want to get the code, you can find the notebook for this part <a href="https://github.com/RichardKelley/dendron-examples/blob/main/tutorial_1/part_1.ipynb" target="_blank">here</a>.</p>
 <h2 id="imports-and-bark-tts">Imports and Bark TTS</h2>
 <p>We'll start out by importing the libraries we need to implement TTS, beginning of course with Dendron:</p>
 <div class="language-python highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-1">1</a></span>
