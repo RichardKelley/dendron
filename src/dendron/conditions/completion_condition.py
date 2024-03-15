@@ -8,6 +8,7 @@ import torch
 import torch.nn.functional as F
 
 from transformers import AutoModelForCausalLM, AutoTokenizer
+from transformers import BitsAndBytesConfig
 
 from typing import Optional, Callable, List
 
@@ -129,47 +130,33 @@ class CompletionCondition(ConditionNode):
         self.completions_key = cfg.completions_key
         self.success_fn_key = cfg.success_fn_key
 
+        self.bnb_cfg = BitsAndBytesConfig()
+        
         match cfg.load_in_4bit, cfg.load_in_8bit:
             case True, True:
-                self.quantization = Quantization.FourBit
+                self.bnb_cfg.load_in_4bit = True
+                self.bnb_cfg.bnb_4bit_compute_dtype = cfg.torch_dtype
             case True, False:
-                self.quantization = Quantization.FourBit
+                self.bnb_cfg.load_in_4bit = True
+                self.bnb_cfg.bnb_4bit_compute_dtype = cfg.torch_dtype
             case False, True:
-                self.quantization = Quantization.EightBit
+                self.bnb_cfg.load_in_8bit = True
             case False, False:
-                self.quantization = Quantization.NoQuantization
-
+                pass
+                
         if cfg.use_flash_attn_2:
             self.attn_implementation = "flash_attention_2"
         else:
             self.attn_implementation = "sdpa"
 
         if cfg.auto_load:
-            match self.quantization:
-                case Quantization.NoQuantization:
-                    self.model = AutoModelForCausalLM.from_pretrained(
-                        cfg.model_name,
-                        torch_dtype=self.torch_dtype,
-                        low_cpu_mem_usage=True,
-                        attn_implementation=self.attn_implementation
-                    )
-                case Quantization.FourBit:
-                    self.model = AutoModelForCausalLM.from_pretrained(
-                        cfg.model_name,
-                        load_in_4bit=True,
-                        torch_dtype=self.torch_dtype,
-                        low_cpu_mem_usage=True,
-                        attn_implementation=self.attn_implementation,
-                        bnb_4bit_compute_dtype=cfg.torch_dtype
-                    )
-                case Quantization.EightBit:
-                    self.model = AutoModelForCausalLM.from_pretrained(
-                        cfg.model_name,
-                        load_in_8bit=True,
-                        torch_dtype=self.torch_dtype,
-                        low_cpu_mem_usage=True,
-                        attn_implementation=self.attn_implementation
-                    )
+            self.model = AutoModelForCausalLM.from_pretrained(
+                cfg.model_name,
+                low_cpu_mem_usage=True,
+                attn_implementation=self.attn_implementation,
+                quantization_config=self.bnb_cfg
+            )
+                    
             self.model.eval()
             self.tokenizer = AutoTokenizer.from_pretrained(cfg.model_name)
 

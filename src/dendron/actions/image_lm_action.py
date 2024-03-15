@@ -142,47 +142,33 @@ class ImageLMAction(ActionNode):
 
         self.torch_dtype = cfg.torch_dtype
 
+        self.bnb_cfg = BitsAndBytesConfig()
+
         match cfg.load_in_4bit, cfg.load_in_8bit:
             case True, True:
-                self.quantization = Quantization.FourBit
+                self.bnb_cfg.load_in_4bit = True
+                self.bnb_cfg.bnb_4bit_compute_dtype = cfg.torch_dtype
             case True, False:
-                self.quantization = Quantization.FourBit
+                self.bnb_cfg.load_in_4bit = True
+                self.bnb_cfg.bnb_4bit_compute_dtype = cfg.torch_dtype
             case False, True:
-                self.quantization = Quantization.EightBit
+                self.bnb_cfg.load_in_8bit = True
             case False, False:
-                self.quantization = Quantization.NoQuantization
-
+                pass
+                
         if cfg.use_flash_attn_2:
             self.attn_implementation = "flash_attention_2"
         else:
             self.attn_implementation = "sdpa"
 
         if cfg.auto_load:
-            match self.quantization:
-                case Quantization.NoQuantization:
-                    self.model = LlavaForConditionalGeneration.from_pretrained(
-                        cfg.model_name, 
-                        torch_dtype=cfg.torch_dtype,
-                        low_cpu_mem_usage=True,
-                        attn_implementation=self.attn_implementation
-                    ).to(self.device)
-                case Quantization.FourBit:
-                    self.model = LlavaForConditionalGeneration.from_pretrained(
-                        cfg.model_name, 
-                        load_in_4bit=True, 
-                        torch_dtype=cfg.torch_dtype,
-                        low_cpu_mem_usage=True,
-                        attn_implementation = self.attn_implementation,
-                        bnb_4bit_compute_dtype=cfg.torch_dtype
-                    )
-                case Quantization.EightBit:
-                    self.model = LlavaForConditionalGeneration.from_pretrained(
-                        cfg.model_name, 
-                        load_in_8bit=True, 
-                        torch_dtype=cfg.torch_dtype,
-                        low_cpu_mem_usage=True,
-                        attn_implementation = self.attn_implementation
-                    )
+            self.model = LlavaForConditionalGeneration.from_pretrained(
+                cfg.model_name,
+                low_cpu_mem_usage=True,
+                attn_implementation=self.attn_implementation,
+                quantization_config=self.bnb_cfg
+            )
+
             self.model.eval()
             self.processor = AutoProcessor.from_pretrained(cfg.model_name)
         else:
