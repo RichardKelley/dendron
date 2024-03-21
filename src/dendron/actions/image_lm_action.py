@@ -4,6 +4,8 @@ from dendron.basic_types import NodeStatus, Quantization
 from dataclasses import dataclass, field
 
 from transformers import AutoProcessor, LlavaForConditionalGeneration
+from transformers import VipLlavaForConditionalGeneration
+from transformers import AutoConfig 
 from transformers import BitsAndBytesConfig
 
 import torch
@@ -131,6 +133,11 @@ class ImageLMAction(ActionNode):
     def __init__(self, name : str, cfg : ImageLMActionConfig) -> None:
         super().__init__(name)
 
+        self.supported_model_map = {
+            "llava" : LlavaForConditionalGeneration,
+            "vipllava" : VipLlavaForConditionalGeneration
+        }
+
         self.text_input_key = cfg.text_input_key
         self.image_input_key = cfg.image_input_key
         self.output_key = cfg.output_key
@@ -162,14 +169,22 @@ class ImageLMAction(ActionNode):
             self.attn_implementation = "sdpa"
 
         if cfg.auto_load:
-            self.model = LlavaForConditionalGeneration.from_pretrained(
-                cfg.model_name,
-                low_cpu_mem_usage=True,
-                attn_implementation=self.attn_implementation,
-                quantization_config=self.bnb_cfg
-            )
+            hf_config = AutoConfig.from_pretrained(cfg.model_name)
+            model_type = hf_config.model_type
 
-            self.model.eval()
+            try:
+                ClassRef = self.supported_model_map[model_type]
+                self.model = ClassRef.from_pretrained(
+                    cfg.model_name,
+                    low_cpu_mem_usage=True,
+                    attn_implementation=self.attn_implementation,
+                    quantization_config=self.bnb_cfg
+                )
+                self.model.eval()
+            except Exception as e:
+                print(f"Failed to create model of type {model_type}")
+                self.model = None
+
             self.processor = AutoProcessor.from_pretrained(cfg.model_name)
         else:
             self.model = None
