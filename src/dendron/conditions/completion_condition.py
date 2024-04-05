@@ -32,6 +32,9 @@ class CompletionConditionConfig:
             upon a `tick()` call. The value stored here should be a list of
             strings, each string representing one completion. Defaults to
             "completions_in".
+        logprobs_out_key (`Optional[str]`):
+            The blackboard key to write a dictionary containing the output 
+            log probabilities.
         success_fn_key (`Optional[str]`):
             The blackboard key to read and write the success predicate that
             determines the status that is ultimately returned upon a `tick()`
@@ -68,6 +71,9 @@ class CompletionConditionConfig:
     model_name : str
     completions_key : Optional[str] = field(
         default = "completions_in"
+    )
+    logprobs_out_key : Optional[str] = field (
+        default = "probs_out"
     )
     success_fn_key : Optional[str] = field(
         default = "success_fn"
@@ -129,6 +135,8 @@ class CompletionCondition(ConditionNode):
         self.torch_dtype = cfg.torch_dtype
         self.completions_key = cfg.completions_key
         self.success_fn_key = cfg.success_fn_key
+
+        self.logprobs_out_key = cfg.logprobs_out_key
 
         self.bnb_cfg = BitsAndBytesConfig()
         
@@ -214,6 +222,8 @@ class CompletionCondition(ConditionNode):
                     if token not in self.tokenizer.all_special_ids:
                         log_probs[i] += p.item()
             
+            self.blackboard[self.logprobs_out_key] = {completions[i] : log_probs[i] for i in range(len(log_probs))}
+
             best_completion = completions[log_probs.argmax()]
 
             return success_fn(best_completion)
