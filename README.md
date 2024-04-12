@@ -1,5 +1,14 @@
 # 🌳 Dendron
 
+<div align="center">
+[![][arxiv-badge]][arxiv] [![][discord-badge]][discord] [![][twitter-badge]][twitter]
+</div>
+
+### News
+
+**April 2024:** New on arXiv: [Behavior Trees Enable Structured Programming of Language Model Agents
+](https://arxiv.org/abs/2404.07439)
+
 ### Behavior Trees for Structured Programming of LLMs
 
 Behavior trees are a technique for building complex reactive agents by composing simpler behaviors in a principled way. The behavior tree abstraction arose from Robotics and Game AI, but the premise of Dendron is that this abstraction can enable more sophisticated language-based agents. 
@@ -31,3 +40,14 @@ You can find the main documentation for Dendron [here](https://richardkelley.io/
 ## Acknowledgements
 
 This work was supported in part by the Federal Transit Administration and the Regional Transportation Commission of Washoe County.
+
+[arxiv-badge]: https://img.shields.io/badge/arXiv-2404.07439-B31B1B?style=flat-square&logo=arXiv&link=https%3A%2F%2Farxiv.org%2Fabs%2F2404.07439
+[arxiv]: https://arxiv.org/abs/2404.07439
+
+[discord]: https://discord.gg/ncBeGQJ9Bk
+[discord-badge]: https://img.shields.io/badge/Discord-chat-%235865F2?logo=discord&logoColor=white&link=https%3A%2F%2Fdiscord.gg%2FncBeGQJ9Bk
+
+
+
+[twitter]: https://twitter.com/richardkelley
+[twitter-badge]: https://img.shields.io/twitter/follow/richardkelley
