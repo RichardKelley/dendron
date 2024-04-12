@@ -1,8 +1,12 @@
 # 🌳 Dendron
 
-<div align="center" style="margin-bottom: -1em;">
+<div align="center" style="margin-bottom: 0em;">
 
 [![][arxiv-badge]][arxiv] [![][discord-badge]][discord] [![][twitter-badge]][twitter]
+
+
+**Dendron is a library for building software agents using behavior trees and language models.**
+
 </div>
 
 ### News
