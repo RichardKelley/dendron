@@ -1,6 +1,9 @@
 # 🌳 Dendron
 
+<div align="center" style="margin-bottom: -1em;">
+
 [![][arxiv-badge]][arxiv] [![][discord-badge]][discord] [![][twitter-badge]][twitter]
+</div>
 
 ### News
 
