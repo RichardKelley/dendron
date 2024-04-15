@@ -23,6 +23,10 @@ from dendron.actions.causal_lm_action import CausalLMActionConfig, CausalLMActio
 
 We import `CausalLMAction` as in Part 0 to create a chat node. We are going to create a custom `dendron.ActionNode` to implement our TTS capability, so next we import the components we need specifically for speech generation:
 
+!!! tip
+
+    Before you run this next block, you will need to pip install `optimum` and `sounddevice` if you have not already done so.
+
 ```python linenums="1"
 import torch
 from transformers import BarkModel, BarkProcessor
