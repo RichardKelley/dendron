@@ -8,11 +8,11 @@ In the [Part 0](0_tutorial_single_node.md), we created a simple Dendron behavior
 
 !!! tip
 
-    Current SOTA text-to-speech (TTS) models appear to be a bit on the slow side, at least on consumer cards like the single 3090 I'm developing with. If you want an agent that can talk but find the latency of neural TTS unbearable, try replacing the `TTSAction` we implement below with an action that uses an old-fashioned TTS system like espeak on Linux. I found that the `pyttsx3` library was useful in this regard.
+    Most of the current neural text-to-speech (TTS) models are a bit too slow, at least on consumer cards like the single 3090 I'm developing with. The one exception I've found is [Piper TTS](https://github.com/rhasspy/piper){:target="_blank"}, which I use in this tutorial. There are other neural models, like Suno's [Bark](https://github.com/suno-ai/bark){:target="_blank"} and Hugging Face's [Parler TTS](https://github.com/huggingface/parler-tts){:target="_blank"} that have great features you may want to check out, but they're slow enough on my hardware that I prefer Piper. If you want old-fashioned (non-neural) TTS, try replacing the `TTSAction` below with an action that uses the `pyttsx3` library.
 
 If you find this tutorial too verbose and you just want to get the code, you can find the notebook for this part [here](https://github.com/RichardKelley/dendron-examples/blob/main/tutorial_1/part_1.ipynb){:target="_blank"}.
 
-## Imports and Bark TTS
+## Imports and Piper TTS
 
 We'll start out by importing the libraries we need to implement TTS, beginning of course with Dendron:
 
@@ -25,16 +25,18 @@ We import `CausalLMAction` as in Part 0 to create a chat node. We are going to c
 
 !!! tip
 
-    Before you run this next block, you will need to pip install `optimum` and `sounddevice` if you have not already done so.
+    Before you run this next block, you will need to pip install `piper-tts` if you have not already done so.
 
 ```python linenums="1"
 import torch
-from transformers import BarkModel, BarkProcessor
-from optimum.bettertransformer import BetterTransformer
+from piper import PiperVoice
+import numpy as np
 import sounddevice as sd
 ```
 
-We are going to be using the [bark-small model](https://huggingface.co/suno/bark-small){:target = "_blank"} for our text to speech capability. The combination of the quantized `openchat_3.5` model and `bark-small` uses about 4.7GB of VRAM on my GPU.
+Piper supports many voices, at several quality levels. You can find a [list of voices here](https://github.com/rhasspy/piper/blob/master/VOICES.md){:target="_blank"} and [demos of the voices here](https://rhasspy.github.io/piper-samples/){:target="_blank"}. We are going to use the voice named "Danny," which has only one quality setting (low). The quality levels refer to the number of model parameters. So-called "higher" quality models are just bigger. In spite of the name, the model we are going to use is quite good in my experience. It is also small enough that it runs in real time on the CPU.
+
+You will need to download two files to use the Danny voice with Piper. To do so you can either follow the download link on the demo page linked above, or [get the files directly from Hugging Face](https://huggingface.co/rhasspy/piper-voices/tree/main/en/en_US/danny/low){:target="_blank"}. You want `en_US-danny-low.onnx` and `en_US-danny-low.onnx.json`. Download these into the directory you're developing in, and be sure to double-check the file names when you save the files.
 
 ## Creating a Custom Dendron Action Node
 
@@ -44,38 +46,40 @@ We want to create an action node that generates some speech and actually says it
 class TTSAction(dendron.ActionNode):
     def __init__(self, name):
         super().__init__(name)
-        self.processor = BarkProcessor.from_pretrained("suno/bark-small")
-        self.model = BarkModel.from_pretrained("suno/bark-small").to("cuda")
-        self.model = BetterTransformer.transform(self.model, keep_original_model=False)
-        self.model.enable_cpu_offload()
-
+        self.voice = PiperVoice.load("en_US-danny-low.onnx", config_path="en_US-danny-low.onnx.json", use_cuda=False)
+        
     def tick(self):
         try:
             input_text = self.blackboard["speech_in"]
-            inputs = self.processor(text=input_text, voice_preset="v2/en_speaker_9", return_tensors="pt").to("cuda")
-            self.blackboard["speech_out"] = self.model.generate(**inputs).cpu().numpy()
+            self.blackboard["speech_out"] = self.voice.synthesize_stream_raw("\t" + input_text, sentence_silence=0.1)
         except Exception as e:
             print("Speech generation exception: ", e)
             return dendron.NodeStatus.FAILURE
-        
+
         return dendron.NodeStatus.SUCCESS
 ```
 
-We can declare a new action node type by inheriting from `dendron.ActionNode`, which we do here. The parent class constructor requires us to specify a name for our node, so we take `name` as a parameter and forward that up to the parent in `super().__init__(name)`. Then we initialize our model. Instead of a tokenizer we have a `BarkProcessor` that achieves the same effect. We initialize a processor from the Hugging Face Hub, and then we initialize our model and send it to the GPU. The next two steps (lines 6 and 7) are optional optimizations.
+We can declare a new action node type by inheriting from `dendron.ActionNode`, which we do here. The parent class constructor requires us to specify a name for our node, so we take `name` as a parameter and forward that up to the parent in `super().__init__(name)`. Then we initialize our model. We specify the file names for the weights file and the config file - if you put these somewhere else make sure you change the strings you pass to `load`. We also specify `use_cuda=False`, which runs the model on the CPU. You can try setting this to `True`, but getting it to work may require that you play with version numbers for the dependencies we have installed so far.
 
-The only member function we _need_ to define to implement a Dendron node is `tick(self)`. In general, a `tick` function should take no inputs and _must_ return a `NodeStatus`. In our case, we `try` to get some input text from `self.blackboard`, run it through the processor, call our TTS model's `generate` function, and write the output back to `self.blackboard`. If all goes well, we return `NodeStatus.SUCCESS`. If there's an exception, we print it out and then return `NodeStatus.FAILURE`. This is representative of the general flow of a `tick` function. 
+The only member function we _need_ to define to implement a Dendron node is `tick(self)`. In general, a `tick` function should take no inputs and _must_ return a `NodeStatus`. In our case, we `try` to get some input text from `self.blackboard`, run the text through our model's `synthesize_stream_raw` function, and then write the output audio back to `self.blackboard`. If all goes well, we return `NodeStatus.SUCCESS`. If there's an exception, we print it out and then return `NodeStatus.FAILURE`. This is representative of the general flow of a `tick` function.
 
-There are some interesting details, such as the `voice_preset` option in the `processor` call. If you want to experiment with other voices (or other languages), you can see a list of voice options [here](https://suno-ai.notion.site/8b8e8749ed514b0cbf3f699013548683?v=bc67cff786b04b50b3ceb756fd05f68c){:target="_blank"}.
+There are a few interesting details to note. We prepend the input text with a tab character (`\t`) because we have found during playback of the audio that sometimes the model doesn't correctly generate the very beginning of the audio stream. The tab seems to help with that. Similarly, the `sentence_silence=0.1` argument appends 100 milliseconds of silence to the end of each utterance. If you find this annoying, feel free to set it to its default of `0.0`.
 
 ## Pre- and Post-Tick Functions
 
-The call to `generate` on line 13 above will generate the audio data we want to play, but won't in fact play a sound. To do that, we need to use the `sounddevice` library that we imported above. If our `TTSAction` class had a member function that used `sounddevice` then we'd be all set. You might imagine a function like `play_speech` that can play the sound data directly from memory (on Ubuntu at least):
+The call to `synthesize_stream_raw` on line 9 above will generate the audio data we want to play, but won't in fact play a sound. To do that, we need to use the `sounddevice` library that we imported above. If our `TTSAction` class had a member function that used `sounddevice` then we'd be all set. You might imagine a function like `play_speech` that can play the sound data directly from memory (on Ubuntu at least):
 
 ```python linenums="1"
 def play_speech(self):
-    sd.play(self.blackboard["speech_out"][0], self.model.generation_config.sample_rate)
-    sd.wait()
+    audio_stream = self.blackboard["speech_out"]
+    for sent in audio_stream:
+        audio = np.frombuffer(sent, dtype=np.int16)
+        a = (audio - 32768) / 65536
+        sd.play(a, 16000)
+        sd.wait()
 ```
+
+(The audio stream is broken down into chunks corresponding to Piper's best guess at sentence boundaries, and the arithmetic is necessary to switch from the data representation used by Piper to the representation used by `sounddevice`.)
 
 After the `tick` function has returned, the audio data is stored in the blackboard and the `play_speech` function above could play it correctly. We just need a way to ensure that `play_speech` is called immediately after the `tick` function returns. It often happens that we want to execute code for its side effects immediately surrounding a `tick` call, and Dendron supports this with "pre-tick functions" and "post-tick functions." These are functions that get added as members of our node classes that are guaranteed to be called before and after a `tick`. Each `TreeNode` maintains a list of pre-tick and post-tick functions, and calls them in the order they are added. To see how this works, we first instantiate our node and then add our `play_speech` post-tick function to the node: 
 
@@ -98,7 +102,7 @@ With this, our `TTSAction` node is ready to go. It just needs something to say, 
 
 ## A Chat Node
 
-To create our chat node, we will follow almost exactly the same steps as in the previous part. We'll start by creating a `CausalLMActionConfig` and then we'll use that configuration to instantiate a `CausalLMAction`. Then we'll define our input and output processor functions to translate between strings and the structured format that `openchat_3.5` expects:
+To create our chat node, we will follow almost exactly the same steps as in the previous part. We'll start by creating a `CausalLMActionConfig` and then we'll use that configuration to instantiate a `CausalLMAction`. Then we'll define our input and output processor functions to translate between strings and the structured format that `openchat/openchat-3.5-0106` expects:
 
 ```python linenums="1"
 chat_behavior_cfg = CausalLMActionConfig(load_in_4bit=True,
@@ -106,7 +110,7 @@ chat_behavior_cfg = CausalLMActionConfig(load_in_4bit=True,
                                          do_sample=True,
                                          top_p=0.95,
                                          use_flash_attn_2=True,
-                                         model_name='openchat/openchat_3.5')
+                                         model_name='openchat/openchat-3.5-0106')
 
 chat_node = CausalLMAction('chat_node', chat_behavior_cfg)
 
@@ -173,7 +177,7 @@ The `Sequence` node is represented by a rightward pointing arrow; this is standa
 
 ## The Chat Loop
 
-Our agent is now ready to talk to us. Since we're still managing the chat state outside of our behavior tree, you'll find that the logic is quite similar to the previous part:
+Our agent is now ready to talk to us. Since we're still managing the chat state outside our behavior tree, you'll find that the logic is quite similar to the previous part:
 
 ```python linenums="1"
 chat = []
