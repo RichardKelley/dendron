@@ -27,7 +27,7 @@ chat_behavior_cfg = CausalLMActionConfig(load_in_4bit=True,
                                          do_sample=True,
                                          top_p=0.95,
                                          use_flash_attn_2=True,
-                                         model_name='openchat/openchat_3.5')
+                                         model_name='openchat/openchat-3.5-0106')
 ```
 
 !!! warning
