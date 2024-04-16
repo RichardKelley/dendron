@@ -10,7 +10,7 @@ In the last few years, behavior trees have become popular in game AI development
 
 !!! info
 
-    Never worked with behavior trees? We define them from scratch in [Tutorial 1](tutorial_intro.md#a-quick-overview-of-behavior-trees).
+    Never worked with behavior trees? We define them from scratch in [Tutorial 1](tutorial_intro.md#a-quick-overview-of-behavior-trees). Or you can find a more academic introduction in the arXiv paper that introduces Dendron: [Behavior Trees Enable Structured Programming of Language Model Agents](https://arxiv.org/abs/2404.07439){:target="_blank"}. 
 
 ## Installation
 
@@ -31,3 +31,18 @@ The resulting behavior tree uses **four different LLMs in five different ways**,
 ## API Reference
 
 For an API reference, see the menu to the left on this page.
+
+## The Paper
+
+If you use Dendron in academic research, please cite the [paper](https://arxiv.org/abs/2404.07439){:target="_blank"}:
+
+```
+@misc{kelley2024behavior,
+      title={Behavior Trees Enable Structured Programming of Language Model Agents}, 
+      author={Richard Kelley},
+      year={2024},
+      eprint={2404.07439},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI}
+}
+```

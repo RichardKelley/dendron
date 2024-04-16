@@ -42,6 +42,21 @@ For examples of basic language model node usage, see the example notebooks in th
 
 You can find the main documentation for Dendron [here](https://richardkelley.io/dendron/). This includes a full tutorial building a chat agent that has text-to-speech and automatic speech recognition capabilities, and an API reference.
 
+## The Paper
+
+If you use Dendron in academic research, please cite the [paper](https://arxiv.org/abs/2404.07439):
+
+```
+@misc{kelley2024behavior,
+      title={Behavior Trees Enable Structured Programming of Language Model Agents}, 
+      author={Richard Kelley},
+      year={2024},
+      eprint={2404.07439},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI}
+}
+```
+
 ## Acknowledgements
 
 This work was supported in part by the Federal Transit Administration and the Regional Transportation Commission of Washoe County.
