@@ -4,7 +4,7 @@ title: Managing Chat State
 
 # 2. Building a Chat System with Dendron: Managing Chat State
 
-In the [Part 1](1_tutorial_seq.md) we saw how to get two `CausalLMAction` nodes to work together to generate speech in a chat loop. To do that, we `tick`ed the nodes in order using a `Sequence` control node. In this part we'll see how to move our chat state management into our tree, which we'll find ultimately increases the flexibility of our agent.  
+In the [Part 1](1_tutorial_seq.md) we saw how to get a `CausalLMAction` node to work with a custom `dendron.Action` node to generate speech in a chat loop. To do that, we `tick`ed the nodes in order using a `Sequence` control node. In this part we'll see how to move our chat state management into our tree, which we'll find ultimately increases the flexibility of our agent.  
 
 If you find this tutorial too verbose and you just want to get the code, you can find the notebook for this part [here](https://github.com/RichardKelley/dendron-examples/blob/main/tutorial_1/part_2.ipynb){:target="_blank"}.
 
@@ -19,15 +19,14 @@ from dendron.controls import Sequence, Fallback
 from dendron import NodeStatus
 
 import torch
-from transformers import BarkModel, BarkProcessor
-from optimum.bettertransformer import BetterTransformer
-import time
+from piper import PiperVoice
+import numpy as np
 import sounddevice as sd
 ```
 
 In addition to importing `dendron` and our `CausalLMAction` node, we're going to explicitly import `Sequence` and `Fallback` from `dendron.controls`, and `NodeStatus` from `dendron`. As our trees get larger and we have more custom components, you'll find that these imports make the code a bit more concise.
 
-Our goal is to handle the entirety of the chat loop inside of our behavior tree. We will need some new logic to do that, but before we get there we'll need to move human text input into the tree as well. We can implement this with an `ActionNode` as follows:
+Our goal is to handle the entirety of the chat loop inside our behavior tree. We will need some new logic to do that, but before we get there we'll need to move human text input into the tree as well. We can implement this with an `ActionNode` as follows:
 
 ```python linenums="1"
 class GetTextInput(dendron.ActionNode):
@@ -109,16 +108,12 @@ To complete the speech sequence, we'll repeat the `TTSAction` code here:
 class TTSAction(dendron.ActionNode):
     def __init__(self, name):
         super().__init__(name)
-        self.processor = BarkProcessor.from_pretrained("suno/bark-small")
-        self.model = BarkModel.from_pretrained("suno/bark-small").to("cuda")
-        self.model = BetterTransformer.transform(self.model, keep_original_model=False)
-        self.model.enable_cpu_offload()
-
+        self.voice = PiperVoice.load("en_US-danny-low.onnx", config_path="en_US-danny-low.onnx.json", use_cuda=False)
+        
     def tick(self):
         try:
-            input_text = self.blackboard["speech_in"].pop()
-            inputs = self.processor(text=input_text, voice_preset="v2/en_speaker_9", return_tensors="pt").to("cuda")
-            self.blackboard["speech_out"] = self.model.generate(**inputs).cpu().numpy()
+            input_text = self.blackboard["speech_in"].pop() 
+            self.blackboard["speech_out"] = self.voice.synthesize_stream_raw("\t" + input_text, sentence_silence=0.1)
         except Exception as e:
             print("Speech generation exception: ", e)
             return dendron.NodeStatus.FAILURE
@@ -126,7 +121,12 @@ class TTSAction(dendron.ActionNode):
         return dendron.NodeStatus.SUCCESS
 
 def play_speech(self):
-    sd.play(self.blackboard["speech_out"][0], self.model.generation_config.sample_rate)
+    audio_stream = self.blackboard["speech_out"]
+    for sent in audio_stream:
+        audio = np.frombuffer(sent, dtype=np.int16)
+        a = (audio - 32768) / 65536
+        sd.play(a, 16000)
+        sd.wait()
 ```
 
 This is almost identical to the `TTSAction` from the previous part of the tutorial, except that on line 11 we are `pop()`ing the input text from the blackboard entry. This relates again to our use of a list, the utility of which will become clear later on. For now, we can create an instance of these two classes and create a speech sequence:
@@ -178,7 +178,7 @@ chat_behavior_cfg = CausalLMActionConfig(load_in_4bit=True,
                                          do_sample=True,
                                          top_p=0.95,
                                          use_flash_attn_2=True,
-                                         model_name='openchat/openchat_3.5')
+                                         model_name='openchat/openchat-3.5-0106')
 
 chat_node = CausalLMAction('chat_node', chat_behavior_cfg)
 
@@ -206,7 +206,7 @@ chat_node.add_post_tick(set_next_speech)
 
     If the logic connecting `TimeToThink` with `chat_node` is not clear, you may find it helpful to _enable logging_. You can do this for a tree by calling `tree.enable_logging()`. By default this will print logging information to the screen, but you can direct that output to file by calling `tree.set_log_filename(file)`. You can switch back to printing by calling `tree.set_log_filename(None)` and you can turn logging off by calling `tree.disable_logging()`.
 
-With all of the above set up, we can create our `thought_seq` object:
+With all the above set up, we can create our `thought_seq` object:
 
 ```python linenums="1"
 thought_seq = Sequence("thought_seq", [
@@ -247,8 +247,8 @@ while True:
     tree.tick_once()
 ```
 
-You should again be able to type to your program and have it reply with speech. You'll need to manually terminate your program since we don't have a check for `"Goodbye"` any more. 
+You should again be able to type to your program and have it reply with speech. You'll need to manually terminate your program since we don't have a check for `"Goodbye"` anymore. 
 
 ## Conclusion
 
-We now have moved all of the management of chat state into our behavior tree. This may feel like a lot of work to get back to where we were at the end of Part 1, but in the [next part](3_tutorial_llm_conditional.md) we'll see how managing the chat state inside the tree allows us to add another language model that will analyze the human's input to decide whether or not it would be appropriate to end the conversation.
+We now have moved all the management of chat state into our behavior tree. This may feel like a lot of work to get back to where we were at the end of Part 1, but in the [next part](3_tutorial_llm_conditional.md) we'll see how managing the chat state inside the tree allows us to add another language model that will analyze the human's input to decide whether it would be appropriate to end the conversation.
