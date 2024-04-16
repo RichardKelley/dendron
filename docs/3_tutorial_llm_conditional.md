@@ -20,12 +20,9 @@ from dendron.controls import Sequence, Fallback
 from dendron import NodeStatus
 
 import torch
-from transformers import BarkModel, BarkProcessor
-from optimum.bettertransformer import BetterTransformer
-
+from piper import PiperVoice
 from spacy.lang.en import English 
 
-import time
 import numpy as np
 import sounddevice as sd
 ```
@@ -100,38 +97,36 @@ Next we define our `TTSAction` and `play_speech` function:
 class TTSAction(dendron.ActionNode):
     def __init__(self, name):
         super().__init__(name)
-        self.processor = BarkProcessor.from_pretrained("suno/bark-small", torch_dtype=torch.bfloat16, attn_implementation="flash_attention_2")
-        self.model = BarkModel.from_pretrained("suno/bark-small").to("cuda")
-        self.model = self.model.to_bettertransformer() 
-        self.model.enable_cpu_offload()
-
+        self.voice = PiperVoice.load("en_US-danny-low.onnx", config_path="en_US-danny-low.onnx.json", use_cuda=False)
+        
     def tick(self):
         try:
             input_text = self.blackboard["speech_in"]
-            inputs = self.processor(text=input_text, voice_preset="v2/en_speaker_9", return_tensors="pt").to("cuda")
-            self.blackboard["speech_out"] = self.model.generate(**inputs, do_sample = True, fine_temperature = 0.4, coarse_temperature = 0.8).cpu().numpy()
+            self.blackboard["speech_out"] = [list(self.voice.synthesize_stream_raw(x, sentence_silence=0.1))[0] for x in input_text]
             self.blackboard["speech_in"] = []
         except Exception as e:
             print("Speech generation exception: ", e)
             return dendron.NodeStatus.FAILURE
-        
+
         return dendron.NodeStatus.SUCCESS
 
 def play_speech(self):
-    num_utterances = self.blackboard["speech_out"].shape[0]
-    
+    num_utterances = len(self.blackboard["speech_out"])
+
     for i in range(num_utterances):
-        sd.play(self.blackboard["speech_out"][i,:], self.model.generation_config.sample_rate)
+        audio = np.frombuffer(self.blackboard["speech_out"][i], dtype=np.int16)
+        a = (audio - 32768) / 65536
+        sd.play(a, 16000)
         sd.wait()
 ```
 
-The class includes a few added bells and whistles, but should be mostly familiar by now. The `play_speech` function is very different, since it appears that we are now processing a series of utterances to speak. To understand why we do this, let's talk about sentence splitting.
+The class includes a few added bells and whistles, but should be mostly familiar by now. The changes in `TTSAction` and `play_speech` all relate to the way in which we are now processing a series of utterances to speak. To understand why we do this, let's talk about sentence splitting.
 
 ### Sentence Splitting
 
-In Part 1, we mentioned that current neural TTS models often struggle with longer utterances. This is something that seems to affect all models, but is particlarly pronounced for smaller models (if you have heard any haunting sounds or screeching from `"bark-small"` you might consider trying the bigger `"bark"`). It turns out you can somewhat mitigate the problem by splitting large utterances into shorter ones. You could do this solely based on string length, but then you're likely to break coherent statements into fragments, which will be spoken in weird ways. It would be best if we could split long strings at natural pause points, like sentence boundaries.
+In Part 1, we mentioned that most current neural TTS models often struggle with longer utterances. This is something that seems to affect all models, but is particularly pronounced for smaller models. It turns out you can somewhat mitigate the problem by splitting large utterances into shorter ones. You could do this solely based on string length, but then you're likely to break coherent statements into fragments, which will be spoken in weird ways. It would be best if we could split long strings at natural pause points, like sentence boundaries.
 
-Here we show a simple strategy for doing this using rule-based AI. You could certainly do better with a learning-based approach, but what we'll do here is quick, easy, and often good enough. The capability we're after is provided by spaCy, which we'll wrap in an `ActionNode`:
+It turns out that Piper supports a version of this already in its `piper-phonemize` library, but in case you want to try different models we show a simple strategy for doing achieving the same result using rule-based AI. You could certainly do better with a learning-based approach, but what we'll do here is quick, easy, and often good enough. The capability we're after is provided by spaCy, which we'll wrap in an `ActionNode`:
 
 ```python linenums="1"
 class SentenceSplitter(dendron.ActionNode):
@@ -158,7 +153,7 @@ In the constructor, we initialize a spaCy pipeline to perform tokenization at th
 
 ## Defining a Single Turn in the Conversation
 
-As in Part 2, we will define a turn in the chat as consisting of speaking, thinking, and listening. Since most of the details are the same as in previous tutorials, we show all of the code while our commentary focuses primarily on differences from previous parts of the tutorial.
+As in Part 2, we will define a turn in the chat as consisting of speaking, thinking, and listening. Since most of the details are the same as in previous tutorials, we show all the code while our commentary focuses primarily on differences from previous parts of the tutorial.
 
 ### The Speech Sequence
 
@@ -184,7 +179,7 @@ chat_behavior_cfg = CausalLMActionConfig(load_in_4bit=True,
                                          do_sample=True,
                                          top_p=0.95,
                                          use_flash_attn_2=True,
-                                         model_name='openchat/openchat_3.5')
+                                         model_name='openchat/openchat-3.5-0106')
 
 chat_node = CausalLMAction('chat_node', chat_behavior_cfg)
 
