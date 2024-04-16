@@ -4,7 +4,7 @@ title: Supporting Code for Tutorial 1, Part 4.
 
 # Supporting Definitions for Tutorial 1, Part 4
 
-As mentioned in [Part 4](4_tutorial_tts_asr_chat.md), I move the node definitions for that part into a separate file named `dendron_tutorial_1.py`, and import that file rather than repeat all of the old class and function definitions. The contents of that file are as follows:
+As mentioned in [Part 4](4_tutorial_tts_asr_chat.md), I move the node definitions for that part into a separate file named `dendron_tutorial_1.py`, and import that file rather than repeat all the old class and function definitions. The contents of that file are as follows:
 
 ```python linenums="1"
 import dendron
@@ -14,6 +14,8 @@ from dendron.controls import Sequence, Fallback
 from dendron import NodeStatus
 
 import torch
+
+from piper import PiperVoice
 
 from transformers import BarkModel, BarkProcessor
 from optimum.bettertransformer import BetterTransformer
@@ -57,28 +59,26 @@ class TimeToThink(dendron.ConditionNode):
 class TTSAction(dendron.ActionNode):
     def __init__(self, name):
         super().__init__(name)
-        self.processor = BarkProcessor.from_pretrained("suno/bark-small", torch_dtype=torch.bfloat16, attn_implementation="flash_attention_2")
-        self.model = BarkModel.from_pretrained("suno/bark-small").to("cuda")
-        self.model = self.model.to_bettertransformer() #BetterTransformer.transform(self.model, keep_original_model=False)
-        self.model.enable_cpu_offload()
-
+        self.voice = PiperVoice.load("en_US-danny-low.onnx", config_path="en_US-danny-low.onnx.json", use_cuda=False)
+        
     def tick(self):
+        input_text = self.blackboard["speech_in"]
         try:
-            input_text = self.blackboard["speech_in"]
-            inputs = self.processor(text=input_text, voice_preset="v2/en_speaker_9", return_tensors="pt").to("cuda")
-            self.blackboard["speech_out"] = self.model.generate(**inputs, do_sample = True, fine_temperature = 0.4, coarse_temperature = 0.8).cpu().numpy()
+            self.blackboard["speech_out"] = [list(self.voice.synthesize_stream_raw(x, sentence_silence=0.1))[0] for x in input_text]
             self.blackboard["speech_in"] = []
         except Exception as e:
             print("Speech generation exception: ", e)
             return dendron.NodeStatus.FAILURE
-        
+
         return dendron.NodeStatus.SUCCESS
 
 def play_speech(self):
-    num_utterances = self.blackboard["speech_out"].shape[0]
-    
+    num_utterances = len(self.blackboard["speech_out"])
+
     for i in range(num_utterances):
-        sd.play(self.blackboard["speech_out"][i,:], self.model.generation_config.sample_rate)
+        audio = np.frombuffer(self.blackboard["speech_out"][i], dtype=np.int16)
+        a = (audio - 32768) / 65536
+        sd.play(a, 16000)
         sd.wait()
 
 class SentenceSplitter(dendron.ActionNode):
