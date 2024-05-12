@@ -149,7 +149,7 @@ class CausalLMAction(ActionNode):
             case False, True:
                 self.bnb_cfg.load_in_8bit = True
             case False, False:
-                pass
+                self.bnb_cfg = None
 
         if cfg.use_flash_attn_2:
             self.attn_implementation = "flash_attention_2"
