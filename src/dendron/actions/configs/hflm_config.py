@@ -33,7 +33,7 @@ class HFLMActionConfig:
         default = False
     )
     device : Optional[str] = field(
-        defualt = "cuda"
+        default = "cuda"
     )
     parallelize : Optional[bool] = field(
         default = False
