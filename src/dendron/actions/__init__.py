@@ -8,3 +8,4 @@ from .causal_lm_action import CausalLMActionConfig, CausalLMAction
 from .image_lm_action import ImageLMActionConfig, ImageLMAction
 
 from .generate import HFLMActionConfig, GenerateAction
+from .loglikelihood import LogLikelihoodActionConfig, LogLikelihoodAction
