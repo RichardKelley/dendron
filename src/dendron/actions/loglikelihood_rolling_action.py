@@ -1,6 +1,6 @@
 from dendron.action_node import ActionNode
 from dendron.basic_types import NodeStatus
-from dendron.configs.hflm_config import HFLMActionConfig
+from dendron.configs.hflm_action_config import HFLMActionConfig
 
 from typing import Callable
 

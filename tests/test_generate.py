@@ -1,6 +1,6 @@
 from dendron import NodeStatus, Blackboard
 from dendron.actions.generate_action import GenerateAction
-from dendron.configs.hflm_config import HFLMActionConfig
+from dendron.configs.hflm_action_config import HFLMActionConfig
 
 def test_generate_action_phi():
     # Create test config for Phi model
