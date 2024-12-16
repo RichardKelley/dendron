@@ -1,6 +1,6 @@
 from dendron.action_node import ActionNode
 from dendron.basic_types import NodeStatus
-from dendron.actions.configs.hflm_config import HFLMActionConfig
+from dendron.configs.hflm_config import HFLMActionConfig
 
 from typing import Callable
 
@@ -8,7 +8,7 @@ import types
 from hflm.huggingface_model import HFLM
 import traceback
 
-class LogProbsAction(ActionNode):
+class GenerateAction(ActionNode):
     """
     An action node that uses a causal language model to generate
     some text based on a prompt contained in the node's 
@@ -26,7 +26,7 @@ class LogProbsAction(ActionNode):
     Args:
         name (str):
             The given name of this node.
-        cfg (CausalLMActionConfig):
+        cfg (HFLMActionConfig):
             The configuration object for this model.
     """
     def __init__(self, name : str, cfg : HFLMActionConfig) -> None:
@@ -115,12 +115,12 @@ class LogProbsAction(ActionNode):
             if self.input_processor:
                 input_text = self.input_processor(input_text)
             
-            output_probs = self.model.loglikelihood_rolling([input_text], disable_tqdm=True)[0]
+            output_text = self.model.generate_until([(input_text, {'max_new_tokens': self.max_new_tokens, "temperature": self.temperature, "do_sample": self.do_sample})], disable_tqdm=True)[0]
 
             if self.output_processor:
-                output_probs = self.output_processor(output_probs)
+                output_text = self.output_processor(output_text)
 
-            self.blackboard[self.output_key] = output_probs
+            self.blackboard[self.output_key] = output_text
 
             return NodeStatus.SUCCESS
         except Exception as ex:
