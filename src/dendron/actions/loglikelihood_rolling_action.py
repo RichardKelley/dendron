@@ -10,11 +10,10 @@ import traceback
 
 class LogLikelihoodRollingAction(ActionNode):
     """
-    An action node that uses a causal language model to generate
-    some text based on a prompt contained in the node's 
-    blackboard.
+    An action node that uses a causal language model to calculate the log-likelihood
+    of a given a prompt in the blackboard.
 
-    This node is based on the Hugging Face transformers library, and will
+    This node is based on the HFLM library, and will
     download the model that you specify by name. This can take a long 
     time and/or use a lot of storage, depending on the model you name.
 

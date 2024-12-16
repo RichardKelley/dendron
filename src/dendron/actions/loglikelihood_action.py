@@ -13,7 +13,7 @@ class LogLikelihoodAction(ActionNode):
     An action node that uses a language model to compute log-likelihoods
     for a list of completion strings given a prompt.
 
-    This node is based on the Hugging Face transformers library, and will
+    This node is based on the HFLM library, and will
     download the model that you specify by name. This can take a long 
     time and/or use a lot of storage, depending on the model you name.
 
