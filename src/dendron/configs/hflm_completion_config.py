@@ -10,10 +10,10 @@ class HFLMCompletionConfig:
     Configuration for a CompletionConditionNode.
 
     The options in this object control what Hugging Face model is used
-    and how the node interacts with the blackboard.
+    and how the node interacts with the blackboard for the completion condition.
 
     Args:
-        model_name (`str`):
+        model (`str`):
             The name of the model to use. This should be a valid name
             corresponding to a Hugging Face model name (including the user
             name).
@@ -30,14 +30,25 @@ class HFLMCompletionConfig:
             determines the status that is ultimately returned upon a `tick()`
             call. The predicate should accept a completion string as input 
             and return a `NodeStatus`. Defaults to "success_fn".
-        auto_load (`Optional[bool]`):
-            An optional boolean indicating whether or not to automatically 
-            load model either from disk or the Hugging Face hub. If `False`,
-            the user is responsible for ensuring that a model is loaded
-            before the first `tick()` is triggered. Defaults to `True`.
         input_key (`Optional[str]`):
             The blackboard key to use for writing and reading the prefix that 
             this node will consume. Defaults to "in".
+        device (`Optional[str]`):
+            The device where the HFLM model will be loaded. Defaults to "cuda".
+        parallelize (`Optional[bool]`):
+            Boolean variable for whether to parallelize the model across
+            multiple GPUs. Defaults to False.
+        dtype (`Optional[Union[str, torch.dtype]]`):
+            The datatype of the input? Model?
+            Defaults to "auto".
+            TODO: get clarification on dtype and if we even need it anymore
+        add_bos_token (`Optional[bool]`):
+            Boolean variable to set the BOS token in the tokenization.
+            Needed for Gemma models. Defaults to False.
+        offload_folder (`Optional[Union[str, os.PathLike]]`):
+            Directory to offload the model to when using disk space
+            for parallelization. Defaults to "./offload". 
+
     """
     model : Union[str, PreTrainedModel]
     completions_key : Optional[str] = field(
@@ -52,28 +63,6 @@ class HFLMCompletionConfig:
     input_key : Optional[str] = field(
         default = "in"
     )
-    tokenizer : Optional[
-        Union[
-            str, PreTrainedTokenizer
-        ]
-    ] = field(
-        default = None
-    )
-    input_key : Optional[str] = field(
-        default = "in"
-    )
-    output_key : Optional[str] = field(
-        default = "out"
-    )
-    max_new_tokens : Optional[int] = field(
-        default = 16
-    )
-    temperature : Optional[float] = field(
-        default = 0.0
-    )
-    truncation : Optional[bool] = field(
-        default = False
-    )
     device : Optional[str] = field(
         default = "cuda"
     )
@@ -86,27 +75,6 @@ class HFLMCompletionConfig:
     add_bos_token : Optional[bool] = field( 
         default = False 
     ) # Need for Gemma-2
-    max_length : Optional[int] = field(
-        default = None
-    )
-    prefix_token_id : Optional[int] = field(
-        default = None
-    )
-    batch_size : Optional[Union[int,str]] = field(
-        default = -1
-    )
-    max_batch_size : Optional[int] = field(
-        default = 1024
-    )
-    parallelize : Optional[bool] = field(
-        default = False
-    )
-    max_memory_per_gpu : Optional[Union[int, str]] = field(
-        default = None
-    )
-    max_cpu_memory : Optional[Union[int, str]] = field(
-        default = None
-    )
     offload_folder : Optional[Union[str, os.PathLike]] = field(
         default = "./offload"
     )
