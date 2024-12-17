@@ -44,7 +44,13 @@ class GenerateAction(ActionNode):
         else:
             self.do_sample = True
 
-        self.model = HFLM(model=cfg.model, device=self.device, parallelize=cfg.parallelize)
+        self.model = HFLM(
+            model=cfg.model, 
+            device=self.device, 
+            parallelize=cfg.parallelize,
+            load_in_4bit=cfg.load_in_4bit,
+            load_in_8bit=cfg.load_in_8bit
+        )
 
         self.input_processor = None
         self.output_processor = None

@@ -54,6 +54,12 @@ class HFLMActionConfig:
             or a torch.dtype. "auto" will attempt to choose the best dtype based on the device.
             Defaults to "auto".
 
+        load_in_8bit (Optional[bool]):
+            Whether to load the model in 8-bit mode. Defaults to False.
+
+        load_in_4bit (Optional[bool]):
+            Whether to load the model in 4-bit mode. Defaults to False. 
+
         add_bos_token (Optional[bool]):
             Whether to add a beginning-of-sequence token to the input. Required for some
             models like Gemma. Defaults to False.
@@ -88,6 +94,8 @@ class HFLMActionConfig:
     device: Optional[str] = field(default="cuda")
     parallelize: Optional[bool] = field(default=False)
     dtype: Optional[Union[str, torch.dtype]] = field(default="auto")
+    load_in_8bit: Optional[bool] = field(default=False)
+    load_in_4bit: Optional[bool] = field(default=False)
     add_bos_token: Optional[bool] = field(default=False)
     max_length: Optional[int] = field(default=None)
     prefix_token_id: Optional[int] = field(default=None)

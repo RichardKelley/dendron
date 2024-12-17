@@ -46,8 +46,13 @@ class CompletionCondition(ConditionNode):
 
         self.logprobs_out_key = cfg.logprobs_out_key
 
-        self.model = HFLM(model=cfg.model, device=self.device, parallelize=cfg.parallelize)
-
+        self.model = HFLM(
+            model=cfg.model, 
+            device=self.device, 
+            parallelize=cfg.parallelize,
+            load_in_4bit=cfg.load_in_4bit,
+            load_in_8bit=cfg.load_in_8bit
+        )
     def set_model(self, new_model) -> None:
         """
         Set a new model to use for generating text.
