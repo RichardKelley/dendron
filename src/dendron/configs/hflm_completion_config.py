@@ -73,6 +73,35 @@ class HFLMCompletionConfig:
     _add_bos_token: Optional[bool] = field(default=False)
     _offload_folder: Optional[Union[str, os.PathLike]] = field(default="./offload")
 
+    def __init__(
+        self,
+        model: Union[str, PreTrainedModel],
+        completions_key: Optional[str] = "completions_in",
+        logprobs_out_key: Optional[str] = "probs_out",
+        success_fn_key: Optional[str] = "success_fn",
+        input_key: Optional[str] = "in",
+        device: Optional[str] = "cuda",
+        parallelize: Optional[bool] = False,
+        dtype: Optional[Union[str, torch.dtype]] = "auto",
+        load_in_8bit: Optional[bool] = False,
+        load_in_4bit: Optional[bool] = False,
+        add_bos_token: Optional[bool] = False,
+        offload_folder: Optional[Union[str, os.PathLike]] = "./offload"
+    ):
+        # Map the public parameter names to internal underscore names
+        self._model = model
+        self._completions_key = completions_key
+        self._logprobs_out_key = logprobs_out_key
+        self._success_fn_key = success_fn_key
+        self._input_key = input_key
+        self._device = device
+        self._parallelize = parallelize
+        self._dtype = dtype
+        self._load_in_8bit = load_in_8bit
+        self._load_in_4bit = load_in_4bit
+        self._add_bos_token = add_bos_token
+        self._offload_folder = offload_folder
+
     @property
     def model_name(self):
         if isinstance(self._model, str):

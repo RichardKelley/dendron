@@ -103,6 +103,47 @@ class HFLMActionConfig:
     _max_batch_size: Optional[int] = field(default=1024)
     _offload_folder: Optional[Union[str, os.PathLike]] = field(default="./offload")
 
+    def __init__(
+        self,
+        model: Union[str, PreTrainedModel],
+        tokenizer: Optional[Union[str, PreTrainedTokenizer]] = None,
+        input_key: Optional[str] = "in",
+        output_key: Optional[str] = "out",
+        max_new_tokens: Optional[int] = 16,
+        temperature: Optional[float] = 0.0,
+        truncation: Optional[bool] = False,
+        device: Optional[str] = "cuda",
+        parallelize: Optional[bool] = False,
+        dtype: Optional[Union[str, torch.dtype]] = "auto",
+        load_in_8bit: Optional[bool] = False,
+        load_in_4bit: Optional[bool] = False,
+        add_bos_token: Optional[bool] = False,
+        max_length: Optional[int] = None,
+        prefix_token_id: Optional[int] = None,
+        batch_size: Optional[Union[int, str]] = -1,
+        max_batch_size: Optional[int] = 1024,
+        offload_folder: Optional[Union[str, os.PathLike]] = "./offload"
+    ):
+        # Map the public parameter names to internal underscore names
+        self._model = model
+        self._tokenizer = tokenizer
+        self._input_key = input_key
+        self._output_key = output_key
+        self._max_new_tokens = max_new_tokens
+        self._temperature = temperature
+        self._truncation = truncation
+        self._device = device
+        self._parallelize = parallelize
+        self._dtype = dtype
+        self._load_in_8bit = load_in_8bit
+        self._load_in_4bit = load_in_4bit
+        self._add_bos_token = add_bos_token
+        self._max_length = max_length
+        self._prefix_token_id = prefix_token_id
+        self._batch_size = batch_size
+        self._max_batch_size = max_batch_size
+        self._offload_folder = offload_folder
+
     @property
     def model_name(self):
         if isinstance(self._model, str):
