@@ -60,15 +60,70 @@ class HFLMCompletionConfig:
             Directory path where model weights will be offloaded when using disk 
             offloading for large models. Defaults to "./offload".
     """
-    model: Union[str, PreTrainedModel]
-    completions_key: Optional[str] = field(default="completions_in")
-    logprobs_out_key: Optional[str] = field(default="probs_out")
-    success_fn_key: Optional[str] = field(default="success_fn")
-    input_key: Optional[str] = field(default="in")
-    device: Optional[str] = field(default="cuda")
-    parallelize: Optional[bool] = field(default=False)
-    dtype: Optional[Union[str, torch.dtype]] = field(default="auto")
-    load_in_8bit: Optional[bool] = field(default=False)
-    load_in_4bit: Optional[bool] = field(default=False)
-    add_bos_token: Optional[bool] = field(default=False)
-    offload_folder: Optional[Union[str, os.PathLike]] = field(default="./offload")
+    _model: Union[str, PreTrainedModel]
+    _completions_key: Optional[str] = field(default="completions_in")
+    _logprobs_out_key: Optional[str] = field(default="probs_out")
+    _success_fn_key: Optional[str] = field(default="success_fn")
+    _input_key: Optional[str] = field(default="in")
+    _device: Optional[str] = field(default="cuda")
+    _parallelize: Optional[bool] = field(default=False)
+    _dtype: Optional[Union[str, torch.dtype]] = field(default="auto")
+    _load_in_8bit: Optional[bool] = field(default=False)
+    _load_in_4bit: Optional[bool] = field(default=False)
+    _add_bos_token: Optional[bool] = field(default=False)
+    _offload_folder: Optional[Union[str, os.PathLike]] = field(default="./offload")
+
+    @property
+    def model_name(self):
+        if isinstance(self._model, str):
+            return self._model 
+        elif isinstance(self._model, PreTrainedModel):
+            return self._model.name_or_path
+
+    @property
+    def model(self):
+        return self._model
+    
+    @property
+    def completions_key(self):
+        return self._completions_key
+    
+    @property
+    def logprobs_out_key(self):
+        return self._logprobs_out_key
+    
+    @property
+    def success_fn_key(self):
+        return self._success_fn_key
+    
+    @property
+    def input_key(self):
+        return self._input_key
+    
+    @property
+    def device(self):
+        return self._device
+    
+    @property
+    def parallelize(self):
+        return self._parallelize
+    
+    @property
+    def dtype(self):
+        return self._dtype
+    
+    @property
+    def load_in_8bit(self):
+        return self._load_in_8bit
+    
+    @property
+    def load_in_4bit(self):
+        return self._load_in_4bit
+    
+    @property
+    def add_bos_token(self):
+        return self._add_bos_token
+    
+    @property
+    def offload_folder(self):
+        return self._offload_folder

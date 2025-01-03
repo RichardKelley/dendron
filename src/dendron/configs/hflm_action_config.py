@@ -84,21 +84,100 @@ class HFLMActionConfig:
             Directory path where model weights will be offloaded when using disk 
             offloading for large models. Defaults to "./offload".
     """
-    model: Union[str, PreTrainedModel]
-    tokenizer: Optional[Union[str, PreTrainedTokenizer]] = field(default=None)
-    input_key: Optional[str] = field(default="in")
-    output_key: Optional[str] = field(default="out")
-    max_new_tokens: Optional[int] = field(default=16)
-    temperature: Optional[float] = field(default=0.0)
-    truncation: Optional[bool] = field(default=False)
-    device: Optional[str] = field(default="cuda")
-    parallelize: Optional[bool] = field(default=False)
-    dtype: Optional[Union[str, torch.dtype]] = field(default="auto")
-    load_in_8bit: Optional[bool] = field(default=False)
-    load_in_4bit: Optional[bool] = field(default=False)
-    add_bos_token: Optional[bool] = field(default=False)
-    max_length: Optional[int] = field(default=None)
-    prefix_token_id: Optional[int] = field(default=None)
-    batch_size: Optional[Union[int, str]] = field(default=-1)
-    max_batch_size: Optional[int] = field(default=1024)
-    offload_folder: Optional[Union[str, os.PathLike]] = field(default="./offload")
+    _model: Union[str, PreTrainedModel]
+    _tokenizer: Optional[Union[str, PreTrainedTokenizer]] = field(default=None)
+    _input_key: Optional[str] = field(default="in")
+    _output_key: Optional[str] = field(default="out")
+    _max_new_tokens: Optional[int] = field(default=16)
+    _temperature: Optional[float] = field(default=0.0)
+    _truncation: Optional[bool] = field(default=False)
+    _device: Optional[str] = field(default="cuda")
+    _parallelize: Optional[bool] = field(default=False)
+    _dtype: Optional[Union[str, torch.dtype]] = field(default="auto")
+    _load_in_8bit: Optional[bool] = field(default=False)
+    _load_in_4bit: Optional[bool] = field(default=False)
+    _add_bos_token: Optional[bool] = field(default=False)
+    _max_length: Optional[int] = field(default=None)
+    _prefix_token_id: Optional[int] = field(default=None)
+    _batch_size: Optional[Union[int, str]] = field(default=-1)
+    _max_batch_size: Optional[int] = field(default=1024)
+    _offload_folder: Optional[Union[str, os.PathLike]] = field(default="./offload")
+
+    @property
+    def model_name(self):
+        if isinstance(self._model, str):
+            return self._model 
+        elif isinstance(self._model, PreTrainedModel):
+            return self._model.name_or_path
+        
+    @property
+    def model(self):
+        return self._model
+    
+    @property
+    def tokenizer(self):
+        return self._tokenizer
+    
+    @property
+    def input_key(self):
+        return self._input_key
+    
+    @property
+    def output_key(self):
+        return self._output_key
+    
+    @property
+    def max_new_tokens(self):
+        return self._max_new_tokens
+    
+    @property
+    def temperature(self):
+        return self._temperature
+    
+    @property
+    def truncation(self):
+        return self._truncation
+    
+    @property
+    def device(self):
+        return self._device
+    
+    @property
+    def parallelize(self):
+        return self._parallelize
+    
+    @property
+    def dtype(self):
+        return self._dtype
+    
+    @property
+    def load_in_8bit(self):
+        return self._load_in_8bit
+    
+    @property
+    def load_in_4bit(self):
+        return self._load_in_4bit
+    
+    @property
+    def add_bos_token(self):
+        return self._add_bos_token
+    
+    @property
+    def max_length(self):
+        return self._max_length
+    
+    @property
+    def prefix_token_id(self):
+        return self._prefix_token_id
+    
+    @property
+    def batch_size(self):
+        return self._batch_size
+    
+    @property
+    def max_batch_size(self):
+        return self._max_batch_size
+    
+    @property
+    def offload_folder(self):
+        return self._offload_folder
