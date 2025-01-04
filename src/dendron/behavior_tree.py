@@ -73,15 +73,16 @@ class BehaviorTree:
             model_config (ModelConfig):
                 Configuration object containing model parameters
         """
-        name = model_config.model_name
-        self.model_configs[name] = model_config
-        self.models[name] = HFLM(
-            model=model_config.model,
-            device=model_config.device,
-            parallelize=model_config.parallelize,
-            load_in_4bit=model_config.load_in_4bit,
-            load_in_8bit=model_config.load_in_8bit
-        )
+        if model_config.model_name not in self.model_configs:
+            name = model_config.model_name
+            self.model_configs[name] = model_config
+            self.models[name] = HFLM(
+                model=model_config.model,
+                device=model_config.device,
+                parallelize=model_config.parallelize,
+                load_in_4bit=model_config.load_in_4bit,
+                load_in_8bit=model_config.load_in_8bit
+            )
 
     def __getstate__(self):
         state = self.__dict__.copy()
