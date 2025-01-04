@@ -89,6 +89,7 @@ class HFLMActionConfig:
     _input_key: Optional[str] = field(default="in")
     _output_key: Optional[str] = field(default="out")
     _max_new_tokens: Optional[int] = field(default=16)
+    _completions_key: Optional[str] = field(default="completions")
     _temperature: Optional[float] = field(default=0.0)
     _truncation: Optional[bool] = field(default=False)
     _device: Optional[str] = field(default="cuda")
@@ -109,6 +110,7 @@ class HFLMActionConfig:
         tokenizer: Optional[Union[str, PreTrainedTokenizer]] = None,
         input_key: Optional[str] = "in",
         output_key: Optional[str] = "out",
+        completions_key: Optional[str] = "completions",
         max_new_tokens: Optional[int] = 16,
         temperature: Optional[float] = 0.0,
         truncation: Optional[bool] = False,
@@ -129,6 +131,7 @@ class HFLMActionConfig:
         self._tokenizer = tokenizer
         self._input_key = input_key
         self._output_key = output_key
+        self._completions_key = completions_key
         self._max_new_tokens = max_new_tokens
         self._temperature = temperature
         self._truncation = truncation
@@ -166,6 +169,10 @@ class HFLMActionConfig:
     @property
     def output_key(self):
         return self._output_key
+    
+    @property
+    def completions_key(self):
+        return self._completions_key
     
     @property
     def max_new_tokens(self):
