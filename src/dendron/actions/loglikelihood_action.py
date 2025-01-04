@@ -1,6 +1,7 @@
 from dendron.action_node import ActionNode
 from dendron.basic_types import NodeStatus
 from dendron.configs.hflm_action_config import HFLMActionConfig
+from dendron.behavior_tree import BehaviorTree
 
 from typing import Callable, List, Tuple
 
@@ -27,21 +28,14 @@ class LogLikelihoodAction(ActionNode):
         super().__init__(name)
 
         self.prompt_key = cfg.input_key
-        self.completions_key = cfg.completions_key  # New key for list of completions
+        self.completions_key = cfg.completions_key 
         self.output_key = cfg.output_key
         self.device = cfg.device
         self.torch_dtype = cfg.dtype
 
-        self.model = HFLM(
-            model=cfg.model, 
-            device=self.device, 
-            parallelize=cfg.parallelize,
-            load_in_4bit=cfg.load_in_4bit,
-            load_in_8bit=cfg.load_in_8bit
-        )
-
         self.input_processor = None
         self.output_processor = None
+        self.config = cfg
 
     def set_model(self, new_model) -> None:
         """
@@ -102,7 +96,7 @@ class LogLikelihoodAction(ActionNode):
             prompt_completion_pairs = ((prompt, completion) for completion in completions)
             
             # Compute log-likelihoods
-            log_probs = self.model.loglikelihood(prompt_completion_pairs, disable_tqdm=True)
+            log_probs = self.tree.get_model(self.config.model).loglikelihood(prompt_completion_pairs, disable_tqdm=True)
 
             if self.output_processor:
                 log_probs = self.output_processor(log_probs)
@@ -115,3 +109,16 @@ class LogLikelihoodAction(ActionNode):
             print(traceback.format_exc())
 
             return NodeStatus.FAILURE
+
+    def set_tree(self, tree : BehaviorTree) -> None:
+        """
+        Set the behavior tree for this node, which includes setting up the blackboard
+        and registering the model configuration with the tree.
+
+        Args:
+            tree (BehaviorTree):
+                The behavior tree this node belongs to.
+        """
+        self.tree = tree
+        self.set_blackboard(tree.blackboard)
+        tree.add_model(self.config)

@@ -1,6 +1,7 @@
 from dendron.action_node import ActionNode
 from dendron.basic_types import NodeStatus
 from dendron.configs.hflm_action_config import HFLMActionConfig
+from dendron.behavior_tree import BehaviorTree
 
 from typing import Callable
 
@@ -44,21 +45,20 @@ class GenerateAction(ActionNode):
         else:
             self.do_sample = True
 
-        self.model = HFLM(
-            model=cfg.model, 
-            device=self.device, 
-            parallelize=cfg.parallelize,
-            load_in_4bit=cfg.load_in_4bit,
-            load_in_8bit=cfg.load_in_8bit
-        )
+        self.config = cfg
 
         self.input_processor = None
         self.output_processor = None
 
+    def set_tree(self, tree : BehaviorTree) -> None:
+        self.tree = tree
+        self.set_blackboard(tree.blackboard)
+        tree.add_model(self.config)
+
     def set_model(self, new_model) -> None:
         """
-        TODO: I'm not sure what type new_model should be
-              if it is supposed to be an HFLM model, then we need to adjust this
+        TODO: This should take a model config or a name, and propagate
+        that to the tree's model map.
         """
         self.model = new_model
 
@@ -120,8 +120,14 @@ class GenerateAction(ActionNode):
 
             if self.input_processor:
                 input_text = self.input_processor(input_text)
-            
-            output_text = self.model.generate_until([(input_text, {'max_new_tokens': self.max_new_tokens, "temperature": self.temperature, "do_sample": self.do_sample})], disable_tqdm=True)[0]
+
+            output_text = self.tree.get_model(self.config.model).generate_until(
+                [(input_text, 
+                  {'max_new_tokens': self.max_new_tokens, 
+                   "temperature": self.temperature, 
+                   "do_sample": self.do_sample
+                  })], 
+                disable_tqdm=True)[0]
 
             if self.output_processor:
                 output_text = self.output_processor(output_text)

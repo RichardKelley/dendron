@@ -1,6 +1,7 @@
 from dendron.action_node import ActionNode
 from dendron.basic_types import NodeStatus
 from dendron.configs.hflm_action_config import HFLMActionConfig
+from dendron.behavior_tree import BehaviorTree
 
 from typing import Callable
 
@@ -43,16 +44,9 @@ class LogLikelihoodRollingAction(ActionNode):
         else:
             self.do_sample = True
 
-        self.model = HFLM(
-            model=cfg.model, 
-            device=self.device, 
-            parallelize=cfg.parallelize,
-            load_in_4bit=cfg.load_in_4bit,
-            load_in_8bit=cfg.load_in_8bit
-        )
-
         self.input_processor = None
         self.output_processor = None
+        self.config = cfg
 
     def set_model(self, new_model) -> None:
         """
@@ -120,7 +114,7 @@ class LogLikelihoodRollingAction(ActionNode):
             if self.input_processor:
                 input_text = self.input_processor(input_text)
             
-            output_probs = self.model.loglikelihood_rolling([input_text], disable_tqdm=True)[0]
+            output_probs = self.tree.get_model(self.config.model).loglikelihood_rolling([input_text], disable_tqdm=True)[0]
 
             if self.output_processor:
                 output_probs = self.output_processor(output_probs)
@@ -133,3 +127,16 @@ class LogLikelihoodRollingAction(ActionNode):
             print(traceback.format_exc())
 
             return NodeStatus.FAILURE
+
+    def set_tree(self, tree : BehaviorTree) -> None:
+        """
+        Set the behavior tree for this node, which includes setting up the blackboard
+        and registering the model configuration with the tree.
+
+        Args:
+            tree (BehaviorTree):
+                The behavior tree this node belongs to.
+        """
+        self.tree = tree
+        self.set_blackboard(tree.blackboard)
+        tree.add_model(self.config)
