@@ -45,6 +45,12 @@ class TreeNode:
                 The new tree this node is a part of.
         """
         self.tree = tree
+        self.set_blackboard(tree.blackboard)
+        for child in self.children():
+            child.set_tree(tree)
+
+    def children(self):
+        raise NotImplementedError("children should be defined in subclass.")
 
     def set_logger(self, new_logger) -> None:
         raise NotImplementedError("set_logger should be defined in subclass.")
