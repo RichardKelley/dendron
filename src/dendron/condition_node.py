@@ -1,7 +1,7 @@
 from .basic_types import NodeType, NodeStatus
 from .tree_node import TreeNode
 
-from typing import Optional
+from typing import Optional, List
 
 import logging
 
@@ -21,6 +21,9 @@ class ConditionNode(TreeNode):
     
     def __init__(self, name) -> None:
         super().__init__(name)
+
+    def children(self) -> List[TreeNode]:
+        return []
 
     def set_logger(self, new_logger) -> None:
         """

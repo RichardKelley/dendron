@@ -2,7 +2,7 @@ from .basic_types import NodeType, NodeStatus
 from .tree_node import TreeNode
 
 import typing
-from typing import Optional
+from typing import Optional, List
 
 import logging
 
@@ -25,6 +25,9 @@ class DecoratorNode(TreeNode):
     def __init__(self, name, child : TreeNode = None) -> None:
         super().__init__(name)
         self.child_node : TreeNode = child
+
+    def children(self) -> List[TreeNode]:
+        return [self.child_node]
 
     def set_logger(self, new_logger) -> None:
         """

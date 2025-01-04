@@ -42,6 +42,9 @@ class ControlNode(TreeNode):
         for c in self.children:
             c.set_tree(tree)
 
+    def children(self) -> List[TreeNode]:
+        return self.children
+
     def set_logger(self, new_logger) -> None:
         """
         Set the logger for this node, and then forward the logger to the
