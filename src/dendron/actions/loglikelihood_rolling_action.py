@@ -1,12 +1,12 @@
 from dendron.action_node import ActionNode
 from dendron.basic_types import NodeStatus
-from dendron.configs.hflm_action_config import HFLMActionConfig
+from dendron.configs.lm_action_config import LMActionConfig
+from dendron.configs.hflm_config import HFLMConfig
 from dendron.behavior_tree import BehaviorTree
 
 from typing import Callable
 
 import types
-from hflm.huggingface_model import HFLM
 import traceback
 
 class LogLikelihoodRollingAction(ActionNode):
@@ -29,15 +29,13 @@ class LogLikelihoodRollingAction(ActionNode):
         cfg (CausalLMActionConfig):
             The configuration object for this model.
     """
-    def __init__(self, name : str, cfg : HFLMActionConfig) -> None:
-        super().__init__(name)
+    def __init__(self, model_cfg : HFLMConfig, node_cfg : LMActionConfig) -> None:
+        super().__init__(node_cfg.node_name)
 
-        self.input_key = cfg.input_key
-        self.output_key = cfg.output_key
-        self.device = cfg.device
-        self.max_new_tokens = cfg.max_new_tokens
-        self.torch_dtype = cfg.dtype
-        self.temperature = cfg.temperature
+        self.input_key = node_cfg.input_key
+        self.output_key = node_cfg.output_key
+        self.max_new_tokens = node_cfg.max_new_tokens
+        self.temperature = node_cfg.temperature
 
         if self.temperature == 0.0: 
             self.do_sample = False
@@ -46,7 +44,8 @@ class LogLikelihoodRollingAction(ActionNode):
 
         self.input_processor = None
         self.output_processor = None
-        self.config = cfg
+        self.node_config = node_cfg
+        self.model_config = model_cfg
 
     def set_model(self, new_model) -> None:
         """
@@ -114,7 +113,7 @@ class LogLikelihoodRollingAction(ActionNode):
             if self.input_processor:
                 input_text = self.input_processor(input_text)
             
-            output_probs = self.tree.get_model(self.config.model).loglikelihood_rolling([input_text], disable_tqdm=True)[0]
+            output_probs = self.tree.get_model(self.model_config.model_name).loglikelihood_rolling([input_text], disable_tqdm=True)[0]
 
             if self.output_processor:
                 output_probs = self.output_processor(output_probs)
@@ -139,4 +138,4 @@ class LogLikelihoodRollingAction(ActionNode):
         """
         self.tree = tree
         self.set_blackboard(tree.blackboard)
-        tree.add_model(self.config)
+        tree.add_model(self.model_config)

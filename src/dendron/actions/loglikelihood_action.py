@@ -1,12 +1,12 @@
 from dendron.action_node import ActionNode
 from dendron.basic_types import NodeStatus
-from dendron.configs.hflm_action_config import HFLMActionConfig
+from dendron.configs.lm_action_config import LMActionConfig
+from dendron.configs.hflm_config import HFLMConfig
 from dendron.behavior_tree import BehaviorTree
 
-from typing import Callable, List, Tuple
+from typing import Callable
 
 import types
-from hflm.huggingface_model import HFLM
 import traceback
 
 class LogLikelihoodAction(ActionNode):
@@ -24,18 +24,17 @@ class LogLikelihoodAction(ActionNode):
         cfg (HFLMActionConfig):
             The configuration object for this model.
     """
-    def __init__(self, name: str, cfg: HFLMActionConfig) -> None:
-        super().__init__(name)
+    def __init__(self, model_cfg: HFLMConfig, node_cfg: LMActionConfig) -> None:
+        super().__init__(node_cfg.node_name)
 
-        self.prompt_key = cfg.input_key
-        self.completions_key = cfg.completions_key 
-        self.output_key = cfg.output_key
-        self.device = cfg.device
-        self.torch_dtype = cfg.dtype
+        self.prompt_key = node_cfg.input_key
+        self.completions_key = node_cfg.completions_key 
+        self.output_key = node_cfg.output_key
 
         self.input_processor = None
         self.output_processor = None
-        self.config = cfg
+        self.node_config = node_cfg
+        self.model_config = model_cfg
 
     def set_model(self, new_model) -> None:
         """
@@ -96,7 +95,7 @@ class LogLikelihoodAction(ActionNode):
             prompt_completion_pairs = ((prompt, completion) for completion in completions)
             
             # Compute log-likelihoods
-            log_probs = self.tree.get_model(self.config.model).loglikelihood(prompt_completion_pairs, disable_tqdm=True)
+            log_probs = self.tree.get_model(self.model_config.model_name).loglikelihood(prompt_completion_pairs, disable_tqdm=True)
 
             if self.output_processor:
                 log_probs = self.output_processor(log_probs)
@@ -121,4 +120,4 @@ class LogLikelihoodAction(ActionNode):
         """
         self.tree = tree
         self.set_blackboard(tree.blackboard)
-        tree.add_model(self.config)
+        tree.add_model(self.model_config)
