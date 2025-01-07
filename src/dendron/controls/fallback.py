@@ -5,6 +5,9 @@ from ..control_node import ControlNode
 from typing import List 
 
 class Fallback(ControlNode):
+
+    _used_names = set(["fallback"])
+
     """
     A Fallback node is a control node that ticks its children in 
     sequence, until a child returns `SUCCESS`, at which point it
@@ -21,10 +24,33 @@ class Fallback(ControlNode):
             node. Will be ticked in the order they are given.            
     """
 
-    def __init__(self, name, children : List[TreeNode] = []) -> None:
-        super().__init__(name, children)
+    def __init__(self, children : List[TreeNode] = [], name : str = "fallback") -> None:
+        super().__init__(children)
+
+        self._name = None
+        self.name = name
 
         self.current_child_idx = 0
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        if self._name is not None:
+            Fallback._used_names.remove(self._name)
+
+        if value in Fallback._used_names:
+            suffix = 0
+            new_name = f"{value}_{suffix}"
+            while new_name in Fallback._used_names:
+                suffix += 1
+                new_name = f"{value}_{suffix}"
+            value = new_name
+        
+        Fallback._used_names.add(value)
+        self._name = value
 
     def reset(self) -> None:
         """

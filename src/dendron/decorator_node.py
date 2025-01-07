@@ -9,6 +9,9 @@ import logging
 BehaviorTree = typing.NewType("BehaviorTree", None)
 
 class DecoratorNode(TreeNode):
+
+    _used_names = set(["decorator"])
+    
     """
     A decorator is a "wrapper" around a single node. The purpose of 
     the decorator is to modify or support the action of its child in
@@ -22,9 +25,33 @@ class DecoratorNode(TreeNode):
             set before this node's `tick()` function is first called.
     """
 
-    def __init__(self, name, child : TreeNode = None) -> None:
-        super().__init__(name)
+    def __init__(self, child : TreeNode = None, name : str = "decorator") -> None:
+        super().__init__()
+        
+        self._name = None
+        self.name = name
+
         self.child_node : TreeNode = child
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        if self._name is not None:
+            DecoratorNode._used_names.remove(self._name)
+
+        if value in DecoratorNode._used_names:
+            suffix = 0
+            new_name = f"{value}_{suffix}"
+            while new_name in DecoratorNode._used_names:
+                suffix += 1
+                new_name = f"{value}_{suffix}"
+            value = new_name
+        
+        DecoratorNode._used_names.add(value)
+        self._name = value
 
     def children(self) -> List[TreeNode]:
         return [self.child_node]

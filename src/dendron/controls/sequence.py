@@ -5,6 +5,8 @@ from ..control_node import ControlNode
 from typing import List
 
 class Sequence(ControlNode):
+
+    _used_names = set(["sequence"])
     """
     A Sequence node is a control node that ticks its children in
     sequence, until a child returns `FAILURE`, at which point it
@@ -19,10 +21,33 @@ class Sequence(ControlNode):
             node. Will be ticked in the order they are given.
     """
 
-    def __init__(self, name, children : List[TreeNode] = []) -> None:
-        super().__init__(name, children)
+    def __init__(self, children : List[TreeNode] = [], name : str = "sequence") -> None:
+        super().__init__(children)
+
+        self._name = None
+        self.name = name
 
         self.current_child_idx = 0
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        if self._name is not None:
+            Sequence._used_names.remove(self._name)
+
+        if value in Sequence._used_names:
+            suffix = 0
+            new_name = f"{value}_{suffix}"
+            while new_name in Sequence._used_names:
+                suffix += 1
+                new_name = f"{value}_{suffix}"
+            value = new_name
+
+        Sequence._used_names.add(value)
+        self._name = value
 
     def reset(self) -> None:
         """

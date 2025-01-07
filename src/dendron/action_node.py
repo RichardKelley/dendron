@@ -6,6 +6,9 @@ from typing import Optional, List
 import logging
 
 class ActionNode(TreeNode):
+
+    _used_names = set(["action"])
+
     """
     An action node encapsulates the notion of a self-contained action
     or behavior. The bulk of the observable actions of a behavior tree
@@ -19,9 +22,31 @@ class ActionNode(TreeNode):
             The given name of this node.
     """
 
-    def __init__(self, name) -> None:
-        super().__init__(name)
+    def __init__(self, name="action") -> None:
+        super().__init__()
+        self._name = None
+        self.name = name
 
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        if self._name is not None:
+            ActionNode._used_names.remove(self._name)
+
+        if value in ActionNode._used_names:
+            suffix = 0
+            new_name = f"{value}_{suffix}"
+            while new_name in ActionNode._used_names:
+                suffix += 1
+                new_name = f"{value}_{suffix}"
+            value = new_name
+        
+        ActionNode._used_names.add(value)
+        self._name = value
+        
     def children(self) -> List[TreeNode]:
         return []
 
