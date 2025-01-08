@@ -25,8 +25,15 @@ nav:
       - api/actions/image_lm_action.md
       - api/actions/pipeline_action.md
       - api/actions/simple_action.md
+      - api/actions/generate_action.md
+      - api/actions/loglikelihood_action.md
+      - api/actions/loglikelihood_rolling_action.md
+    - Configs:
+      - api/configs/hflm_config.md
+      - api/configs/lm_action_config.md
+      - api/configs/lm_completion_config.md
     - Condition Nodes:
-      - api/conditions/completion_condition.md
+      - api/conditions/lm_completion_condition.md
       - api/conditions/simple_condition.md
     - Control Nodes:
       - api/controls/fallback.md
@@ -54,9 +61,31 @@ theme:
   name: material
   favicon: img/favicon.ico
   logo: img/favicon.ico
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
   features:
     - navigation.expand
     - content.code.copy
+    - navigation.tabs
+    - navigation.sections
+    - navigation.indexes
+    - search.suggest
+    - search.highlight
+
 
 extra_javascript:
   - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML
