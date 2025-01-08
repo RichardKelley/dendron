@@ -7,6 +7,7 @@ from typing import List
 class Sequence(ControlNode):
 
     _used_names = set(["sequence"])
+    
     """
     A Sequence node is a control node that ticks its children in
     sequence, until a child returns `FAILURE`, at which point it
