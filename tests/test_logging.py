@@ -1,6 +1,8 @@
 from dendron import *
 
-def test_logging0(capsys):
+# moving away from XML-based tree factory, so marking this as deprecated
+# to remove from tests.
+def deprecated_test_logging0(capsys):
 
     factory = BehaviorTreeFactory()
     factory.register_simple_action("Action1", lambda: NodeStatus.FAILURE)
