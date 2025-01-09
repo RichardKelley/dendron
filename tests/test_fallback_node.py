@@ -7,7 +7,7 @@ def test_failing_fallback():
     n1 = AlwaysFailure("Failure1")
     n2 = AlwaysFailure("Failure2")
 
-    fallback = Fallback("Fallback1", [n1, n2])
+    fallback = Fallback([n1, n2])
 
     result = fallback.execute_tick()
 
