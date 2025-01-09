@@ -3,11 +3,11 @@ from dendron.actions.generate_action import GenerateAction
 from dendron.configs.hflm_config import HFLMConfig
 from dendron.configs.lm_action_config import LMActionConfig
 
-def test_generate_action_phi():
-    # Create test config for Phi model
+def test_generate_action_llama():
+    # Create test config for llama model
 
     model_config = HFLMConfig(
-        model="microsoft/phi-4",
+        model="meta-llama/Llama-3.1-8B-Instruct",
         device="cuda",
         parallelize=False,
         load_in_8bit=True
@@ -32,16 +32,13 @@ def test_generate_action_phi():
     # Execute node
     result = tree.tick_once()
 
-
-    print("OUT: ",tree.blackboard)
-
     # Verify results
     assert result == NodeStatus.SUCCESS
     assert "4" in tree.blackboard["out"]  # Basic sanity check of output
 
 def test_generate_action_with_processors():
     model_config = HFLMConfig(
-        model="microsoft/phi-4",
+        model="meta-llama/Llama-3.1-8B-Instruct",
         device="cuda",
         parallelize=False,
         load_in_8bit=True
@@ -67,17 +64,13 @@ def test_generate_action_with_processors():
 
     tree = BehaviorTree("generate-tree") 
     tree.set_root(node)
-    tree.blackboard["in"] = "What is 2+2?"
-    
+    tree.blackboard["in"] = "What is 2+2? Be sure to preceed the answer with A:"
+        
     result = tree.tick_once()
     
-
-    print(tree.blackboard["out"])
     assert result == NodeStatus.SUCCESS
     assert "4" in tree.blackboard["out"]
 
-
-
 if __name__ == "__main__":
-    test_generate_action_phi()
+    test_generate_action_llama()
     test_generate_action_with_processors()
