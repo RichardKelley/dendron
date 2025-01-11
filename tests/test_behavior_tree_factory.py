@@ -1,6 +1,8 @@
 from dendron import *
 
-def test_create_from_groot0():
+# moving away from XML-based tree factory, so marking this as deprecated
+# to remove from tests.
+def deprecated_test_create_from_groot0():
 
     factory = BehaviorTreeFactory()
     factory.register_simple_action("Action1", lambda: NodeStatus.FAILURE)

@@ -1,11 +1,14 @@
 from .basic_types import NodeType, NodeStatus
 from .tree_node import TreeNode
 
-from typing import Optional
+from typing import Optional, List
 
 import logging
 
 class ConditionNode(TreeNode):
+
+    _used_names = set(["condition"])
+
     """
     A condition node is a node that always *must* return either `SUCCESS` 
     or `FAILURE` - it can never be left in a `RUNNING` state. Such nodes
@@ -19,8 +22,33 @@ class ConditionNode(TreeNode):
             The given name of this node.
     """
     
-    def __init__(self, name) -> None:
-        super().__init__(name)
+    def __init__(self, name : str = "condition") -> None:
+        super().__init__()
+        self._name = None
+        self.name = name
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        if self._name is not None:
+            ConditionNode._used_names.remove(self._name)
+
+        if value in ConditionNode._used_names:
+            suffix = 0
+            new_name = f"{value}_{suffix}"
+            while new_name in ConditionNode._used_names:
+                suffix += 1
+                new_name = f"{value}_{suffix}"
+            value = new_name
+        
+        ConditionNode._used_names.add(value)
+        self._name = value
+
+    def children(self) -> List[TreeNode]:
+        return []
 
     def set_logger(self, new_logger) -> None:
         """

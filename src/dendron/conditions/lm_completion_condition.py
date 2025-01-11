@@ -1,14 +1,13 @@
 from ..condition_node import ConditionNode
-from ..basic_types import NodeStatus, Quantization
-from dendron.configs.hflm_completion_config import HFLMCompletionConfig
-import numpy as np
-import torch
-from hflm.huggingface_model import HFLM
+from ..basic_types import NodeStatus
+from dendron.configs.lm_completion_config import LMCompletionConfig
+from dendron.configs.hflm_config import HFLMConfig
+from dendron.behavior_tree import BehaviorTree
 import traceback
 
 argmax = lambda lst: max(enumerate(lst), key=lambda x: x[1])[0]
 
-class CompletionCondition(ConditionNode):
+class LMCompletionCondition(ConditionNode):
     """
     A completion condition node uses a causal language model to evaluate
     the relative likelihood of several different completions of a prompt,
@@ -35,29 +34,34 @@ class CompletionCondition(ConditionNode):
         cfg (`CompletionConditionNodeConfig`):
             The configuration object for this model.
     """
-    def __init__(self, name : str, cfg : HFLMCompletionConfig) -> None:
-        super().__init__(name)
-        self.input_key = cfg.input_key
-        self.device = cfg.device
-        print(self.device)
+    def __init__(self, model_cfg : HFLMConfig, node_cfg : LMCompletionConfig) -> None:
+        super().__init__(node_cfg.node_name)
+        self.input_key = node_cfg.input_key
+        self.completions_key = node_cfg.completions_key
+        self.success_fn_key = node_cfg.success_fn_key
+        self.logprobs_out_key = node_cfg.logprobs_out_key
 
-        self.completions_key = cfg.completions_key
-        self.success_fn_key = cfg.success_fn_key
-
-        self.logprobs_out_key = cfg.logprobs_out_key
-
-        self.model = HFLM(
-            model=cfg.model, 
-            device=self.device, 
-            parallelize=cfg.parallelize,
-            load_in_4bit=cfg.load_in_4bit,
-            load_in_8bit=cfg.load_in_8bit
-        )
+        self.node_config = node_cfg
+        self.model_config = model_cfg
+        
     def set_model(self, new_model) -> None:
         """
         Set a new model to use for generating text.
         """
         self.model = new_model
+
+    def set_tree(self, tree : BehaviorTree) -> None:
+        """
+        Set the behavior tree for this node, which includes setting up the blackboard
+        and registering the model configuration with the tree.
+
+        Args:
+            tree (BehaviorTree):
+                The behavior tree this node belongs to.
+        """
+        self.tree = tree
+        self.set_blackboard(tree.blackboard)
+        tree.add_model(self.model_config)
 
     def tick(self) -> NodeStatus:
         """
@@ -79,7 +83,10 @@ class CompletionCondition(ConditionNode):
             completions = self.blackboard[self.completions_key]
             success_fn = self.blackboard[self.success_fn_key]
 
-            log_probs = self.model.loglikelihood(((input_prefix, s) for s in completions), disable_tqdm=True)
+            log_probs = self.tree.get_model(self.model_config.model_name).loglikelihood(
+                ((input_prefix, s) for s in completions), 
+                disable_tqdm=True
+            )
 
             self.blackboard[self.logprobs_out_key] = {completions[i] : log_probs[i] for i in range(len(log_probs))}
 

@@ -10,6 +10,9 @@ import logging
 BehaviorTree = typing.NewType("BehaviorTree", None)
 
 class ControlNode(TreeNode):
+
+    _used_names = set(["control"])
+
     """
     Base class for a control node.
 
@@ -25,9 +28,31 @@ class ControlNode(TreeNode):
             An optional initial list of children.
     """
 
-    def __init__(self, name : str, children : List[TreeNode] = None) -> None:
-        super().__init__(name)
-        self.children : List[TreeNode] = children 
+    def __init__(self, children : List[TreeNode] = None, name : str = "control") -> None:
+        super().__init__()
+        self.children : List[TreeNode] = children if children is not None else []
+        self._name = None
+        self.name = name
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        if self._name is not None:
+            ControlNode._used_names.remove(self._name)
+
+        if value in ControlNode._used_names:
+            suffix = 0
+            new_name = f"{value}_{suffix}"
+            while new_name in ControlNode._used_names:
+                suffix += 1
+                new_name = f"{value}_{suffix}"
+            value = new_name
+        
+        ControlNode._used_names.add(value)
+        self._name = value
 
     def set_tree(self, tree : BehaviorTree) -> None:
         """
@@ -41,6 +66,9 @@ class ControlNode(TreeNode):
         self.tree = tree
         for c in self.children:
             c.set_tree(tree)
+
+    def children(self) -> List[TreeNode]:
+        return self.children
 
     def set_logger(self, new_logger) -> None:
         """

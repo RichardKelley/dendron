@@ -1,6 +1,8 @@
-from .basic_types import NodeType, NodeStatus
+from .basic_types import NodeType, NodeStatus, ModelConfig
 from .tree_node import TreeNode
 from .blackboard import Blackboard 
+
+from hflm import LM, HFLM
 
 from typing import Optional, Any
 
@@ -26,7 +28,7 @@ class BehaviorTree:
             An optional number of workings to initialize the thread pool
             with.
     """
-    def __init__(self, tree_name : str, root_node : TreeNode, bb : Blackboard = None, num_workers=4) -> None:
+    def __init__(self, tree_name : str, root_node : TreeNode = None, bb : Blackboard = None, num_workers=4) -> None:
         self.tree_name = tree_name
         self.root = root_node
 
@@ -35,14 +37,52 @@ class BehaviorTree:
         else:
             self.blackboard = bb
         
-        self.root.set_blackboard(self.blackboard)
-        self.root.set_tree(self)
+        if self.root is not None:
+            self.root.set_blackboard(self.blackboard)
+            self.root.set_tree(self)
 
         self.num_workers = num_workers
         self.logger = None
         self.log_file_name = None
 
+        # Mapping from model names to config objects.
+        self.model_configs = {}
+
+        # Mapping from model names to HFLM model objects.
+        self.models = {}
+
         self.executor = futures.ThreadPoolExecutor(max_workers=num_workers)
+
+    def get_config(self, model_name : str) -> Optional[ModelConfig]:
+        if model_name in self.model_configs:
+            return self.model_configs[model_name]
+        else:
+            return None
+    
+    def get_model(self, model_name : str) -> Optional[LM]:
+        if model_name in self.models:
+            return self.models[model_name]
+        else:
+            return None
+        
+    def add_model(self, model_config : ModelConfig) -> None:
+        """
+        Add a model to the behavior tree's model registry.
+        
+        Args:
+            model_config (ModelConfig):
+                Configuration object containing model parameters
+        """
+        if model_config.model_name not in self.model_configs:
+            name = model_config.model_name
+            self.model_configs[name] = model_config
+            self.models[name] = HFLM(
+                model=model_config.model,
+                device=model_config.device,
+                parallelize=model_config.parallelize,
+                load_in_4bit=model_config.load_in_4bit,
+                load_in_8bit=model_config.load_in_8bit
+            )
 
     def __getstate__(self):
         state = self.__dict__.copy()
@@ -69,7 +109,9 @@ class BehaviorTree:
             formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
             handler.setFormatter(formatter)
             self.logger.addHandler(handler)
-            self.root.set_logger(self.logger)
+
+            if self.root is not None:
+                self.root.set_logger(self.logger)
 
     def disable_logging(self) -> None:
         """
@@ -81,7 +123,8 @@ class BehaviorTree:
                 self.logger.removeHandler(h)
         self.logger = None
         self.log_file_name = None
-        # TODO set root logger to None? 
+        if self.root is not None:
+            self.root.set_logger(None)
 
     def set_log_level(self, log_level) -> None:
         """
@@ -111,7 +154,9 @@ class BehaviorTree:
             self.logger.setLevel(level_to_set)
             for h in self.logger.handlers:
                 h.setLevel(level_to_set)
-            self.root.set_log_level(level_to_set)
+
+            if self.root is not None:
+                self.root.set_log_level(level_to_set)
 
     def set_log_filename(self, filename : Optional[str]) -> None:
         """
@@ -155,9 +200,14 @@ class BehaviorTree:
                 The new root node.
         """
         self.root = new_root
+
+        if self.logger is not None:
+            self.root.set_logger(self.logger)
+            self.root.set_log_level(self.logger.level)
+
         new_root.set_tree(self)
 
-    def status(self) -> NodeStatus:
+    def status(self) -> Optional[NodeStatus]:
         """
         Return the current status of this tree. The status of a tree
         is the current status of the root node of hte tree.
@@ -165,25 +215,32 @@ class BehaviorTree:
         Returns:
             `NodeStatus`: The status of the tree's root.
         """
-        return self.root.get_status()
+        if self.root is not None:
+            return self.root.get_status()
+        else:
+            return None 
 
     def reset(self) -> None:
         """
         Instruct the root of the tree to `reset()`.
         """
-        self.root.reset()
+        if self.root is not None:
+            self.root.reset()
 
     def halt_tree(self) -> None:
         """
         Instruct the root of the tree to `halt()`.
         """
-        self.root.halt_node()
+        if self.root is not None:
+            self.root.halt_node()
 
-    # TODO consider deprecating
+    # TODO: This was a hallucination. Need to decide if we want to add dependency.
+    #@deprecated("Use blackboard directly.")
     def blackboard_get(self, key) -> Any:
         return self.blackboard[key]
 
-    # TODO consider deprecating
+    # TODO: This was a hallucination. Need to decide if we want to add dependency.
+    #@deprecated("Use blackboard directly.")
     def blackboard_set(self, key, value) -> None:
         self.blackboard[key] = value
 
@@ -200,12 +257,12 @@ class BehaviorTree:
             `Optional[TreeNode]`: Either a node with the given name,
             or None.
         """
-        if self.root:
+        if self.root is not None:
             return self.root.get_node_by_name(name)
         else:
             return None
 
-    def tick_once(self) -> NodeStatus:
+    def tick_once(self) -> Optional[NodeStatus]:
         """
         Instruct the root of the tree to execute its `tick()` function.
         
@@ -214,9 +271,12 @@ class BehaviorTree:
         Returns:
             `NodeStatus`: The status returned by the root.
         """
-        return self.root.execute_tick()
+        if self.root is not None:
+            return self.root.execute_tick()
+        else:
+            return None
 
-    def tick_while_running(self) -> NodeStatus:
+    def tick_while_running(self) -> Optional[NodeStatus]:
         """
         Repeatedly `tick()` the behavior tree as long as the status
         returned by the root is `RUNNING`. 
@@ -227,14 +287,20 @@ class BehaviorTree:
         Returns:
             `NodeStatus`: The status ultimately returned by the root.
         """
-        status = self.root.execute_tick()
-        while status == NodeStatus.RUNNING:
+        if self.root is not None:
             status = self.root.execute_tick()
-        return status
+            while status == NodeStatus.RUNNING:
+                status = self.root.execute_tick()
+            return status
+        else:
+            return None
 
     def pretty_print(self) -> None:
         """
         Print an indented version of this tree to the command line. 
         Indentation shows structure.
         """
-        print(self.root.pretty_repr())
+        if self.root is not None:
+            print(self.root.pretty_repr())
+        else:
+            print("BehaviorTree{}")

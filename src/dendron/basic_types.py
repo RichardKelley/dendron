@@ -1,4 +1,5 @@
 from enum import Enum
+from typing import Protocol 
 
 class NodeType(Enum):
     """
@@ -35,3 +36,25 @@ class Quantization(Enum):
     TwoBit = 2,
     FourBit = 4,
     EightBit = 8,
+
+class ModelConfig(Protocol):
+    
+    @property
+    def model_name(self): 
+        ...
+
+    @property
+    def device(self):
+        ...
+
+    @property
+    def parallelize(self):
+        ...
+
+    @property
+    def load_in_4bit(self):
+        ...
+
+    @property
+    def load_in_8bit(self):
+        ...

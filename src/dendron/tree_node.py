@@ -23,8 +23,7 @@ class TreeNode:
             The name to give to this node. 
     """
     
-    def __init__(self, name : str) -> None:
-        self.name = name
+    def __init__(self) -> None:
         self.blackboard = None
         self.status = NodeStatus.IDLE
 
@@ -45,6 +44,12 @@ class TreeNode:
                 The new tree this node is a part of.
         """
         self.tree = tree
+        self.set_blackboard(tree.blackboard)
+        for child in self.children():
+            child.set_tree(tree)
+
+    def children(self):
+        raise NotImplementedError("children should be defined in subclass.")
 
     def set_logger(self, new_logger) -> None:
         raise NotImplementedError("set_logger should be defined in subclass.")
@@ -147,15 +152,6 @@ class TreeNode:
                 The new NodeStatus.
         """
         self.status = new_status
-
-    def name(self) -> str:
-        """
-        Get this node's human-readable name.
-
-        Returns:
-            `str`: The given name of this node.
-        """
-        return self.name
 
     def node_type(self) -> NodeType:
         raise NotImplementedError("Type is specified in subclass.")
