@@ -1,6 +1,6 @@
 from dendron.actions import SimpleAction
-from dendron import NodeStatus
-from dendron import Blackboard, BlackboardEntryMetadata
+from dendron.basic_types import NodeStatus
+from dendron.blackboard import Blackboard
 
 def test_simple_action_function():
 

@@ -1,4 +1,6 @@
-from dendron import ActionNode, NodeStatus, Blackboard
+from dendron.action_node import ActionNode
+from dendron.basic_types import NodeStatus
+from dendron.blackboard import Blackboard
 
 def test_action():
 
