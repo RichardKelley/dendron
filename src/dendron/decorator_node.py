@@ -4,8 +4,6 @@ from .tree_node import TreeNode
 import typing
 from typing import Optional, List
 
-import logging
-
 BehaviorTree = typing.NewType("BehaviorTree", None)
 
 class DecoratorNode(TreeNode):

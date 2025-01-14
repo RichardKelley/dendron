@@ -1,9 +1,7 @@
-from .basic_types import NodeType, NodeStatus
+from .basic_types import NodeType
 from .tree_node import TreeNode
 
 from typing import Optional, List
-
-import logging
 
 class ConditionNode(TreeNode):
 

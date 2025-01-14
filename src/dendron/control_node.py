@@ -1,11 +1,9 @@
-from .basic_types import NodeType, NodeStatus
+from .basic_types import NodeType
 from .tree_node import TreeNode
 from .blackboard import Blackboard
 
 import typing
 from typing import List, Optional
-
-import logging
 
 BehaviorTree = typing.NewType("BehaviorTree", None)
 
