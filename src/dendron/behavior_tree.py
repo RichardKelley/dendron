@@ -1,6 +1,7 @@
-from .basic_types import NodeType, NodeStatus, ModelConfig
-from .tree_node import TreeNode
-from .blackboard import Blackboard 
+from dendron.basic_types import NodeStatus
+from dendron.tree_node import TreeNode
+from dendron.blackboard import Blackboard 
+from dendron.configs import HFLMConfig
 
 from hflm import LM, HFLM
 
@@ -53,7 +54,7 @@ class BehaviorTree:
 
         self.executor = futures.ThreadPoolExecutor(max_workers=num_workers)
 
-    def get_config(self, model_name : str) -> Optional[ModelConfig]:
+    def get_config(self, model_name : str) -> Optional[HFLMConfig]:
         if model_name in self.model_configs:
             return self.model_configs[model_name]
         else:
@@ -65,12 +66,12 @@ class BehaviorTree:
         else:
             return None
         
-    def add_model(self, model_config : ModelConfig) -> None:
+    def add_model(self, model_config : HFLMConfig) -> None:
         """
         Add a model to the behavior tree's model registry.
         
         Args:
-            model_config (ModelConfig):
+            model_config (HFLMConfig):
                 Configuration object containing model parameters
         """
         if model_config.model_name not in self.model_configs:
