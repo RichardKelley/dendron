@@ -3,14 +3,23 @@ from dendron.actions.generate_action import GenerateAction
 from dendron.configs.hflm_config import HFLMConfig
 from dendron.configs.lm_action_config import LMActionConfig
 
+import pytest
+import torch 
+
+@pytest.fixture(autouse=True)
+def setup_device():
+    # Force device initialization before any tests
+    if torch.backends.mps.is_available():
+        torch.device("mps")
+
 def test_generate_action_llama():
     # Create test config for llama model
 
     model_config = HFLMConfig(
         model="meta-llama/Llama-3.1-8B-Instruct",
-        device="cuda",
+        device="mps",
         parallelize=False,
-        load_in_8bit=True
+        load_in_8bit=False
     )
 
     node_config = LMActionConfig(
@@ -39,9 +48,9 @@ def test_generate_action_llama():
 def test_generate_action_with_processors():
     model_config = HFLMConfig(
         model="meta-llama/Llama-3.1-8B-Instruct",
-        device="cuda",
+        device="mps",
         parallelize=False,
-        load_in_8bit=True
+        load_in_8bit=False
     )
 
     node_config = LMActionConfig(
