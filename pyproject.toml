@@ -19,12 +19,6 @@ classifiers = [
 ]
 
 dependencies = [
-  "torch>=2.0.0",
-  "transformers>=4.36.2",
-  "accelerate>=0.26.1",
-  "bitsandbytes>=0.42.0",
-  "sentencepiece>=0.1.99",
-  "protobuf>=4.25.2",
   "hflm>=0.0.9",
 ]
 
