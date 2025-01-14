@@ -21,7 +21,7 @@ def test_generate_action_llama():
         model="meta-llama/Llama-3.1-8B-Instruct",
         device=default_device(),
         parallelize=False,
-        load_in_8bit=False
+        load_in_8bit=True if default_device() == "cuda" else False
     )
 
     node_config = LMActionConfig(
@@ -52,7 +52,7 @@ def test_generate_action_with_processors():
         model="meta-llama/Llama-3.1-8B-Instruct",
         device=default_device(),
         parallelize=False,
-        load_in_8bit=False
+        load_in_8bit=True if default_device() == "cuda" else False
     )
 
     node_config = LMActionConfig(
