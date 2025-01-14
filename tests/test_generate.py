@@ -3,6 +3,8 @@ from dendron.actions.generate_action import GenerateAction
 from dendron.configs.hflm_config import HFLMConfig
 from dendron.configs.lm_action_config import LMActionConfig
 
+from dendron.util import default_device
+
 import pytest
 import torch 
 
@@ -17,7 +19,7 @@ def test_generate_action_llama():
 
     model_config = HFLMConfig(
         model="meta-llama/Llama-3.1-8B-Instruct",
-        device="mps",
+        device=default_device(),
         parallelize=False,
         load_in_8bit=False
     )
@@ -48,7 +50,7 @@ def test_generate_action_llama():
 def test_generate_action_with_processors():
     model_config = HFLMConfig(
         model="meta-llama/Llama-3.1-8B-Instruct",
-        device="mps",
+        device=default_device(),
         parallelize=False,
         load_in_8bit=False
     )
