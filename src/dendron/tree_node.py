@@ -1,18 +1,9 @@
-from .blackboard import Blackboard
-from .basic_types import NodeType, NodeStatus
+from dendron.basic_types import NodeStatus
 
 import types
 
-import typing
-
-# see the note below on why we don't want to use Self.
-#from typing import Dict, List, Callable, Optional, Self, Any
-
-from typing import Dict, List, Callable, Optional, Any
-from dataclasses import dataclass
+from typing import Callable
 import logging
-
-BehaviorTree = typing.NewType("BehaviorTree", None)
 
 class TreeNode:
     """
@@ -35,7 +26,7 @@ class TreeNode:
 
         self.tree = None
 
-    def set_tree(self, tree : BehaviorTree) -> None:
+    def set_tree(self, tree) -> None:
         """
         Set the tree that contains this node.
 
@@ -115,7 +106,7 @@ class TreeNode:
     def halt_node(self) -> None:
         raise NotImplementedError("Halt behavior is specified in subclass.")
 
-    def set_blackboard(self, bb : Blackboard) -> None:
+    def set_blackboard(self, bb) -> None:
         """
         Set the blackboard to be used by this TreeNode.
 
@@ -153,7 +144,7 @@ class TreeNode:
         """
         self.status = new_status
 
-    def node_type(self) -> NodeType:
+    def node_type(self):
         raise NotImplementedError("Type is specified in subclass.")
 
     # the problem with this is that Self is only supported in 3.11+, which 
