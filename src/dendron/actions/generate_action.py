@@ -9,6 +9,9 @@ from typing import Callable
 import types
 import traceback
 
+from dendron.registry import register_dendron_node
+
+@register_dendron_node
 class GenerateAction(ActionNode):
     """
     An action node that uses a causal language model to generate

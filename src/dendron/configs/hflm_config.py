@@ -5,6 +5,9 @@ from typing import Union
 import torch
 from transformers import PreTrainedModel
 
+from dendron.registry import register_config
+
+@register_config
 @dataclass
 class HFLMConfig:
     _model: Union[str, PreTrainedModel]

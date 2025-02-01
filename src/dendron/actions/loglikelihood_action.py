@@ -9,6 +9,9 @@ from typing import Callable
 import types
 import traceback
 
+from dendron.registry import register_dendron_node
+
+@register_dendron_node
 class LogLikelihoodAction(ActionNode):
     """
     An action node that uses a language model to compute log-likelihoods

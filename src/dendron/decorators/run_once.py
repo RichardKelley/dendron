@@ -1,7 +1,10 @@
-from ..basic_types import NodeType, NodeStatus
-from ..tree_node import TreeNode
-from ..decorator_node import DecoratorNode
+from dendron.basic_types import NodeStatus
+from dendron.tree_node import TreeNode
+from dendron.decorator_node import DecoratorNode
 
+from dendron.registry import register_dendron_node
+
+@register_dendron_node
 class RunOnce(DecoratorNode):
     """
     The RunOnce decorator tracks whether or not its child has been

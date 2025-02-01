@@ -1,7 +1,8 @@
-from ..action_node import ActionNode
-from ..basic_types import NodeStatus
-from ..blackboard import Blackboard
+from dendron.action_node import ActionNode
+from dendron.basic_types import NodeStatus
+from dendron.registry import register_dendron_node
 
+@register_dendron_node
 class AlwaysSuccess(ActionNode):
     """
     An action node that always returns `SUCCESS`.

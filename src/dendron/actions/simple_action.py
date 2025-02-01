@@ -1,8 +1,11 @@
-from ..action_node import ActionNode
-from ..basic_types import NodeStatus
+from dendron.action_node import ActionNode
+from dendron.basic_types import NodeStatus
 
 from typing import Callable
 
+from dendron.registry import register_dendron_node
+
+@register_dendron_node
 class SimpleAction(ActionNode):
     """
     A simple action node is initialized with a callback that is 

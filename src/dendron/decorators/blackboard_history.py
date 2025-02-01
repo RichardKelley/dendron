@@ -1,8 +1,11 @@
-from ..blackboard import Blackboard
-from ..basic_types import NodeType, NodeStatus
-from ..tree_node import TreeNode
-from ..decorator_node import DecoratorNode
+from dendron.blackboard import Blackboard
+from dendron.basic_types import NodeStatus
+from dendron.tree_node import TreeNode
+from dendron.decorator_node import DecoratorNode
 
+from dendron.registry import register_dendron_node
+
+@register_dendron_node
 class BlackboardHistory(DecoratorNode):
     """
     The Blackboard history node keeps track of a blackboard entry 

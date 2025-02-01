@@ -1,9 +1,12 @@
-from ..basic_types import NodeType, NodeStatus
-from ..tree_node import TreeNode
-from ..decorator_node import DecoratorNode
+from dendron.basic_types import NodeStatus
+from dendron.tree_node import TreeNode
+from dendron.decorator_node import DecoratorNode
+
+from dendron.registry import register_dendron_node
 
 import time
 
+@register_dendron_node
 class Timeout(DecoratorNode):
     """
     The timeout decorator ticks its child and starts a timer. The next time

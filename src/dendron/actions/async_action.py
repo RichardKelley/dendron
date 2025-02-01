@@ -1,10 +1,12 @@
-from ..action_node import ActionNode
-from ..basic_types import NodeStatus
+from dendron.action_node import ActionNode
+from dendron.basic_types import NodeStatus
+from dendron.registry import register_dendron_node
 
 from typing import Callable
 
 from concurrent import futures
 
+@register_dendron_node
 class AsyncAction(ActionNode):
     """
     An action node that operates asynchronously. 

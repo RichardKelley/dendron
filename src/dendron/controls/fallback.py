@@ -1,9 +1,12 @@
-from ..basic_types import NodeType, NodeStatus
-from ..tree_node import TreeNode
-from ..control_node import ControlNode
+from dendron.basic_types import NodeType, NodeStatus
+from dendron.tree_node import TreeNode
+from dendron.control_node import ControlNode
 
 from typing import List 
 
+from dendron.registry import register_dendron_node
+
+@register_dendron_node
 class Fallback(ControlNode):
 
     _used_names = set(["fallback"])

@@ -1,8 +1,11 @@
-from ..condition_node import ConditionNode
-from ..tree_node import NodeStatus
+from dendron.condition_node import ConditionNode
+from dendron.basic_types import NodeStatus
 
 from typing import Callable
 
+from dendron.registry import register_dendron_node
+
+@register_dendron_node
 class SimpleCondition(ConditionNode):
     """
     A simple condition node is initialized with a callback that is

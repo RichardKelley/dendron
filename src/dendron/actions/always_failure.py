@@ -1,6 +1,8 @@
-from ..action_node import ActionNode
-from ..tree_node import NodeStatus
+from dendron.action_node import ActionNode
+from dendron.basic_types import NodeStatus
+from dendron.registry import register_dendron_node
 
+@register_dendron_node
 class AlwaysFailure(ActionNode):
     """
     An action node that always returns `FAILURE`.

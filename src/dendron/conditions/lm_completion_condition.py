@@ -1,12 +1,15 @@
-from ..condition_node import ConditionNode
-from ..basic_types import NodeStatus
+from dendron.condition_node import ConditionNode
+from dendron.basic_types import NodeStatus
 from dendron.configs.lm_completion_config import LMCompletionConfig
 from dendron.configs.hflm_config import HFLMConfig
 from dendron.behavior_tree import BehaviorTree
 import traceback
 
+from dendron.registry import register_dendron_node
+
 argmax = lambda lst: max(enumerate(lst), key=lambda x: x[1])[0]
 
+@register_dendron_node
 class LMCompletionCondition(ConditionNode):
     """
     A completion condition node uses a causal language model to evaluate
