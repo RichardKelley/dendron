@@ -6,7 +6,8 @@ large language models and vision language models.
 __version__ = "0.2.0"
 __author__ = "Richard Kelley"
 
-from .registry import class_registry, register_class, config_registry, register_config
+from dendron.registry import node_registry, config_registry
+from dendron.registry import register_dendron_node, register_external_node, register_config
 from .basic_types import NodeStatus
 from .behavior_tree import BehaviorTree 
 from .blackboard import Blackboard

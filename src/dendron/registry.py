@@ -2,7 +2,7 @@ from typing import Type, Dict
 from .tree_node import TreeNode
 
 # Global registries to store all available classes
-class_registry: Dict[str, Type] = {}
+node_registry: Dict[str, Type] = {}
 config_registry: Dict[str, Type] = {}
 
 def register_dendron_node(cls: Type) -> Type:
@@ -12,9 +12,9 @@ def register_dendron_node(cls: Type) -> Type:
     """
     if not issubclass(cls, TreeNode):
         raise TypeError(f"Class {cls.__name__} must be a subclass of TreeNode")
-    if cls.__name__ in class_registry:
+    if cls.__name__ in node_registry:
         raise ValueError(f"Class {cls.__name__} is already registered")
-    class_registry[cls.__name__] = cls
+    node_registry[cls.__name__] = cls
     return cls
 
 def register_external_node(cls: Type):
@@ -24,9 +24,9 @@ def register_external_node(cls: Type):
     """
     if not issubclass(cls, TreeNode):
         raise TypeError(f"Class {cls.__name__} must be a subclass of TreeNode")
-    if cls.__name__ in class_registry:
+    if cls.__name__ in node_registry:
         raise ValueError(f"Class {cls.__name__} is already registered")
-    class_registry[cls.__name__] = cls
+    node_registry[cls.__name__] = cls
 
 def register_config(cls: Type) -> Type:
     """
