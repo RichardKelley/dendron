@@ -19,7 +19,7 @@ def register_dendron_node(cls: Type) -> Type:
 
 def register_external_node(cls: Type):
     """
-    Decorator to register a class in the global registry.
+    Function to register a class in the global registry.
     Can be used with both library and user-defined classes.
     """
     if not issubclass(cls, TreeNode):
