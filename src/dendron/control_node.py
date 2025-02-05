@@ -28,7 +28,12 @@ class ControlNode(TreeNode):
 
     def __init__(self, children : List[TreeNode] = None, name : str = "control") -> None:
         super().__init__()
-        self.children : List[TreeNode] = children if children is not None else []
+        # Initialize with empty list if no children provided
+        self._children : List[TreeNode] = []
+        # Add any provided children
+        if children is not None:
+            for child in children:
+                self.add_child(child)
         self._name = None
         self.name = name
 
@@ -62,11 +67,12 @@ class ControlNode(TreeNode):
                 The tree that will contain this node.
         """
         self.tree = tree
-        for c in self.children:
+        for c in self._children:
             c.set_tree(tree)
 
-    def children(self) -> List[TreeNode]:
-        return self.children
+    def get_children(self) -> List[TreeNode]:
+        """Get the list of children"""
+        return self._children
 
     def set_logger(self, new_logger) -> None:
         """
@@ -78,7 +84,7 @@ class ControlNode(TreeNode):
                 The Logger to use.
         """
         self.logger = new_logger
-        for c in self.children:
+        for c in self._children:
             c.set_logger(new_logger)
 
     def set_log_level(self, new_level) -> None:
@@ -87,7 +93,7 @@ class ControlNode(TreeNode):
         children to use.
         """
         self.log_level = new_level
-        for c in self.children:
+        for c in self._children:
             c.set_log_level(new_level)
 
     def add_child(self, child : TreeNode) -> None:
@@ -98,7 +104,9 @@ class ControlNode(TreeNode):
             child (`dendron.tree_node.TreeNode`):
                 The new child node.
         """
-        self.children.append(child)
+        if not isinstance(self._children, list):
+            self._children = []
+        self._children.append(child)
 
     def add_children(self, children : List[TreeNode]) -> None:
         """
@@ -108,7 +116,7 @@ class ControlNode(TreeNode):
             children (`List[TreeNode]`):
                 The list of `TreeNode`s to add. 
         """
-        self.children.extend(children)
+        self._children.extend(children)
 
     def set_blackboard(self, bb : Blackboard) -> None:
         """
@@ -120,7 +128,7 @@ class ControlNode(TreeNode):
                 The new blackboard to use.
         """
         self.blackboard = bb
-        for child in self.children:
+        for child in self._children:
             child.set_blackboard(bb)
 
     def get_node_by_name(self, name : str) -> Optional[TreeNode]:
@@ -138,7 +146,7 @@ class ControlNode(TreeNode):
         if self.name == name:
             return self
         else:
-            for child in self.children:
+            for child in self._children:
                 node = child.get_node_by_name(name)
                 if node != None:
                     return node
@@ -151,16 +159,7 @@ class ControlNode(TreeNode):
         Returns:
             `int`: The length of the children list.
         """
-        return len(self.children)
-
-    def children(self) -> List[TreeNode]:
-        """
-        Get the list of children.
-
-        Returns:
-            `List[TreeNode]`: The `self.children` list.
-        """
-        return self.children
+        return len(self._children)
 
     def child(self, index : int) -> TreeNode:
         """
@@ -174,7 +173,7 @@ class ControlNode(TreeNode):
         Returns:
             `TreeNode`: The child at the desired index.
         """
-        return self.children[index]
+        return self._children[index]
 
     def node_type(self) -> NodeType:
         """
@@ -196,6 +195,6 @@ class ControlNode(TreeNode):
         """
         Instruct each child to reset.
         """
-        for child in self.children:
+        for child in self._children:
             child.reset()
     

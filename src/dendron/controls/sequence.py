@@ -59,7 +59,7 @@ class Sequence(ControlNode):
         to reset.
         """
         self.current_child_idx = 0
-        for child in self.children:
+        for child in self._children:
             child.reset()
 
     def halt_node(self) -> None:
@@ -85,7 +85,7 @@ class Sequence(ControlNode):
         self.set_status(NodeStatus.RUNNING)
 
         while(self.current_child_idx < n_children):
-            current_child = self.children[self.current_child_idx]
+            current_child = self._children[self.current_child_idx]
 
             child_status = current_child.execute_tick()
             
@@ -121,7 +121,7 @@ class Sequence(ControlNode):
         """
         tabs = '\t'*depth
         repr = f"{tabs}Sequence {self.name}"
-        for child in self.children:
+        for child in self._children:
             child_repr = child.pretty_repr(depth+1)
             repr += f"\n{child_repr}"
         repr += "\n"
