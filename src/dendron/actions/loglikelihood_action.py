@@ -95,7 +95,7 @@ class LogLikelihoodAction(ActionNode):
                 prompt, completions = self.input_processor(prompt, completions)
             
             # Create iterator of (prompt, completion) pairs
-            prompt_completion_pairs = ((prompt, completion) for completion in completions)
+            prompt_completion_pairs = [(prompt, completion) for completion in completions]
             
             # Compute log-likelihoods
             log_probs = self.tree.get_model(self.model_config.model_name).loglikelihood(prompt_completion_pairs, disable_tqdm=True)
