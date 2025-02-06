@@ -121,43 +121,50 @@ def create_node_from_json(
     node_type = node_data['type']
     custom_name = node_data.get('custom_name', '')
     
-    # Verify node type exists in registry
-    if node_type not in node_registry:
-        raise ValueError(f"Node type {node_type} not found in registry")
-    
-    # Get node class from registry
-    node_class = node_registry[node_type]
-    
-    print("node_type: ", node_type)
-
-    # Special handling for nodes that take configs directly in constructor
-    if node_type in ['GenerateAction', 'LogLikelihoodAction', 'LogLikelihoodRollingAction']:
-        if 'configs' not in node_data:
-            raise ValueError(f"{node_type} requires HFLMConfig and LMActionConfig")
-        
-        config_ids = node_data['configs']
-        if 'HFLMConfig' not in config_ids or 'LMActionConfig' not in config_ids:
-            raise ValueError(f"{node_type} requires both HFLMConfig and LMActionConfig")
-            
-        model_config = config_objects['HFLMConfig'][config_ids['HFLMConfig']]
-        action_config = config_objects['LMActionConfig'][config_ids['LMActionConfig']]
-        
-        node = node_class(model_config, action_config)
-
-        print("node: ", node)
-    else:
-        # Create node instance normally
+    # Handle Custom nodes first
+    if node_type in ['CustomAction', 'CustomCondition']:
+        if 'custom_type' not in node_data:
+            raise ValueError(f"{node_type} requires custom_type")
+        actual_type = node_data['custom_type']
+        if actual_type not in node_registry:
+            raise ValueError(f"Custom type {actual_type} not found in registry")
+        node_class = node_registry[actual_type]
         node = node_class(custom_name)
+    else:
+        # For all other nodes, verify type exists in registry
+        if node_type not in node_registry:
+            raise ValueError(f"Node type {node_type} not found in registry")
         
-        # Handle configs if present
-        if 'configs' in node_data:
-            node_configs = {}
-            for config_type, config_id in node_data['configs'].items():
-                if config_id not in config_objects.get(config_type, {}):
-                    raise ValueError(f"Config {config_id} of type {config_type} not found")
-                node_configs[config_type] = config_objects[config_type][config_id]
-            node.configure(node_configs)
+        # Get node class from registry
+        node_class = node_registry[node_type]
+
+        # Create the node based on type
+        if node_type in ['GenerateAction', 'LogLikelihoodAction', 'LogLikelihoodRollingAction']:
+            if 'configs' not in node_data:
+                raise ValueError(f"{node_type} requires HFLMConfig and LMActionConfig")
+            
+            config_ids = node_data['configs']
+            if 'HFLMConfig' not in config_ids or 'LMActionConfig' not in config_ids:
+                raise ValueError(f"{node_type} requires both HFLMConfig and LMActionConfig")
+                
+            model_config = config_objects['HFLMConfig'][config_ids['HFLMConfig']]
+            action_config = config_objects['LMActionConfig'][config_ids['LMActionConfig']]
+            
+            node = node_class(model_config, action_config)
+            node_data.pop('configs', None)
+        else:
+            # Create standard node instance
+            node = node_class(custom_name)
     
+    # Handle configs if present
+    if 'configs' in node_data:
+        node_configs = {}
+        for config_type, config_id in node_data['configs'].items():
+            if config_id not in config_objects.get(config_type, {}):
+                raise ValueError(f"Config {config_id} of type {config_type} not found")
+            node_configs[config_type] = config_objects[config_type][config_id]
+        node.configure(node_configs)
+
     # Handle blackboard if present
     if 'blackboard' in node_data:
         blackboard_id = node_data['blackboard']
@@ -166,13 +173,16 @@ def create_node_from_json(
         blackboard_data = blackboards[blackboard_id]
         for key, value in blackboard_data.items():
             node.blackboard[key] = value
-    
+
     # Recursively create children
     if 'children' in node_data:
-        for child_data in node_data['children']:
+        children = node_data['children']
+        for child_data in children:
             child = create_node_from_json(child_data, configs, blackboards, config_objects)
+            if not isinstance(child, TreeNode):
+                continue
             node.add_child(child)
-    
+
     return node
 
 
